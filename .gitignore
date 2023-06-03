@@ -1,0 +1,10 @@
+.vscode
+build
+
+bin/Debug
+bin/Release
+
+allegro_mac/lib
+allegro_build
+
+SnakeGame

@@ -1,0 +1,15 @@
+prefix=/home/axel/Documents/VSCode/Repository/SnakeGame2/allegro_mac
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+version=5.2.7
+suffix=
+versuffix=5
+
+Name: allegro_dialog
+Description: Allegro game programming library, native dialog addon
+Version: ${version}
+Libs: -L${libdir} -lallegro_dialog${suffix}
+Libs.private: 
+Requires: allegro${suffix}-${versuffix} >= ${version}
+Cflags: -I${includedir}

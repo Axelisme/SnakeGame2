@@ -14,7 +14,7 @@ Build:
 ```
 Run:
 ```bash=
-SnakeGame
+./SnakeGame
 ```
 enjoy!
 

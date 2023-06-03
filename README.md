@@ -1,12 +1,20 @@
 # Gavity snake
 >I want to play a game
 
-Requirement: `Allegro libary`, `cmake`
+Requirement: `cmake`
 
 ## How to run
-use cmake to compile and run:
+Initial:
 ```bash=
-./bin/Release/game
+./install_allegro
+```
+Build:
+```bash=
+./compileSnakeGame
+```
+Run:
+```bash=
+SnakeGame
 ```
 enjoy!
 

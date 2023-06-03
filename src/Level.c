@@ -513,7 +513,7 @@ bool Level_load_level(Level *self, int _level_idx) {
     }
     show_msg("load level done");
     fclose(fin);
-    print_map(self);
+    if (Debug) print_map(self);
     return true;
 }
 void Level_level_reset(Level *self, int level_idx) {

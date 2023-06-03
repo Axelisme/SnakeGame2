@@ -11,6 +11,20 @@ void Menu_init(Menu* self, GAME_STATE _game_state) {
     Interface_init((Interface*)self,"","","");
     self->game_state = _game_state;
     self->menu_state = IN_MENU;
+    self->In_menu = NULL;
+    self->Start_menu = NULL;
+    self->Start_menu_level = NULL;
+    self->Start_menu_music = NULL;
+    self->Start_menu_guide = NULL;
+    self->Start_menu_exit = NULL;
+    self->Level_menu = NULL;
+    self->Level_menu_1 = NULL;
+    self->Level_menu_2 = NULL;
+    self->Level_menu_3 = NULL;
+    self->Level_menu_4 = NULL;
+    self->Level_menu_exit = NULL;
+    self->Guide = NULL;
+
     if (self->game_state == GAME_LEVEL)
     {
         self->menu_state = GUIDE;
@@ -209,20 +223,21 @@ ALLEGRO_BITMAP * Menu_ToImg(Menu* self,MENU_STATE stat) {
     }
 }
 void Menu_destroy(Menu* self) {
+    if (self == NULL) {return;}
     Interface_destroy((Interface*)self);
-    al_destroy_bitmap(self->In_menu);
-    al_destroy_bitmap(self->Start_menu);
-    al_destroy_bitmap(self->Start_menu_level);
-    al_destroy_bitmap(self->Start_menu_music);
-    al_destroy_bitmap(self->Start_menu_guide);
-    al_destroy_bitmap(self->Start_menu_exit);
-    al_destroy_bitmap(self->Level_menu);
-    al_destroy_bitmap(self->Level_menu_1);
-    al_destroy_bitmap(self->Level_menu_2);
-    al_destroy_bitmap(self->Level_menu_3);
-    al_destroy_bitmap(self->Level_menu_4);
-    al_destroy_bitmap(self->Level_menu_exit);
-    al_destroy_bitmap(self->Guide);
+    if (self->In_menu != NULL) al_destroy_bitmap(self->In_menu);
+    if (self->Start_menu != NULL) al_destroy_bitmap(self->Start_menu);
+    if (self->Start_menu_level != NULL) al_destroy_bitmap(self->Start_menu_level);
+    if (self->Start_menu_music != NULL) al_destroy_bitmap(self->Start_menu_music);
+    if (self->Start_menu_guide != NULL) al_destroy_bitmap(self->Start_menu_guide);
+    if (self->Start_menu_exit != NULL) al_destroy_bitmap(self->Start_menu_exit);
+    if (self->Level_menu != NULL) al_destroy_bitmap(self->Level_menu);
+    if (self->Level_menu_1 != NULL) al_destroy_bitmap(self->Level_menu_1);
+    if (self->Level_menu_2 != NULL) al_destroy_bitmap(self->Level_menu_2);
+    if (self->Level_menu_3 != NULL) al_destroy_bitmap(self->Level_menu_3);
+    if (self->Level_menu_4 != NULL) al_destroy_bitmap(self->Level_menu_4);
+    if (self->Level_menu_exit != NULL) al_destroy_bitmap(self->Level_menu_exit);
+    if (self->Guide != NULL) al_destroy_bitmap(self->Guide);
 }
 void delete_Menu(Interface* Iself) {
     Menu* self = (Menu*)Iself;

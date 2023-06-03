@@ -10,7 +10,11 @@ Button* new_Button(Pos pos,ALLEGRO_BITMAP* img,EFFECT eff,Pos* eff_pos,size_t ef
 void Button_init(Button* button,Pos pos,ALLEGRO_BITMAP* img,EFFECT eff,Pos* eff_pos,size_t eff_len) {
     Object_init((Object*)button,pos,BUTTON,img,OBJECT_IMAGE_SIZE,OBJECT_IMAGE_SIZE);
     button->effect = eff;
-    button->Effect_pos = eff_pos;
+    if (eff_len > 0) {
+        button->Effect_pos = (Pos*)malloc(sizeof(Pos)*eff_len);
+        memcpy(button->Effect_pos,eff_pos,sizeof(Pos)*eff_len);
+    }
+    else button->Effect_pos = NULL;
     button->Effect_len = eff_len;
     button->triger = false;
     button->obj.deleter = delete_Button;

@@ -49,6 +49,7 @@ bool Level_update(Interface *level);
 bool Level_load_level(Level *level, int level_idx);
 void Level_level_reset(Level *level, int level_idx);
 void print_map(Level *level);
+void print_map_id(Level *level);
 GAME_STATE Level_key_triger(Level *self, int key);
 DIRCTION KEY_TO_DIRC(int key);
 bool CanMove(Level *level, Pos pos, OBJ_TYPE type, DIRCTION dir);

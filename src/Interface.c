@@ -20,26 +20,43 @@ void Interface_init(Interface* infer, char* sound_path, char* back1path, char* b
     infer->image_width2 = 0;
     infer->image_height2 = 0;
     infer->light = 255;
+    infer->sample = NULL;
+    infer->backgroundSound = NULL;
+    infer->backgroundImage1 = NULL;
+    infer->backgroundImage2 = NULL;
 
     // load sound
     infer->sample = al_load_sample(sound_path);
-    infer->backgroundSound = al_create_sample_instance(infer->sample);
-    al_set_sample_instance_playmode(infer->backgroundSound, ALLEGRO_PLAYMODE_LOOP);
-    al_attach_sample_instance_to_mixer(infer->backgroundSound, al_get_default_mixer());
+    if (infer->sample == NULL)
+        raise_warn("Can't load sound");
+    else {
+        infer->backgroundSound = al_create_sample_instance(infer->sample);
+        al_set_sample_instance_playmode(infer->backgroundSound, ALLEGRO_PLAYMODE_LOOP);
+        al_attach_sample_instance_to_mixer(infer->backgroundSound, al_get_default_mixer());
+    }
+
 
     // load background1 image
     infer->backgroundImage1 = al_load_bitmap(back1path);
-    infer->image_width1 =  al_get_bitmap_width(infer->backgroundImage1)/CHUNK_WIDTH;
-    infer->image_height1 = al_get_bitmap_height(infer->backgroundImage1)/CHUNK_HEIGHT;
-    infer->width_ratio1 = (infer->image_width1-infer->window_width)
-                            /(SEE_MAP_RIGHT-SEE_MAP_LEFT - infer->window_width);
+    if (infer->backgroundImage1 == NULL)
+        raise_warn("Can't load background image");
+    else {
+        infer->image_width1 =  al_get_bitmap_width(infer->backgroundImage1)/CHUNK_WIDTH;
+        infer->image_height1 = al_get_bitmap_height(infer->backgroundImage1)/CHUNK_HEIGHT;
+        infer->width_ratio1 = (infer->image_width1-infer->window_width)
+                                /(SEE_MAP_RIGHT-SEE_MAP_LEFT - infer->window_width);
+    }
 
     // load background2 image
     infer->backgroundImage2 = al_load_bitmap(back2path);
-    infer->image_width2 =  al_get_bitmap_width(infer->backgroundImage2)/CHUNK_WIDTH;
-    infer->image_height2 = al_get_bitmap_height(infer->backgroundImage2)/CHUNK_HEIGHT;
-    infer->width_ratio2 = (infer->image_width2-infer->window_width)
-                            /(SEE_MAP_RIGHT-SEE_MAP_LEFT - infer->window_width);
+    if (infer->backgroundImage2 == NULL)
+        raise_warn("Can't load background image");
+    else {
+        infer->image_width2 =  al_get_bitmap_width(infer->backgroundImage2)/CHUNK_WIDTH;
+        infer->image_height2 = al_get_bitmap_height(infer->backgroundImage2)/CHUNK_HEIGHT;
+        infer->width_ratio2 = (infer->image_width2-infer->window_width)
+                                /(SEE_MAP_RIGHT-SEE_MAP_LEFT - infer->window_width);
+    }
 
     // method
     infer->draw = Interface_draw;
@@ -68,8 +85,16 @@ void Interface_draw(Interface* infer) {
     al_draw_scaled_bitmap(infer->backgroundImage2,sx,sy,sw,sh,dx,dy,dw,dh,0);
 }
 bool Interface_update(Interface* infer){return false;}
-void Interface_start_sound(Interface* infer){al_play_sample_instance(infer->backgroundSound);}
-void Interface_stop_sound(Interface* infer){al_stop_sample_instance(infer->backgroundSound);}
+void Interface_start_sound(Interface* infer){
+    if (infer == NULL) raise_err("Interface is NULL");
+    else if (infer->backgroundSound == NULL) raise_warn("Can't play sound");
+    else al_play_sample_instance(infer->backgroundSound);
+}
+void Interface_stop_sound(Interface* infer){
+    if (infer == NULL) raise_err("Interface is NULL");
+    else if (infer->backgroundSound == NULL) raise_warn("Can't stop sound");
+    else al_stop_sample_instance(infer->backgroundSound);
+}
 void Interface_go_down(Interface* infer){
     show_msg("show down animation begin");
     infer->key_lock = true;
@@ -112,7 +137,6 @@ void Interface_destroy(Interface* infer){
     infer->backgroundImage2 = NULL;
     show_msg("destroy interface done");
 }
-
 void delete_Interface(Interface* infer){
     Interface_destroy(infer);
     free(infer);

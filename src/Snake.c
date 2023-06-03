@@ -16,7 +16,6 @@ Snake* new_Snake(Pos Poss[], int len,
                img_tail);
     return snake;
 }
-
 void Snake_init(Snake *snake, Pos Poss[], int len,
                 ALLEGRO_BITMAP * img_head,
                 ALLEGRO_BITMAP * img_body_straight,
@@ -59,7 +58,6 @@ void Snake_init(Snake *snake, Pos Poss[], int len,
                                              to,to));
     show_msg("Create Snake done");
 }
-
 void Snake_draw(Snake *snake) {
     ObjectQueue *body = snake->body;
     Node* BN = body->head;
@@ -71,7 +69,6 @@ void Snake_draw(Snake *snake) {
         BN = next(BN);
     }
 }
-
 bool Snake_update(Snake *snake) {
     if(snake->isDied) return false;
     else if(snake->isFall) {
@@ -99,12 +96,10 @@ bool Snake_update(Snake *snake) {
     }
     else return false;
 }
-
 Pos Snake_Next_Pos(Snake *snake) {
     Pos dP = DIRC_TO_POS(snake->move_direction);
     return add(snake->head,dP);
 }
-
 void Snake_Move_all(Snake *snake) {
     ObjectQueue *body = snake->body;
     Node* BN = body->head;
@@ -116,12 +111,10 @@ void Snake_Move_all(Snake *snake) {
     }
     snake->head = obj->pos;
 }
-
 void Snake_Move_forward(Snake *snake) {
     Snake_Move_extend(snake);
     Snake_Shorten(snake);
 }
-
 void Snake_Move_extend(Snake *snake) {
     Pos next_pos = Snake_Next_Pos(snake);
     ObjectQueue *body = snake->body;
@@ -140,7 +133,6 @@ void Snake_Move_extend(Snake *snake) {
                                         snake->move_direction,
                                         snake->move_direction));
 }
-
 void Snake_Shorten(Snake *snake) {
     show_msg("snake shorten begin");
     Object* obj = pop_front(snake->body);
@@ -154,7 +146,6 @@ void Snake_Shorten(Snake *snake) {
     NewTail->from_dirc = NewTail->to_dirc;
     show_msg("snake shorten end");
 }
-
 void Snake_destory(Snake *snake) {
     show_msg("destroy snake begin");
     if (snake->body == NULL) return;
@@ -166,7 +157,6 @@ void Snake_destory(Snake *snake) {
     snake->body = NULL;
     show_msg("destroy snake done");
 }
-
 void delete_Snake(Snake *snake) {
     Snake_destory(snake);
     free(snake);

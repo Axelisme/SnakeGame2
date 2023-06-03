@@ -1,7 +1,8 @@
 // rewrite in c
 
 #include "Level.h"
-#include "stdio.h"
+#include <stdio.h>
+#include <wchar.h>
 
 Level* new_Level(int level_idx) {
     Level* level = (Level*)malloc(sizeof(Level));
@@ -14,11 +15,24 @@ void Level_init(Level *self, int level_idx) {
     self->level_idx = level_idx;
     self->Gravity = DOWN;
     self->level_stat = KEEP;
-    Map_init(&self->map,0,0);
-    Map_init(&self->ground_map,0,0);
-    Map_init(&self->ob_map,0,0);
-    Map_init(&self->snake_map,0,0);
+    self->Fix_Background_image = nullptr;
+    self->Ground_image = nullptr;
+    self->Stone_image = nullptr;
+    self->Apple_image = nullptr;
+    self->Snake_head_image = nullptr;
+    self->Snake_body_straight_image = nullptr;
+    self->Snake_body_turn_image = nullptr;
+    self->Snake_tail_image = nullptr;
+    self->End_point_image = nullptr;
+    self->Buttom_image = nullptr;
+    self->Spike_image = nullptr;
+    self->Spike_down_image = nullptr;
+    Map_init(&self->map,0,0,AIR);
+    Map_init(&self->ground_map,0,0,AIR);
+    Map_init(&self->ob_map,0,0,AIR);
+    Map_init(&self->snake_map,0,0,AIR);
     ObjectQueue_init(&self->object);
+    self->infer.draw = Level_draw;
     Level_load_level(self,level_idx);
     show_msg("Create level done");
 }
@@ -150,6 +164,7 @@ bool Level_update(Interface *Iself) {
             }
             default: raise_warn("Unknown object type");
         }
+        if (Onode == nullptr) break;
         Onode = next(Onode);
     }
 
@@ -331,7 +346,7 @@ bool Level_load_level(Level *self, int _level_idx) {
     int m = 0, n = 0;
     while (t--)
     {
-        fgets(data_type, 20, fin);
+        fscanf(fin, "%s", data_type);
         switch(data_type[0])
         {
             case '1': {  //background
@@ -365,7 +380,7 @@ bool Level_load_level(Level *self, int _level_idx) {
                 for (int i = 0; i < m; i++)
                 {
                     //fin >> snake_position_vector[i].first >> snake_position_vector[i].second;
-                    fscanf(fin, "%d %d", &snake_position_vector[i].y, &snake_position_vector[i].x);
+                    fscanf(fin, "%lf %lf", &snake_position_vector[i].y, &snake_position_vector[i].x);
                 }
                 Snake_init(&self->snake,snake_position_vector,m,self->Snake_head_image,
                                                         self->Snake_body_straight_image,
@@ -381,7 +396,7 @@ bool Level_load_level(Level *self, int _level_idx) {
                 for (int i = 0; i < m; i++)
                 {
                     //fin >> stone_position.first >> stone_position.second;
-                    fscanf(fin, "%d %d", &stone_position.y, &stone_position.x);
+                    fscanf(fin, "%lf %lf", &stone_position.y, &stone_position.x);
                     Object * temp = (Object*)new_Stone(stone_position,self->Stone_image);
                     //object.emplace_back(temp);
                     push_back(&self->object, temp);
@@ -396,7 +411,7 @@ bool Level_load_level(Level *self, int _level_idx) {
                 for (int i = 0; i < m; i++)
                 {
                     //fin >> button_position.first >> button_position.second >> path;
-                    fscanf(fin, "%d %d %s", &button_position.y, &button_position.x, path);
+                    fscanf(fin, "%lf %lf %s", &button_position.y, &button_position.x, path);
                     Object * newOb = nullptr;
                     switch (path[1]){
                         case 'h':{   //Short
@@ -410,12 +425,13 @@ bool Level_load_level(Level *self, int _level_idx) {
                             Pos spike_position;  //spike_posotion {y1,x1}
                             //fin >> n;
                             fscanf(fin, "%d", &n);
-                            while (n--)
+                            size_t i = n;
+                            while (i--)
                             {
                                 //fin >> spike_position.first >> spike_position.second;
-                                fscanf(fin, "%d %d", &spike_position.y, &spike_position.x);
+                                fscanf(fin, "%lf %lf", &spike_position.y, &spike_position.x);
                                 //Spike.emplace_back(spike_position);
-                                Spike[n] = spike_position;
+                                Spike[i] = spike_position;
                             }
                             //object.emplace_back(new Button(button_position,Buttom_image,TRIGER_SPIKE,Spike));
                             newOb = (Object*)new_Button(button_position,self->Buttom_image,TRIGER_SPIKE,Spike,n);
@@ -441,10 +457,10 @@ bool Level_load_level(Level *self, int _level_idx) {
                 self->mapw = n;
                 self->maph = m;
                 //map.resize(m,std::vector<OBJ_TYPE>(n,AIR));
-                Map_resize(&self->map, m, n);
-                Map_resize(&self->ground_map, m, n);
-                Map_resize(&self->ob_map, m, n);
-                Map_resize(&self->snake_map, m, n);
+                Map_resize(&self->map, m, n, AIR);
+                Map_resize(&self->ground_map, m, n, AIR);
+                Map_resize(&self->ob_map, m, n, AIR);
+                Map_resize(&self->snake_map, m, n, AIR);
                 int element;
                 for (int i = 0; i < m; i++)
                 {
@@ -490,16 +506,12 @@ bool Level_load_level(Level *self, int _level_idx) {
             default: {
                 sprintf(tmp, "Level%d loaded fail, Level%d's data wrong.", self->level_idx,self->level_idx);
                 raise_err(tmp);
-                //fin.clear();
-                //fin.close();
                 fclose(fin);
                 return false;
             }
         }
     }
     show_msg("load level done");
-    //fin.clear();
-    //fin.close();
     fclose(fin);
     print_map(self);
     return true;
@@ -513,62 +525,75 @@ void Level_level_reset(Level *self, int level_idx) {
 }
 void print_map(Level *self) {
     show_msg("print map begin");
-    //for (auto i:map)
     for (int i = 0; i < self->map.y_size; i++)
     {
-        //for (auto j:i)
         for (int j = 0; j < self->map.x_size; j++)
         {
             switch(self->map.map[i][j])
             {
                 case AIR:
                     //cout << "  ";
-                    printf("%ls", L"  ");
+                    wprintf(L"  ");
                     break;
                 case STONE:
                     //cout << "░░";
-                    printf("%ls", L"░░");
+                    wprintf(L"░░");
                     break;
                 case GROUND:
                     //cout << "██";
-                    printf("%ls", L"██");
+                    wprintf(L"██");
                     break;
                 case END:
                     //cout << " ⊠";
-                    printf("%ls", L" ⊠");
+                    wprintf(L" ⊠");
                     break;
                 case APPLE:
                     //cout << " ⋄";
-                    printf("%ls", L" ⋄");
+                    wprintf(L" ⋄");
                     break;
                 case EDGE:
                     //cout << "▞▞";
-                    printf("%ls", L"▞▞");
+                    wprintf(L"▞▞");
                     break;
                 case SPIKE:
                 case SPIKE_DOWN:
                     //cout << "||";
-                    printf("%ls", L"||");
+                    wprintf(L"||");
                     break;
                 case BUTTON:
                     //cout << " ▂";
-                    printf("%ls", L" ▂");
+                    wprintf(L" ▂");
                     break;
                 case BODY:
                     //cout << "▒▒";
-                    printf("%ls", L"▒▒");
+                    wprintf(L"▒▒");
                     break;
                 case HEAD:
                     //cout << "▓▓";
-                    printf("%ls", L"▓▓");
+                    wprintf(L"▓▓");
                     break;
                 default:
                     //cout << "**";
-                    printf("%s", "**");
+                    wprintf(L"**");
                     break;
             }
         }
-        printf("\n");
+        wprintf(L"\n");
+    }
+    show_msg("print map done");
+}
+void print_map_id(Level *self) {
+    show_msg("print map begin");
+    //setlocale(LC_ALL, "");
+    //for (auto i:map)
+    for (int i = 0; i < self->map.y_size; i++)
+    {
+        //for (auto j:i)
+        for (int j = 0; j < self->map.x_size; j++)
+        {
+            wprintf(L"%d ", (int)self->map.map[i][j]);
+        }
+        wprintf(L"\n");
     }
     show_msg("print map done");
 }

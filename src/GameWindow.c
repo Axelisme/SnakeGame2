@@ -12,6 +12,8 @@ void GameWindow_init(GameWindow* self) {
     self->width = DISPLAY_WIDTH;
     self->height = DISPLAY_HEIGHT;
     self->state = GAME_MENU;
+    self->menu = nullptr;
+    self->level = nullptr;
     GameWindow_Mute = false;
     GameWindow_want_level = FIRST_LEVEL;
     // Initial Allegro
@@ -193,9 +195,9 @@ void GameWindow_game_reset(GameWindow* self) {
 void GameWindow_game_destroy(GameWindow* self) {
     show_msg("Game destroy begin");
 
-    al_destroy_display(self->display);            // delete display
-    al_destroy_event_queue(self->event_queue);    // delete event_queue
-    al_destroy_timer(self->timer);                // delete timer
+    if (self->display) al_destroy_display(self->display);               // delete display
+    if (self->event_queue) al_destroy_event_queue(self->event_queue);   // delete event_queue
+    if (self->timer) al_destroy_timer(self->timer);                     // delete timer
 
     //delete level;
     delete_Level((Interface*)self->level);

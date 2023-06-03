@@ -1,0 +1,9 @@
+.vscode
+build
+
+bin/Debug
+bin/Release
+
+algif5
+allegro
+allegro_mac

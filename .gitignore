@@ -1,9 +1,0 @@
-.vscode
-build
-
-bin/Debug
-bin/Release
-
-allegro_mac/lib
-
-SnakeGame

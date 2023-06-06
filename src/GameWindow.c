@@ -1,5 +1,7 @@
 
 #include "GameWindow.h"
+#include "Interface/Interface.h"
+#include "Interface/Menu/InMenu.h"
 #include <string.h>
 
 const char BACKGROUND_SOUND_PATH[] = "data/music/level_bgm.ogg";
@@ -11,8 +13,6 @@ GameWindow* new_GameWindow() {
 }
 void GameWindow_init(GameWindow* self) {
     // display
-    self->width = INIT_DISPLAY_WIDTH;
-    self->height = INIT_DISPLAY_HEIGHT;
     self->display = nullptr;
     // sound
     self->background_sample = nullptr;
@@ -99,11 +99,13 @@ void GameWindow_event_record(GameWindow* self, ALLEGRO_EVENT event) {
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
             self->event = event;
             break;
-        default: {
+        case ALLEGRO_EVENT_KEY_DOWN: {
             Interface* top_interface = self->interfaces[self->interface_num-1];
             top_interface->event_record(top_interface, event);
             break;
         }
+        default:
+            break;
     }
 }
 
@@ -111,7 +113,7 @@ void _GameWindow_load(GameWindow* self) {
     // Create Display
     show_msg("Create Display");
     al_set_new_display_refresh_rate(DISPLAY_FPS);
-    self->display = al_create_display(self->width,self->height);
+    self->display = al_create_display(INIT_DISPLAY_WIDTH,INIT_DISPLAY_HEIGHT);
     if(self->display==nullptr) raise_err("can't not create display window");
     al_set_window_position(self->display,0,0);
     // Create Sound
@@ -129,9 +131,15 @@ void _GameWindow_load(GameWindow* self) {
 Interface* _create_Interface(INTERFACE_TYPE type) {
     // TODO
     switch (type) {
+        case INTERFACE_IN_MENU:
+            return (Interface*)new_InMenu();
+            break;
         case INTERFACE_NONE:
             raise_err("can't create INTERFACE_NONE");
-            return nullptr;
+        case INTERFACE_START_MENU:
+        case INTERFACE_LEVEL_MENU:
+        case INTERFACE_LEVEL:
+        case INTERFACE_GUIDE:
         case INTERFACE_BASIC:
             return new_Interface();
         default:
@@ -144,6 +152,9 @@ void _GameWindow_deal_event(GameWindow* self) {
     switch(self->event.type) {
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
             self->state = GAMEWINDOW_EXIT;
+            break;
+        case ALLEGRO_EVENT_DISPLAY_RESIZE:
+            al_acknowledge_resize(self->display);
             break;
         default:
             break;

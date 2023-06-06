@@ -6,7 +6,7 @@
 #define INIT_DISPLAY_WIDTH 800
 #define INIT_DISPLAY_HEIGHT 800
 #define DISPLAY_FPS 30
-#define FIRST_INTERFACE INTERFACE_BASIC
+#define FIRST_INTERFACE INTERFACE_IN_MENU
 #define INTERFACE_MAX_NUM 10
 
 typedef enum GAMEWINDOW_STATE {
@@ -16,8 +16,6 @@ typedef enum GAMEWINDOW_STATE {
 
 typedef struct  GameWindow {
     // display
-    int width;
-    int height;
     ALLEGRO_DISPLAY* display;
     // sound
     ALLEGRO_SAMPLE* background_sample;

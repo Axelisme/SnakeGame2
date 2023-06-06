@@ -30,7 +30,8 @@ typedef struct Interface {
     INTERFACE_TYPE type;
     // Display
     int background_light;
-    int background_light_step;
+    int background_light_up_step;
+    int background_light_down_step;
     // state
     INTERFACE_STATE state;
     INTERFACE_TYPE next_interface;
@@ -53,5 +54,6 @@ void Interface_event_record(Interface* self, ALLEGRO_EVENT event);
 
 bool _Interface_update_light(Interface* self, int dirc);
 static void _Interface_deal_event(Interface* self);
+void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer);
 
 #endif // INTERFACCE_H

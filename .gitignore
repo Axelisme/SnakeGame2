@@ -4,6 +4,9 @@ build
 bin/Debug
 bin/Release
 
+oldsrc
+oldinclude
+
 allegro_mac/lib
 allegro_build
 

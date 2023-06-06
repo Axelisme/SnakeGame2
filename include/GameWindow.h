@@ -2,98 +2,46 @@
 #define GANEWINDOW_H
 
 #include "global.h"
-#include "Menu.h"
-#include "Level.h"
+#include "Interface/Interface.h"
+#define INIT_DISPLAY_WIDTH 800
+#define INIT_DISPLAY_HEIGHT 800
+#define DISPLAY_FPS 30
+#define FIRST_INTERFACE INTERFACE_BASIC
+#define INTERFACE_MAX_NUM 10
 
-typedef struct GameWindow {
+typedef enum GAMEWINDOW_STATE {
+    GAMEWINDOW_RUNING = 1,
+    GAMEWINDOW_EXIT = 0
+} GAMEWINDOW_STATE;
+
+typedef struct  GameWindow {
     // display
-    ALLEGRO_DISPLAY* display;
     int width;
     int height;
-
-    // menu
-    Menu *menu;
-
-    // level
-    Level *level;
-
+    ALLEGRO_DISPLAY* display;
+    // sound
+    ALLEGRO_SAMPLE* background_sample;
+    ALLEGRO_SAMPLE_INSTANCE* background_music;
+    bool Mute;
     // state
-    GAME_STATE state;
-
+    GAMEWINDOW_STATE state;
     // event
-    ALLEGRO_EVENT_QUEUE *event_queue;
     ALLEGRO_EVENT event;
-
-    // Time
-    ALLEGRO_TIMER *timer;
+    // Interface
+    int interface_num;
+    Interface* interfaces[INTERFACE_MAX_NUM];
 } GameWindow;
 
 GameWindow* new_GameWindow();
 void GameWindow_init(GameWindow* self);
+void GameWindow_destroy(GameWindow* self);
+void delete_GameWindow(GameWindow* self);
 void GameWindow_draw(GameWindow* self);
-bool GameWindow_update(GameWindow* self);
-void GameWindow_game_load(GameWindow* self);
-void GameWindow_game_play(GameWindow* self);
-void GameWindow_game_reset(GameWindow* self);
-void GameWindow_game_destroy(GameWindow* self);
-void GameWindow_game_begin(GameWindow* self);
-void GameWindow_game_process(GameWindow* self);
-GameWindow* delete_GameWindow(GameWindow* self);
+GAMEWINDOW_STATE GameWindow_update(GameWindow* self);
+void GameWindow_event_record(GameWindow* self, ALLEGRO_EVENT event);
+
+void _GameWindow_load(GameWindow* self);
+Interface* _create_Interface(INTERFACE_TYPE type);
+void _GameWindow_deal_event(GameWindow* self);
 
 #endif // GANEWINDOW_H
-
-/*
-#include "global.h"
-#include "Menu.h"
-#include "Level.h"
-#include <string>
-
-using namespace std;
-
-class GameWindow {
-public:
-    static bool Mute;
-    static int want_level;
-
-    // Draw function
-    void draw();
-    // update object
-    bool update();
-
-    // game process
-    void game_load();
-    void game_play();
-    void game_reset();
-    void game_destroy();
-
-    // Create and destroy
-    GameWindow();
-    ~GameWindow();
-
-private:
-    // inner process
-    void game_begin();
-    void game_process();
-
-    // display 
-    ALLEGRO_DISPLAY* display = nullptr;
-    const int width = DISPLAY_WIDTH;
-    const int height = DISPLAY_HEIGHT;
-
-    // menu
-    Menu *menu = nullptr;
-
-    // level
-    Level *level = nullptr;
-
-    // state
-    GAME_STATE state = GAME_MENU;
-
-    // event
-    ALLEGRO_EVENT_QUEUE *event_queue = nullptr;
-    ALLEGRO_EVENT event;
-
-    // Time
-    ALLEGRO_TIMER *timer = nullptr;
-};
-*/

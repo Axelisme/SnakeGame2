@@ -1,9 +1,9 @@
 #! /bin/sh
 
 mkdir build
+rm -rfd build/**
 cd build
-rm -rd ./**
 cmake -DCMAKE_BUILD_TYPE=Release ../src
-cmake --build . --target all -- -j $(nproc)
+cmake --build . --target all --clean-first -- -j $(nproc)
 cd ..
 ln -sf bin/Release/SnakeGame SnakeGame

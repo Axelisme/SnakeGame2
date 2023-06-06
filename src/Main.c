@@ -1,15 +1,12 @@
-// rewrite it to c language
-#include "GameWindow.h"
-#include "stdlib.h"
+#include "Game.h"
 #include "locale.h"
 
 int main() {
     setlocale(LC_ALL, "");
 
-    GameWindow* SnakeGame = new_GameWindow();
+    Game* SnakeGame = new_Game();
 
-    //SnakeGame->game_play();
-    GameWindow_game_play(SnakeGame);
+    Game_run(SnakeGame);
 
-    delete_GameWindow(SnakeGame);
+    delete_Game(SnakeGame);
 }

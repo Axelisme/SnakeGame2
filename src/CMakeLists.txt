@@ -13,7 +13,12 @@ message("Working directory: ${WORKING_DIRECTORY}")
 
 # 新增原始檔列表變數
 SET(SRC_DIR ${WORKING_DIRECTORY}/src)
-aux_source_directory(${SRC_DIR} SRC_LIST)
+aux_source_directory(${SRC_DIR} SRC_LIST1)
+aux_source_directory(${SRC_DIR}/Interface SRC_LIST2)
+aux_source_directory(${SRC_DIR}/Interface/Menu SRC_LIST3)
+aux_source_directory(${SRC_DIR}/Interface/Level SRC_LIST4)
+aux_source_directory(${SRC_DIR}/Object SRC_LIST5)
+SET(SRC_LIST ${SRC_LIST1} ${SRC_LIST2} ${SRC_LIST3} ${SRC_LIST4} ${SRC_LIST5})
 message("Source directory: ${SRC_DIR}")
 
 # 指定庫檔案搜尋目錄，必須為絕對路徑

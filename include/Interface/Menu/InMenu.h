@@ -12,7 +12,7 @@ typedef struct InMenu {
 
 Menu* new_InMenu();
 void InMenu_init(Menu* self);
-void INMenu_destroy(Menu* self);
+void InMenu_destroy(Menu* self);
 void delete_InMenu(Interface* Iself);
 void InMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
 INTERFACE_STATE InMenu_update(Interface* Iself);

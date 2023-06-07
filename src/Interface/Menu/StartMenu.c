@@ -1,5 +1,6 @@
 
 #include "Interface/Menu/StartMenu.h"
+#include "GameWindow.h"
 
 const char START_MENU_START_IMAGE_PATH[] = "data/image/menu/game_menu_start.png";
 const char START_MENU_LEVEL_IMAGE_PATH[] = "data/image/menu/game_menu_level.png";
@@ -95,6 +96,7 @@ void StartMenu_event_record(Interface* Iself, ALLEGRO_EVENT event) {
         case ALLEGRO_KEY_UP:
         case ALLEGRO_KEY_DOWN:
         case ALLEGRO_KEY_ENTER:
+        case ALLEGRO_KEY_SPACE:
         case ALLEGRO_KEY_ESCAPE:
             Iself->event = event;
             break;
@@ -114,11 +116,12 @@ void _StartMenu_deal_event(StartMenu* self) {
         case ALLEGRO_KEY_DOWN:
             self->menu_state = _StartMenu_next_state(self);
             break;
+        case ALLEGRO_KEY_SPACE:
         case ALLEGRO_KEY_ENTER:
             _StartMenu_enter_state(self);
             break;
         case ALLEGRO_KEY_ESCAPE:
-            _StartMenu_escape_state(self);
+            _StartMenu_escape(self);
             break;
         default:
             raise_warn("try to deal with unknown event");
@@ -139,7 +142,6 @@ void _StartMenu_init_image(StartMenu* self) {
     self->exit_image  = nullptr;
 }
 void _StartMenu_load_image(StartMenu* self) {
-    show_msg("_StartMenu_load_image");
     _StartMenu_init_image(self);
     self->start_image = al_load_bitmap(START_MENU_START_IMAGE_PATH);
     self->level_image = al_load_bitmap(START_MENU_LEVEL_IMAGE_PATH);
@@ -182,14 +184,14 @@ void _StartMenu_enter_state(StartMenu* self) {
     switch (self->menu_state) {
         case START_MENU_STATE_LEVEL:
             Iself->next_interface = INTERFACE_LEVEL_MENU;
-            Iself->should_kill = true;
+            Iself->should_kill = false;
             Iself->state = INTERFACE_EXITING;
             break;
         case START_MENU_STATE_MUSIC:
-            show_msg("TODO: mute or unmute music");
+            GameWindow_toggle_mute();
             break;
         case START_MENU_STATE_GUIDE:
-            Iself->next_interface = INTERFACE_GUIDE;
+            Iself->next_interface = INTERFACE_GUIDE_MENU;
             Iself->should_kill = false;
             Iself->state = INTERFACE_EXITING;
             break;
@@ -203,7 +205,7 @@ void _StartMenu_enter_state(StartMenu* self) {
             break;
     }
 }
-void _StartMenu_escape_state(StartMenu* self) {
+void _StartMenu_escape(StartMenu* self) {
     Interface* Iself = (Interface*)self;
     Iself->next_interface = INTERFACE_NONE;
     Iself->should_kill = true;

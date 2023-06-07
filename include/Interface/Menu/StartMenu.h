@@ -39,7 +39,7 @@ ALLEGRO_BITMAP* _StartMenu_current_image(StartMenu* self);
 START_MENU_STATE _StartMenu_next_state(StartMenu* self);
 START_MENU_STATE _StartMenu_prev_state(StartMenu* self);
 void _StartMenu_enter_state(StartMenu* self);
-void _StartMenu_escape_state(StartMenu* self);
+void _StartMenu_escape(StartMenu* self);
 
 #endif // START_MENU_H
 

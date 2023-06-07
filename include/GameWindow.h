@@ -37,6 +37,9 @@ void delete_GameWindow(GameWindow* self);
 void GameWindow_draw(GameWindow* self);
 GAMEWINDOW_STATE GameWindow_update(GameWindow* self);
 void GameWindow_event_record(GameWindow* self, ALLEGRO_EVENT event);
+void GameWindow_set_mute(bool mute);
+bool GameWindow_get_mute();
+void GameWindow_toggle_mute();
 
 void _GameWindow_load(GameWindow* self);
 Interface* _create_Interface(INTERFACE_TYPE type);

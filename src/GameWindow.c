@@ -3,9 +3,13 @@
 #include "Interface/Interface.h"
 #include "Interface/Menu/InMenu.h"
 #include "Interface/Menu/StartMenu.h"
+#include "Interface/Menu/GuideMenu.h"
 #include <string.h>
+#include <stdio.h>
+#include <unistd.h>
 
 const char BACKGROUND_SOUND_PATH[] = "data/music/level_bgm.ogg";
+bool Mute = false;
 
 GameWindow* new_GameWindow() {
     GameWindow* self = (GameWindow*)al_calloc(1,sizeof(GameWindow));
@@ -18,7 +22,7 @@ void GameWindow_init(GameWindow* self) {
     // sound
     self->background_sample = nullptr;
     self->background_music = nullptr;
-    self->Mute = false;
+    self->Mute = GameWindow_get_mute();
     // state
     self->state = GAMEWINDOW_RUNING;
     // event
@@ -62,10 +66,14 @@ void GameWindow_draw(GameWindow* self) {
     al_flip_display();
 }
 GAMEWINDOW_STATE GameWindow_update(GameWindow* self) {
-    // deal with the game window level key event
-    _GameWindow_deal_event(self);
     // exit if status is GAME_EXIT
     if (self->state==GAMEWINDOW_EXIT) return GAMEWINDOW_EXIT;
+    // deal with the game window level key event
+    _GameWindow_deal_event(self);
+    // mute or unmute the background music
+    self->Mute = GameWindow_get_mute();
+    if (self->Mute) al_stop_sample_instance(self->background_music);
+    else al_play_sample_instance(self->background_music);
     // update the top interface
     if (self->interface_num==0) return GAMEWINDOW_EXIT;
     Interface* top_interface = self->interfaces[self->interface_num-1];
@@ -112,6 +120,9 @@ void GameWindow_event_record(GameWindow* self, ALLEGRO_EVENT event) {
         }
     }
 }
+void GameWindow_set_mute(bool mute) {Mute = mute;}
+bool GameWindow_get_mute() {return Mute;}
+void GameWindow_toggle_mute() {Mute = !Mute;}
 
 void _GameWindow_load(GameWindow* self) {
     // Create Display
@@ -128,7 +139,7 @@ void _GameWindow_load(GameWindow* self) {
     al_set_sample_instance_playmode(self->background_music, ALLEGRO_PLAYMODE_LOOP);
     al_attach_sample_instance_to_mixer(self->background_music, al_get_default_mixer());
     // Create interface
-    show_msg("Create In interface");
+    show_msg("Create first interface");
     Interface* first_interface = _create_Interface(FIRST_INTERFACE);
     self->interfaces[self->interface_num++] = first_interface;
 }
@@ -141,11 +152,13 @@ Interface* _create_Interface(INTERFACE_TYPE type) {
         case INTERFACE_START_MENU:
             return (Interface*)new_StartMenu();
             break;
+        case INTERFACE_GUIDE_MENU:
+            return (Interface*)new_GuideMenu();
+            break;
         case INTERFACE_NONE:
             raise_warn("can't create INTERFACE_NONE");
         case INTERFACE_LEVEL_MENU:
         case INTERFACE_LEVEL:
-        case INTERFACE_GUIDE:
         case INTERFACE_BASIC:
             return new_Interface();
         default:

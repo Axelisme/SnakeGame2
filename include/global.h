@@ -12,7 +12,7 @@
 #include <stdbool.h>
 
 // Debug
-#define Debug 0
+#define Debug 1
 #define ShowMap 0
 
 // Color

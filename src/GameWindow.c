@@ -2,6 +2,7 @@
 #include "GameWindow.h"
 #include "Interface/Interface.h"
 #include "Interface/Menu/InMenu.h"
+#include "Interface/Menu/StartMenu.h"
 #include <string.h>
 
 const char BACKGROUND_SOUND_PATH[] = "data/music/level_bgm.ogg";
@@ -97,15 +98,18 @@ void GameWindow_event_record(GameWindow* self, ALLEGRO_EVENT event) {
     self->event.type = -1;
     switch(event.type) {
         case ALLEGRO_EVENT_DISPLAY_CLOSE:
+            show_msg("Detect display close");
             self->event = event;
             break;
-        case ALLEGRO_EVENT_KEY_DOWN: {
+        case ALLEGRO_EVENT_DISPLAY_RESIZE:
+            show_msg("Detect display resize");
+            self->event = event;
+            break;
+        default: {
             Interface* top_interface = self->interfaces[self->interface_num-1];
             top_interface->event_record(top_interface, event);
             break;
         }
-        default:
-            break;
     }
 }
 
@@ -134,9 +138,11 @@ Interface* _create_Interface(INTERFACE_TYPE type) {
         case INTERFACE_IN_MENU:
             return (Interface*)new_InMenu();
             break;
-        case INTERFACE_NONE:
-            raise_err("can't create INTERFACE_NONE");
         case INTERFACE_START_MENU:
+            return (Interface*)new_StartMenu();
+            break;
+        case INTERFACE_NONE:
+            raise_warn("can't create INTERFACE_NONE");
         case INTERFACE_LEVEL_MENU:
         case INTERFACE_LEVEL:
         case INTERFACE_GUIDE:

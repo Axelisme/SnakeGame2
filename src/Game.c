@@ -50,6 +50,7 @@ void Game_init(Game* self) {
     show_msg("register event source");
     al_register_event_source(self->event_queue, al_get_display_event_source(self->window.display));
     al_register_event_source(self->event_queue, al_get_keyboard_event_source());
+    al_register_event_source(self->event_queue, al_get_mouse_event_source());
     al_register_event_source(self->event_queue, al_get_timer_event_source(self->update_timer));
     al_register_event_source(self->event_queue, al_get_timer_event_source(self->render_timer));
 }

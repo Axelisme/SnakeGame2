@@ -6,6 +6,7 @@
 #define MAX_LIGHT 255
 #define MIN_LIGHT 0
 #define BASIC_LIGHT_STEP 20
+#define NO_EVENT -1
 
 typedef enum INTERFACE_TYPE {
     INTERFACE_IN_MENU,
@@ -34,6 +35,7 @@ typedef struct Interface {
     int background_light_down_step;
     // state
     INTERFACE_STATE state;
+    bool should_kill;
     INTERFACE_TYPE next_interface;
     // event
     ALLEGRO_EVENT event;

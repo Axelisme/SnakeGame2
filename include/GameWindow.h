@@ -41,8 +41,8 @@ void GameWindow_set_mute(bool mute);
 bool GameWindow_get_mute();
 void GameWindow_toggle_mute();
 
-void _GameWindow_load(GameWindow* self);
-Interface* _create_Interface(CHILD_INFO type_info);
-void _GameWindow_deal_event(GameWindow* self);
+static void _GameWindow_load(GameWindow* self);
+static Interface* _create_Interface(CHILD_INFO type_info);
+static void _GameWindow_deal_event(GameWindow* self);
 
 #endif // GANEWINDOW_H

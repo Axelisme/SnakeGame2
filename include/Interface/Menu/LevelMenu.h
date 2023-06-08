@@ -22,6 +22,22 @@ typedef struct LevelMenu {
     ALLEGRO_BITMAP *  level_4_image;
 } LevelMenu;
 
+LevelMenu* new_LevelMenu();
+void LevelMenu_init(LevelMenu* self);
+void LevelMenu_destroy(LevelMenu* self);
+void delete_LevelMenu(Interface* Iself);
+void LevelMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
+INTERFACE_INFO LevelMenu_update(Interface* Iself);
+void LevelMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
+
+static void _LevelMenu_deal_event(LevelMenu* self);
+static void _LevelMenu_init_image(LevelMenu* self);
+static void _LevelMenu_load_image(LevelMenu* self);
+static ALLEGRO_BITMAP* _LevelMenu_current_image(LevelMenu* self);
+static LEVEL_MENU_STATE _LevelMenu_next_state(LevelMenu* self);
+static LEVEL_MENU_STATE _LevelMenu_prev_state(LevelMenu* self);
+static void _LevelMenu_enter_state(LevelMenu* self);
+static void _LevelMenu_escape(LevelMenu* self);
 
 
 #endif // LEVEL_MENU_H

@@ -48,7 +48,7 @@ void GuideMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     GuideMenu* self = (GuideMenu*)Iself;
     if (Iself->info.state == INTERFACE_DIED) return;
     Interface_draw(Iself, backbuffer);
-    if (self->guide_menu_image) _draw_image(self->guide_menu_image, backbuffer);
+    if (self->guide_menu_image) draw_image(self->guide_menu_image, backbuffer);
     else raise_warn("try to draw NULL guide image");
 }
 INTERFACE_INFO GuideMenu_update(Interface* Iself) {
@@ -56,7 +56,7 @@ INTERFACE_INFO GuideMenu_update(Interface* Iself) {
     GuideMenu* self = (GuideMenu*)Iself;
     switch (Iself->info.state) {
         case INTERFACE_INITIALING:
-            if (_Interface_update_light(Iself,1))
+            if (Interface_update_light(Iself,1))
                 Iself->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_STOP:
@@ -66,7 +66,7 @@ INTERFACE_INFO GuideMenu_update(Interface* Iself) {
             _GuideMenu_deal_event(self);
             break;
         case INTERFACE_EXITING:
-            if (_Interface_update_light(Iself,-1))
+            if (Interface_update_light(Iself,-1))
                 Iself->info.state = (Iself->should_kill) ? INTERFACE_DIED : INTERFACE_STOP;
             break;
         case INTERFACE_DIED:
@@ -77,7 +77,7 @@ INTERFACE_INFO GuideMenu_update(Interface* Iself) {
     return Iself->info;
 }
 
-void _GuideMenu_deal_event(GuideMenu* self) {
+static void _GuideMenu_deal_event(GuideMenu* self) {
     Interface* Iself = (Interface*)self;
     if (Iself->event.type == NO_EVENT) return;
     if (Iself->event.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -93,11 +93,11 @@ void _GuideMenu_deal_event(GuideMenu* self) {
         }
     }
 }
-void _GuideMenu_init_image(GuideMenu* self) {
+static void _GuideMenu_init_image(GuideMenu* self) {
     if (self->guide_menu_image) al_destroy_bitmap(self->guide_menu_image);
     self->guide_menu_image = nullptr;
 }
-void _GuideMenu_load_image(GuideMenu* self) {
+static void _GuideMenu_load_image(GuideMenu* self) {
     _GuideMenu_init_image(self);
     self->guide_menu_image = al_load_bitmap(GUIDE_MENU_IMAGE_PATH);
     if (self->guide_menu_image == nullptr)

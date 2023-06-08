@@ -32,14 +32,14 @@ void StartMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
 INTERFACE_INFO StartMenu_update(Interface* Iself);
 void StartMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
 
-void _StartMenu_deal_event(StartMenu* self);
-void _StartMenu_init_image(StartMenu* self);
-void _StartMenu_load_image(StartMenu* self);
-ALLEGRO_BITMAP* _StartMenu_current_image(StartMenu* self);
-START_MENU_STATE _StartMenu_next_state(StartMenu* self);
-START_MENU_STATE _StartMenu_prev_state(StartMenu* self);
-void _StartMenu_enter_state(StartMenu* self);
-void _StartMenu_escape(StartMenu* self);
+static void _StartMenu_deal_event(StartMenu* self);
+static void _StartMenu_init_image(StartMenu* self);
+static void _StartMenu_load_image(StartMenu* self);
+static ALLEGRO_BITMAP* _StartMenu_current_image(StartMenu* self);
+static START_MENU_STATE _StartMenu_next_state(StartMenu* self);
+static START_MENU_STATE _StartMenu_prev_state(StartMenu* self);
+static void _StartMenu_enter_state(StartMenu* self);
+static void _StartMenu_escape(StartMenu* self);
 
 #endif // START_MENU_H
 

@@ -57,7 +57,7 @@ void StartMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     Interface_draw(Iself, backbuffer);
     // draw image
     ALLEGRO_BITMAP* image = _StartMenu_current_image(self);
-    _draw_image(image, backbuffer);
+    draw_image(image, backbuffer);
 }
 INTERFACE_INFO StartMenu_update(Interface* Iself) {
     StartMenu* self = (StartMenu*)Iself;
@@ -66,7 +66,7 @@ INTERFACE_INFO StartMenu_update(Interface* Iself) {
     // update by state
     switch (Iself->info.state) {
         case INTERFACE_INITIALING:
-            if (_Interface_update_light(Iself, 1))
+            if (Interface_update_light(Iself, 1))
                 Iself->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_STOP:
@@ -76,7 +76,7 @@ INTERFACE_INFO StartMenu_update(Interface* Iself) {
             _StartMenu_deal_event(self);
             break;
         case INTERFACE_EXITING:
-            if (_Interface_update_light(Iself, -1))
+            if (Interface_update_light(Iself, -1))
                 Iself->info.state = (Iself->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
             break;
         case INTERFACE_DIED:
@@ -105,7 +105,7 @@ void StartMenu_event_record(Interface* Iself, ALLEGRO_EVENT event) {
     }
 }
 
-void _StartMenu_deal_event(StartMenu* self) {
+static void _StartMenu_deal_event(StartMenu* self) {
     Interface* Iself = (Interface*)self;
     if (Iself->event.type == NO_EVENT) return;
     if (Iself->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
@@ -129,7 +129,7 @@ void _StartMenu_deal_event(StartMenu* self) {
     }
     Iself->event.type = NO_EVENT;
 }
-void _StartMenu_init_image(StartMenu* self) {
+static void _StartMenu_init_image(StartMenu* self) {
     if (self->start_image) al_destroy_bitmap(self->start_image);
     if (self->level_image) al_destroy_bitmap(self->level_image);
     if (self->music_image) al_destroy_bitmap(self->music_image);
@@ -141,7 +141,7 @@ void _StartMenu_init_image(StartMenu* self) {
     self->guide_image = nullptr;
     self->exit_image  = nullptr;
 }
-void _StartMenu_load_image(StartMenu* self) {
+static void _StartMenu_load_image(StartMenu* self) {
     _StartMenu_init_image(self);
     self->start_image = al_load_bitmap(START_MENU_START_IMAGE_PATH);
     self->level_image = al_load_bitmap(START_MENU_LEVEL_IMAGE_PATH);
@@ -151,7 +151,7 @@ void _StartMenu_load_image(StartMenu* self) {
     if (!(self->start_image && self->level_image && self->music_image && self->guide_image && self->exit_image))
         raise_warn("failed to load start menu image!");
 }
-ALLEGRO_BITMAP* _StartMenu_current_image(StartMenu* self) {
+static ALLEGRO_BITMAP* _StartMenu_current_image(StartMenu* self) {
     switch (self->menu_state) {
         case START_MENU_STATE_START:
             return self->start_image;
@@ -168,17 +168,17 @@ ALLEGRO_BITMAP* _StartMenu_current_image(StartMenu* self) {
             return nullptr;
     }
 }
-START_MENU_STATE _StartMenu_next_state(StartMenu* self) {
+static START_MENU_STATE _StartMenu_next_state(StartMenu* self) {
     if (self->menu_state < START_MENU_STATE_EXIT)
         return self->menu_state = (START_MENU_STATE)(self->menu_state + 1);
     return START_MENU_STATE_EXIT;
 }
-START_MENU_STATE _StartMenu_prev_state(StartMenu* self) {
+static START_MENU_STATE _StartMenu_prev_state(StartMenu* self) {
     if (self->menu_state > START_MENU_STATE_START)
         return self->menu_state = (START_MENU_STATE)(self->menu_state - 1);
     return START_MENU_STATE_START;
 }
-void _StartMenu_enter_state(StartMenu* self) {
+static void _StartMenu_enter_state(StartMenu* self) {
     Interface* Iself = (Interface*)self;
     if (self->menu_state == START_MENU_STATE_START) return;
     switch (self->menu_state) {
@@ -205,7 +205,7 @@ void _StartMenu_enter_state(StartMenu* self) {
             break;
     }
 }
-void _StartMenu_escape(StartMenu* self) {
+static void _StartMenu_escape(StartMenu* self) {
     Interface* Iself = (Interface*)self;
     Iself->info.state = INTERFACE_EXITING;
     Iself->info.child.next_interface = INTERFACE_NONE;

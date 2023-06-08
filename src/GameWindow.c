@@ -124,7 +124,7 @@ void GameWindow_set_mute(bool mute) {Mute = mute;}
 bool GameWindow_get_mute() {return Mute;}
 void GameWindow_toggle_mute() {Mute = !Mute;}
 
-void _GameWindow_load(GameWindow* self) {
+static void _GameWindow_load(GameWindow* self) {
     // Create Display
     show_msg("Create Display");
     al_set_new_display_refresh_rate(DISPLAY_FPS);
@@ -144,7 +144,7 @@ void _GameWindow_load(GameWindow* self) {
     Interface* first_interface = _create_Interface(first_interface_info);
     self->interfaces[self->interface_num++] = first_interface;
 }
-Interface* _create_Interface(CHILD_INFO type_info) {
+static Interface* _create_Interface(CHILD_INFO type_info) {
     // TODO
     switch (type_info.next_interface) {
         case INTERFACE_IN_MENU:
@@ -167,7 +167,7 @@ Interface* _create_Interface(CHILD_INFO type_info) {
             return nullptr;
     }
 }
-void _GameWindow_deal_event(GameWindow* self) {
+static void _GameWindow_deal_event(GameWindow* self) {
     if (self->event.type == -1) return;
     switch(self->event.type) {
         case ALLEGRO_EVENT_DISPLAY_CLOSE:

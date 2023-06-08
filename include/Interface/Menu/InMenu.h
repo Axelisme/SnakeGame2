@@ -18,8 +18,8 @@ void InMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
 INTERFACE_INFO InMenu_update(Interface* Iself);
 void InMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
 
-void _InMenu_deal_event(Menu* self);
-void _InMenu_init_image(Menu* self);
-void _InMenu_load_image(Menu* self);
+static void _InMenu_deal_event(Menu* self);
+static void _InMenu_init_image(Menu* self);
+static void _InMenu_load_image(Menu* self);
 
 #endif // MENU_H

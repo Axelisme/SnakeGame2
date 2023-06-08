@@ -18,8 +18,8 @@ void GuideMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
 INTERFACE_INFO GuideMenu_update(Interface* Iself);
 void GuideMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
 
-void _GuideMenu_deal_event(GuideMenu* self);
-void _GuideMenu_init_image(GuideMenu* self);
-void _GuideMenu_load_image(GuideMenu* self);
+static void _GuideMenu_deal_event(GuideMenu* self);
+static void _GuideMenu_init_image(GuideMenu* self);
+static void _GuideMenu_load_image(GuideMenu* self);
 
 #endif // GUIDE_MENU_H

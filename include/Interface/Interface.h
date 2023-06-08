@@ -64,9 +64,9 @@ void delete_Interface(Interface* self);
 void Interface_draw(Interface* self, ALLEGRO_BITMAP* backbuffer);
 INTERFACE_INFO Interface_update(Interface* self);
 void Interface_event_record(Interface* self, ALLEGRO_EVENT event);
+bool Interface_update_light(Interface* self, int dirc);
+void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer);
 
-bool _Interface_update_light(Interface* self, int dirc);
 static void _Interface_deal_event(Interface* self);
-void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer);
 
 #endif // INTERFACCE_H

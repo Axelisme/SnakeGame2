@@ -48,7 +48,7 @@ void InMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     Menu* self = (Menu*)Iself;
     if (Iself->info.state == INTERFACE_DIED) return;
     Interface_draw(Iself, backbuffer);
-    if (self->in_menu_image) _draw_image(self->in_menu_image, backbuffer);
+    if (self->in_menu_image) draw_image(self->in_menu_image, backbuffer);
     else raise_warn("try to draw NULL in menu image");
 }
 INTERFACE_INFO InMenu_update(Interface* Iself) {
@@ -63,7 +63,7 @@ INTERFACE_INFO InMenu_update(Interface* Iself) {
             _InMenu_deal_event(self);
             break;
         case INTERFACE_EXITING:
-            if (_Interface_update_light(Iself, -1))
+            if (Interface_update_light(Iself, -1))
                 Iself->info.state = (Iself->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
             break;
         case INTERFACE_DIED:
@@ -75,7 +75,7 @@ INTERFACE_INFO InMenu_update(Interface* Iself) {
     return Iself->info;
 }
 
-void _InMenu_deal_event(Menu* self) {
+static void _InMenu_deal_event(Menu* self) {
     Interface* Iself = (Interface*)self;
     if (Iself->event.type == NO_EVENT) return;
     if (Iself->event.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -85,11 +85,11 @@ void _InMenu_deal_event(Menu* self) {
     }
     Iself->event.type = NO_EVENT;
 }
-void _InMenu_init_image(Menu* self) {
+static void _InMenu_init_image(Menu* self) {
     if (self->in_menu_image) al_destroy_bitmap(self->in_menu_image);
     self->in_menu_image = nullptr;
 }
-void _InMenu_load_image(Menu* self) {
+static void _InMenu_load_image(Menu* self) {
     _InMenu_init_image(self);
     self->in_menu_image = al_load_bitmap(IN_MENU_IMAGE_PATH);
     if (self->in_menu_image == nullptr)

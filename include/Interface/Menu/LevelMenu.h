@@ -7,7 +7,8 @@ typedef enum LEVEL_MENU_STATE {
     LEVEL_MENU_LEVEL_1 = 1,
     LEVEL_MENU_LEVEL_2,
     LEVEL_MENU_LEVEL_3,
-    LEVEL_MENU_LEVEL_4
+    LEVEL_MENU_LEVEL_4,
+    LEVEL_MENU_EXIT,
 } LEVEL_MENU_STATE;
 
 typedef struct LevelMenu {
@@ -20,6 +21,7 @@ typedef struct LevelMenu {
     ALLEGRO_BITMAP *  level_2_image;
     ALLEGRO_BITMAP *  level_3_image;
     ALLEGRO_BITMAP *  level_4_image;
+    ALLEGRO_BITMAP *  level_exit_image;
 } LevelMenu;
 
 LevelMenu* new_LevelMenu();
@@ -38,7 +40,6 @@ static LEVEL_MENU_STATE _LevelMenu_next_state(LevelMenu* self);
 static LEVEL_MENU_STATE _LevelMenu_prev_state(LevelMenu* self);
 static void _LevelMenu_enter_state(LevelMenu* self);
 static void _LevelMenu_escape(LevelMenu* self);
-
 
 #endif // LEVEL_MENU_H
 

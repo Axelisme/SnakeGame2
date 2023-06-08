@@ -4,6 +4,7 @@
 #include "Interface/Menu/InMenu.h"
 #include "Interface/Menu/StartMenu.h"
 #include "Interface/Menu/GuideMenu.h"
+#include "Interface/Menu/LevelMenu.h"
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -156,9 +157,11 @@ static Interface* _create_Interface(CHILD_INFO type_info) {
         case INTERFACE_GUIDE_MENU:
             return (Interface*)new_GuideMenu();
             break;
+        case INTERFACE_LEVEL_MENU:
+            return (Interface*)new_LevelMenu();
+            break;
         case INTERFACE_NONE:
             raise_warn("can't create INTERFACE_NONE");
-        case INTERFACE_LEVEL_MENU:
         case INTERFACE_LEVEL:
         case INTERFACE_BASIC:
             return new_Interface();

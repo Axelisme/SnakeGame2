@@ -28,11 +28,7 @@ void StartMenu_init(StartMenu* self) {
     // Info
     self->menu_state = START_MENU_STATE_START;
     // Image
-    self->start_image = nullptr;
-    self->level_image = nullptr;
-    self->music_image = nullptr;
-    self->guide_image = nullptr;
-    self->exit_image = nullptr;
+    _StartMenu_init_image(self);
     _StartMenu_load_image(self);
 }
 void StartMenu_destroy(StartMenu* self) {
@@ -89,8 +85,8 @@ INTERFACE_INFO StartMenu_update(Interface* Iself) {
 }
 void StartMenu_event_record(Interface* Iself, ALLEGRO_EVENT event) {
     StartMenu* self = (StartMenu*)Iself;
-    if (self == nullptr) {raise_warn("try to record event on NULL interface");return;}
-    if (Iself->info.state != INTERFACE_RUNING) return;
+    if (self == nullptr) {raise_warn("try to record event on NULL StartMenu");return;}
+    if (Iself->info.state != INTERFACE_RUNING && Iself->info.state != INTERFACE_INITIALING) return;
     if (event.type != ALLEGRO_EVENT_KEY_DOWN) return;
     switch (event.keyboard.keycode) {
         case ALLEGRO_KEY_UP:
@@ -142,14 +138,13 @@ static void _StartMenu_init_image(StartMenu* self) {
     self->exit_image  = nullptr;
 }
 static void _StartMenu_load_image(StartMenu* self) {
-    _StartMenu_init_image(self);
     self->start_image = al_load_bitmap(START_MENU_START_IMAGE_PATH);
     self->level_image = al_load_bitmap(START_MENU_LEVEL_IMAGE_PATH);
     self->music_image = al_load_bitmap(START_MENU_MUSIC_IMAGE_PATH);
     self->guide_image = al_load_bitmap(START_MENU_GUIDE_IMAGE_PATH);
     self->exit_image  = al_load_bitmap(START_MENU_EXIT_IMAGE_PATH);
     if (!(self->start_image && self->level_image && self->music_image && self->guide_image && self->exit_image))
-        raise_warn("failed to load start menu image!");
+        raise_warn("failed to load some start menu image!");
 }
 static ALLEGRO_BITMAP* _StartMenu_current_image(StartMenu* self) {
     switch (self->menu_state) {

@@ -80,7 +80,7 @@ INTERFACE_INFO Interface_update(Interface* self) {
 }
 void Interface_event_record(Interface* self, ALLEGRO_EVENT event) {
     if (self == nullptr) {raise_warn("try to record event on NULL interface");return;}
-    if (self->info.state != INTERFACE_RUNING) return;
+    if (self->info.state != INTERFACE_RUNING && self->info.state != INTERFACE_INITIALING) return;
     if (event.type == ALLEGRO_EVENT_KEY_DOWN)
         self->event = event;
 }

@@ -77,20 +77,20 @@ GAMEWINDOW_STATE GameWindow_update(GameWindow* self) {
     // update the top interface
     if (self->interface_num==0) return GAMEWINDOW_EXIT;
     Interface* top_interface = self->interfaces[self->interface_num-1];
-    INTERFACE_STATE state = top_interface->update(top_interface);
+    INTERFACE_INFO state_info = top_interface->update(top_interface);
     // update the interface stack
-    switch (state) {
+    switch (state_info.state) {
         case INTERFACE_STOP: { // add a new interface base on the infomation from top interface
             if (self->interface_num==INTERFACE_MAX_NUM) {raise_err("interface stack overflow");return GAMEWINDOW_EXIT;}
-            if (top_interface->next_interface == INTERFACE_NONE) {raise_err("interface stop but next interface is INTERFACE_NONE");return GAMEWINDOW_EXIT;}
-            Interface* next_interface = _create_Interface(top_interface->next_interface);
+            if (state_info.child.next_interface == INTERFACE_NONE) {raise_err("interface stop but give none new interface, ignore");return GAMEWINDOW_RUNING;}
+            Interface* next_interface = _create_Interface(state_info.child);
             self->interfaces[self->interface_num++] = next_interface;
             break;
         }
         case INTERFACE_DIED: { // delete the top interface and return to the previous interface if next interface is INTERFACE_NONE
             self->interfaces[self->interface_num-1] = nullptr;
-            if (top_interface->next_interface != INTERFACE_NONE) {
-                Interface* next_interface = _create_Interface(top_interface->next_interface);
+            if (state_info.child.next_interface != INTERFACE_NONE) {
+                Interface* next_interface = _create_Interface(state_info.child);
                 self->interfaces[self->interface_num-1] = next_interface;
             }
             else self->interface_num--;
@@ -140,12 +140,13 @@ void _GameWindow_load(GameWindow* self) {
     al_attach_sample_instance_to_mixer(self->background_music, al_get_default_mixer());
     // Create interface
     show_msg("Create first interface");
-    Interface* first_interface = _create_Interface(FIRST_INTERFACE);
+    CHILD_INFO first_interface_info = {FIRST_INTERFACE, 1};
+    Interface* first_interface = _create_Interface(first_interface_info);
     self->interfaces[self->interface_num++] = first_interface;
 }
-Interface* _create_Interface(INTERFACE_TYPE type) {
+Interface* _create_Interface(CHILD_INFO type_info) {
     // TODO
-    switch (type) {
+    switch (type_info.next_interface) {
         case INTERFACE_IN_MENU:
             return (Interface*)new_InMenu();
             break;

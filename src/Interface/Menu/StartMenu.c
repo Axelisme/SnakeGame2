@@ -19,7 +19,7 @@ void StartMenu_init(StartMenu* self) {
     // inherited from Interface
     Interface* Iself = (Interface*)self;
     Interface_init(Iself);
-    Iself->type = INTERFACE_START_MENU;
+    Iself->info.type = INTERFACE_START_MENU;
     Iself->background_light_up_step = 10;
     Iself->draw = StartMenu_draw;
     Iself->update = StartMenu_update;
@@ -52,32 +52,32 @@ void StartMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     StartMenu* self = (StartMenu*)Iself;
     if (self == nullptr) {raise_warn("try to draw NULL interface");return;}
     if (backbuffer == nullptr) {raise_warn("try to draw interface on NULL backbuffer");return;}
-    if (Iself->state == INTERFACE_DIED) return;
+    if (Iself->info.state == INTERFACE_DIED) return;
     // inherited from Interface
     Interface_draw(Iself, backbuffer);
     // draw image
     ALLEGRO_BITMAP* image = _StartMenu_current_image(self);
     _draw_image(image, backbuffer);
 }
-INTERFACE_STATE StartMenu_update(Interface* Iself) {
+INTERFACE_INFO StartMenu_update(Interface* Iself) {
     StartMenu* self = (StartMenu*)Iself;
     // check validility
-    if (self == nullptr) {raise_warn("try to update NULL interface");return INTERFACE_DIED;}
+    if (self == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
     // update by state
-    switch (Iself->state) {
+    switch (Iself->info.state) {
         case INTERFACE_INITIALING:
             if (_Interface_update_light(Iself, 1))
-                Iself->state = INTERFACE_RUNING;
+                Iself->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_STOP:
-            Iself->state = INTERFACE_INITIALING;
+            Iself->info.state = INTERFACE_INITIALING;
             break;
         case INTERFACE_RUNING:
             _StartMenu_deal_event(self);
             break;
         case INTERFACE_EXITING:
             if (_Interface_update_light(Iself, -1))
-                Iself->state = (Iself->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
+                Iself->info.state = (Iself->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
             break;
         case INTERFACE_DIED:
             break;
@@ -85,12 +85,12 @@ INTERFACE_STATE StartMenu_update(Interface* Iself) {
             raise_err("unknown interface state");
             break;
     }
-    return Iself->state;
+    return Iself->info;
 }
 void StartMenu_event_record(Interface* Iself, ALLEGRO_EVENT event) {
     StartMenu* self = (StartMenu*)Iself;
     if (self == nullptr) {raise_warn("try to record event on NULL interface");return;}
-    if (Iself->state != INTERFACE_RUNING) return;
+    if (Iself->info.state != INTERFACE_RUNING) return;
     if (event.type != ALLEGRO_EVENT_KEY_DOWN) return;
     switch (event.keyboard.keycode) {
         case ALLEGRO_KEY_UP:
@@ -183,22 +183,22 @@ void _StartMenu_enter_state(StartMenu* self) {
     if (self->menu_state == START_MENU_STATE_START) return;
     switch (self->menu_state) {
         case START_MENU_STATE_LEVEL:
-            Iself->next_interface = INTERFACE_LEVEL_MENU;
+            Iself->info.state = INTERFACE_EXITING;
+            Iself->info.child.next_interface = INTERFACE_LEVEL_MENU;
             Iself->should_kill = false;
-            Iself->state = INTERFACE_EXITING;
             break;
         case START_MENU_STATE_MUSIC:
             GameWindow_toggle_mute();
             break;
         case START_MENU_STATE_GUIDE:
-            Iself->next_interface = INTERFACE_GUIDE_MENU;
+            Iself->info.state = INTERFACE_EXITING;
+            Iself->info.child.next_interface = INTERFACE_GUIDE_MENU;
             Iself->should_kill = false;
-            Iself->state = INTERFACE_EXITING;
             break;
         case START_MENU_STATE_EXIT:
-            Iself->next_interface = INTERFACE_NONE;
+            Iself->info.state = INTERFACE_EXITING;
+            Iself->info.child.next_interface = INTERFACE_NONE;
             Iself->should_kill = true;
-            Iself->state = INTERFACE_EXITING;
             break;
         default:
             raise_warn("unknown state");
@@ -207,7 +207,7 @@ void _StartMenu_enter_state(StartMenu* self) {
 }
 void _StartMenu_escape(StartMenu* self) {
     Interface* Iself = (Interface*)self;
-    Iself->next_interface = INTERFACE_NONE;
+    Iself->info.state = INTERFACE_EXITING;
+    Iself->info.child.next_interface = INTERFACE_NONE;
     Iself->should_kill = true;
-    Iself->state = INTERFACE_EXITING;
 }

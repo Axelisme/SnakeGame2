@@ -14,7 +14,7 @@ void GuideMenu_init(GuideMenu* self) {
     // inherited from Interface
     Interface* Iself = (Interface*)self;
     Interface_init(Iself);
-    Iself->type = INTERFACE_GUIDE_MENU;
+    Iself->info.type = INTERFACE_GUIDE_MENU;
     Iself->background_light = MIN_LIGHT;
     Iself->should_kill = true;
     Iself->draw = GuideMenu_draw;
@@ -26,7 +26,7 @@ void GuideMenu_init(GuideMenu* self) {
     _GuideMenu_load_image(self);
     if (self->guide_menu_image == nullptr) {
         raise_warn("failed to load guide menu image!");
-        self->interface.state = INTERFACE_DIED;
+        Iself->info.state = INTERFACE_DIED;
     }
 }
 void GuideMenu_destroy(GuideMenu* self) {
@@ -46,35 +46,35 @@ void GuideMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     if (Iself == nullptr) {raise_warn("try to draw NULL interface");return;}
     if (backbuffer == nullptr) {raise_warn("try to draw interface on NULL backbuffer");return;}
     GuideMenu* self = (GuideMenu*)Iself;
-    if (Iself->state == INTERFACE_DIED) return;
+    if (Iself->info.state == INTERFACE_DIED) return;
     Interface_draw(Iself, backbuffer);
     if (self->guide_menu_image) _draw_image(self->guide_menu_image, backbuffer);
     else raise_warn("try to draw NULL guide image");
 }
-INTERFACE_STATE GuideMenu_update(Interface* Iself) {
-    if (Iself == nullptr) {raise_warn("try to update NULL interface");return INTERFACE_DIED;}
+INTERFACE_INFO GuideMenu_update(Interface* Iself) {
+    if (Iself == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
     GuideMenu* self = (GuideMenu*)Iself;
-    switch (Iself->state) {
+    switch (Iself->info.state) {
         case INTERFACE_INITIALING:
             if (_Interface_update_light(Iself,1))
-                Iself->state = INTERFACE_RUNING;
+                Iself->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_STOP:
-            Iself->state = INTERFACE_INITIALING;
+            Iself->info.state = INTERFACE_INITIALING;
             break;
         case INTERFACE_RUNING:
             _GuideMenu_deal_event(self);
             break;
         case INTERFACE_EXITING:
             if (_Interface_update_light(Iself,-1))
-                Iself->state = (Iself->should_kill) ? INTERFACE_DIED : INTERFACE_STOP;
+                Iself->info.state = (Iself->should_kill) ? INTERFACE_DIED : INTERFACE_STOP;
             break;
         case INTERFACE_DIED:
             break;
         default:
             break;
     }
-    return Iself->state;
+    return Iself->info;
 }
 
 void _GuideMenu_deal_event(GuideMenu* self) {
@@ -84,9 +84,9 @@ void _GuideMenu_deal_event(GuideMenu* self) {
         switch (Iself->event.keyboard.keycode) {
             case ALLEGRO_KEY_G:
             case ALLEGRO_KEY_ESCAPE:
-                Iself->next_interface = INTERFACE_NONE;
+                Iself->info.state = INTERFACE_EXITING;
+                Iself->info.child.next_interface = INTERFACE_NONE;
                 Iself->should_kill = true;
-                Iself->state = INTERFACE_EXITING;
                 break;
             default:
                 break;

@@ -15,7 +15,7 @@ void InMenu_init(Menu* self);
 void InMenu_destroy(Menu* self);
 void delete_InMenu(Interface* Iself);
 void InMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
-INTERFACE_STATE InMenu_update(Interface* Iself);
+INTERFACE_INFO InMenu_update(Interface* Iself);
 void InMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
 
 void _InMenu_deal_event(Menu* self);

@@ -29,7 +29,7 @@ void StartMenu_init(StartMenu* self);
 void StartMenu_destroy(StartMenu* self);
 void delete_StartMenu(Interface* Iself);
 void StartMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
-INTERFACE_STATE StartMenu_update(Interface* Iself);
+INTERFACE_INFO StartMenu_update(Interface* Iself);
 void StartMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
 
 void _StartMenu_deal_event(StartMenu* self);

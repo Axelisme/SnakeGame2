@@ -1,6 +1,21 @@
 
 #include "Interface/Interface.h"
 
+INTERFACE_INFO _default_info() {
+    INTERFACE_INFO info;
+    info.type = INTERFACE_BASIC;
+    info.state = INTERFACE_INITIALING;
+    info.child.next_interface = INTERFACE_NONE;
+    info.child.level = 0;
+    return info;
+}
+INTERFACE_INFO _fall_back_info() {
+    INTERFACE_INFO info;
+    info.state = INTERFACE_DIED;
+    info.child.next_interface = INTERFACE_NONE;
+    return info;
+}
+
 Interface* new_Interface() {
     Interface* interface = (Interface*)al_calloc(1,sizeof(Interface));
     Interface_init(interface);
@@ -8,15 +23,12 @@ Interface* new_Interface() {
 }
 void Interface_init(Interface* self) {
     // Info
-    self->type = INTERFACE_BASIC;
+    self->info = _default_info();
+    self->should_kill = true;
     // Display
     self->background_light = MIN_LIGHT;
     self->background_light_up_step = BASIC_LIGHT_STEP;
     self->background_light_down_step = BASIC_LIGHT_STEP;
-    // state
-    self->state = INTERFACE_INITIALING;
-    self->should_kill = true;
-    self->next_interface = INTERFACE_NONE;
     // event
     self->event.type = NO_EVENT;
     // methods
@@ -35,26 +47,26 @@ void delete_Interface(Interface* self) {
 void Interface_draw(Interface* self, ALLEGRO_BITMAP* backbuffer) {
     if (self == nullptr) {raise_warn("try to draw NULL interface");return;}
     if (backbuffer == nullptr) {raise_err("try to draw interface on NULL backbuffer");return;}
-    if (self->state == INTERFACE_DIED) return;
+    if (self->info.state == INTERFACE_DIED) return;
     al_set_target_bitmap(backbuffer);
     al_clear_to_color(al_map_rgb(self->background_light, self->background_light, self->background_light));
 }
-INTERFACE_STATE Interface_update(Interface* self) {
-    if (self == nullptr) {raise_warn("try to update NULL interface");return INTERFACE_DIED;}
-    switch (self->state) {
+INTERFACE_INFO Interface_update(Interface* self) {
+    if (self == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
+    switch (self->info.state) {
         case INTERFACE_INITIALING:
             if (_Interface_update_light(self, 1))
-                self->state = INTERFACE_RUNING;
+                self->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_RUNING:
             _Interface_deal_event(self);
             break;
         case INTERFACE_EXITING:
             if (_Interface_update_light(self, -1))
-                self->state = (self->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
+                self->info.state = (self->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
             break;
         case INTERFACE_STOP:
-            self->state = INTERFACE_RUNING;
+            self->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_DIED:
             break;
@@ -62,11 +74,11 @@ INTERFACE_STATE Interface_update(Interface* self) {
             raise_err("unknown interface state");
             break;
     }
-    return self->state;
+    return self->info;
 }
 void Interface_event_record(Interface* self, ALLEGRO_EVENT event) {
     if (self == nullptr) {raise_warn("try to record event on NULL interface");return;}
-    if (self->state != INTERFACE_RUNING) return;
+    if (self->info.state != INTERFACE_RUNING) return;
     if (event.type == ALLEGRO_EVENT_KEY_DOWN)
         self->event = event;
 }
@@ -92,9 +104,9 @@ bool _Interface_update_light(Interface* self, int step) {
 static void _Interface_deal_event(Interface* self) {
     if (self->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
     if (self->event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-        self->state = INTERFACE_EXITING;
+        self->info.state = INTERFACE_EXITING;
+        self->info.child.next_interface = INTERFACE_NONE;
         self->should_kill = true;
-        self->next_interface = INTERFACE_NONE;
     }
     self->event.type = NO_EVENT;
 }
@@ -110,4 +122,3 @@ void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer) {
     // draw
     al_draw_scaled_bitmap(image, 0, 0, image_w, image_h, 0, 0, screen_w, screen_h, 0);
 }
-

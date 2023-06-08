@@ -15,7 +15,7 @@ void GuideMenu_init(GuideMenu* self);
 void GuideMenu_destroy(GuideMenu* self);
 void delete_GuideMenu(Interface* Iself);
 void GuideMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
-INTERFACE_STATE GuideMenu_update(Interface* Iself);
+INTERFACE_INFO GuideMenu_update(Interface* Iself);
 void GuideMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
 
 void _GuideMenu_deal_event(GuideMenu* self);

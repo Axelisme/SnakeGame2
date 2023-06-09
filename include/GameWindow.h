@@ -17,6 +17,8 @@ typedef enum GAMEWINDOW_STATE {
 typedef struct  GameWindow {
     // display
     ALLEGRO_DISPLAY* display;
+    // Icon
+    ALLEGRO_BITMAP* icon;
     // sound
     ALLEGRO_SAMPLE* background_sample;
     ALLEGRO_SAMPLE_INSTANCE* background_music;

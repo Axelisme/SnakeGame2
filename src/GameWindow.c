@@ -9,7 +9,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
+const char GAMEWINDOW_TITLE[] = "SnakeGame2";
 const char BACKGROUND_SOUND_PATH[] = "data/music/level_bgm.ogg";
+const char GAME_ICON_PATH[] = "data/image/icon.png";
 bool Mute = false;
 
 GameWindow* new_GameWindow() {
@@ -20,6 +22,8 @@ GameWindow* new_GameWindow() {
 void GameWindow_init(GameWindow* self) {
     // display
     self->display = nullptr;
+    // Icon
+    self->icon = nullptr;
     // sound
     self->background_sample = nullptr;
     self->background_music = nullptr;
@@ -40,18 +44,19 @@ void GameWindow_destroy(GameWindow* self) {
     show_msg("Destroy Interface");
     for(int i=0;i<self->interface_num;i++) {
         Interface* interface = self->interfaces[i];
-        if(interface!=nullptr) interface->deleter(interface);
+        if(interface) interface->deleter(interface);
     }
     // destroy sound
     show_msg("Destroy Sound");
-    if(self->background_music!=nullptr) {
+    if(self->background_music) {
         al_stop_sample_instance(self->background_music);
         al_destroy_sample_instance(self->background_music);
     }
-    if(self->background_sample!=nullptr) al_destroy_sample(self->background_sample);
+    if(self->background_sample) al_destroy_sample(self->background_sample);
     // destroy display
     show_msg("Destroy Display");
-    if(self->display!=nullptr) al_destroy_display(self->display);
+    if (self->display) al_destroy_display(self->display);
+    if (self->icon) al_destroy_bitmap(self->icon);
 }
 void delete_GameWindow(GameWindow* self) {
     GameWindow_destroy(self);
@@ -131,7 +136,10 @@ static void _GameWindow_load(GameWindow* self) {
     al_set_new_display_refresh_rate(DISPLAY_FPS);
     self->display = al_create_display(INIT_DISPLAY_WIDTH,INIT_DISPLAY_HEIGHT);
     if(self->display==nullptr) raise_err("can't not create display window");
+    self->icon = al_load_bitmap(GAME_ICON_PATH);
     al_set_window_position(self->display,0,0);
+    al_set_display_icon(self->display, self->icon);
+    al_set_window_title(self->display, GAMEWINDOW_TITLE);
     // Create Sound
     show_msg("Create background music");
     self->background_sample = al_load_sample(BACKGROUND_SOUND_PATH);

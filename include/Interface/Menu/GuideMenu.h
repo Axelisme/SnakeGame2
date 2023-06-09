@@ -3,8 +3,10 @@
 
 #include "Interface/Menu/SingleMenu.h"
 
-SingleMenu* new_GuideMenu();
-void GuideMenu_init(SingleMenu* self);
+typedef SingleMenu GuideMenu;
+
+GuideMenu* new_GuideMenu();
+void GuideMenu_init(GuideMenu* self);
 void GuideMenu_deal_event(Interface* self);
 
 #endif // GUIDE_MENU_H

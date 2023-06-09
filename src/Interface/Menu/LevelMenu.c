@@ -52,7 +52,7 @@ void LevelMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     Interface_draw(Iself, backbuffer);
     // draw image
     ALLEGRO_BITMAP* image = _LevelMenu_current_image(self);
-    draw_image(image, backbuffer);
+    _draw_image(image, backbuffer);
 }
 INTERFACE_INFO LevelMenu_update(Interface* Iself) {
     LevelMenu* self = (LevelMenu*)Iself;
@@ -61,7 +61,7 @@ INTERFACE_INFO LevelMenu_update(Interface* Iself) {
     // update by state
     switch (Iself->info.state) {
         case INTERFACE_INITIALING:
-            if (Interface_light_up(Iself))
+            if (_Interface_light_up(Iself))
                 Iself->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_STOP:
@@ -71,7 +71,7 @@ INTERFACE_INFO LevelMenu_update(Interface* Iself) {
             Iself->event_dealer(Iself);
             break;
         case INTERFACE_EXITING:
-            if (Interface_light_down(Iself))
+            if (_Interface_light_down(Iself))
                 Iself->info.state = (Iself->should_kill) ? INTERFACE_DIED : INTERFACE_STOP;
             break;
         case INTERFACE_DIED:

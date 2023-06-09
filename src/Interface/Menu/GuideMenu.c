@@ -3,12 +3,12 @@
 
 const char GUIDE_MENU_IMAGE_PATH[] = "data/image/menu/guide_menu.png";
 
-SingleMenu* new_GuideMenu() {
-    SingleMenu* self = new_SingleMenu(GUIDE_MENU_IMAGE_PATH);
+GuideMenu* new_GuideMenu() {
+    GuideMenu* self = new_SingleMenu(GUIDE_MENU_IMAGE_PATH);
     GuideMenu_init(self);
     return self;
 }
-void GuideMenu_init(SingleMenu* self) {
+void GuideMenu_init(GuideMenu* self) {
     if (self == nullptr) {raise_err("try to init NULL interface");return;}
     show_msg("GuideMenu_init");
     // inherited from Interface
@@ -17,7 +17,7 @@ void GuideMenu_init(SingleMenu* self) {
     Iself->event_dealer = GuideMenu_deal_event;
 }
 void GuideMenu_deal_event(Interface* Iself) {
-    SingleMenu* self = (SingleMenu*)Iself;
+    GuideMenu* self = (GuideMenu*)Iself;
     if (Iself->event.type == NO_EVENT) return;
     if (Iself->event.type == ALLEGRO_EVENT_KEY_DOWN) {
         switch (Iself->event.keyboard.keycode) {

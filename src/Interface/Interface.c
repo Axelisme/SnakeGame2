@@ -60,14 +60,14 @@ INTERFACE_INFO Interface_update(Interface* self) {
     if (self == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
     switch (self->info.state) {
         case INTERFACE_INITIALING:
-            if (Interface_light_up(self))
+            if (_Interface_light_up(self))
                 self->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_RUNING:
             self->event_dealer(self);
             break;
         case INTERFACE_EXITING:
-            if (Interface_light_down(self))
+            if (_Interface_light_down(self))
                 self->info.state = (self->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
             break;
         case INTERFACE_STOP:
@@ -89,12 +89,15 @@ void Interface_event_record(Interface* self, ALLEGRO_EVENT event) {
 }
 void Interface_deal_event(Interface* self) {
     if (self->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
+    _Interface_escape(self);
+    self->event.type = NO_EVENT;
+}
+void _Interface_escape(Interface* self) {
     self->info.state = INTERFACE_EXITING;
     self->info.child.next_interface = INTERFACE_NONE;
     self->should_kill = true;
-    self->event.type = NO_EVENT;
 }
-bool Interface_light_up(Interface* self) {
+bool _Interface_light_up(Interface* self) {
     if (self == nullptr) {raise_warn("try to light up NULL interface");return true;}
     self->background_light += self->background_light_up_step;
     if (self->background_light > self->background_light_max) {
@@ -103,7 +106,7 @@ bool Interface_light_up(Interface* self) {
     }
     else return false;
 }
-bool Interface_light_down(Interface* self) {
+bool _Interface_light_down(Interface* self) {
     if (self == nullptr) {raise_warn("try to light down NULL interface");return true;}
     self->background_light -= self->background_light_down_step;
     if (self->background_light < self->background_light_min) {
@@ -112,7 +115,7 @@ bool Interface_light_down(Interface* self) {
     }
     else return false;
 }
-void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer) {
+void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer) {
     if (image == nullptr) {raise_warn("try to draw NULL image");return;}
     al_set_target_bitmap(backbuffer);
     // get screen size

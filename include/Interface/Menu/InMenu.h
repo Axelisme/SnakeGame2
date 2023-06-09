@@ -3,8 +3,10 @@
 
 #include "Interface/Menu/SingleMenu.h"
 
-SingleMenu* new_InMenu();
-void InMenu_init(SingleMenu* self);
+typedef SingleMenu InMenu;
+
+InMenu* new_InMenu();
+void InMenu_init(InMenu* self);
 void InMenu_deal_event(Interface* Iself);
 
 #endif // MENU_H

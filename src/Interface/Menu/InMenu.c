@@ -3,12 +3,12 @@
 
 const char IN_MENU_IMAGE_PATH[] = "data/image/menu/In_menu.png";
 
-SingleMenu* new_InMenu() {
-    SingleMenu* self = new_SingleMenu(IN_MENU_IMAGE_PATH);
+InMenu* new_InMenu() {
+    InMenu* self = new_SingleMenu(IN_MENU_IMAGE_PATH);
     InMenu_init(self);
     return self;
 }
-void InMenu_init(SingleMenu* self) {
+void InMenu_init(InMenu* self) {
     if (self == nullptr) {raise_err("try to init NULL interface");return;}
     show_msg("InMenu_init");
     // inherited from Interface

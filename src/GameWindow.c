@@ -170,10 +170,15 @@ static Interface* _create_Interface(CHILD_INFO type_info) {
             break;
         case INTERFACE_NONE:
             raise_warn("can't create INTERFACE_NONE");
+            return nullptr;
             break;
         case INTERFACE_SINGLE:
             raise_warn("create inner interface: INTERFACE_SINGLE");
             return (Interface*)new_SingleMenu("");
+            break;
+        case INTERFACE_MULTI:
+            raise_warn("create inner interface: INTERFACE_MULTI");
+            return (Interface*)new_MultiMenu(nullptr,0);
             break;
         case INTERFACE_LEVEL:
         case INTERFACE_BASIC:

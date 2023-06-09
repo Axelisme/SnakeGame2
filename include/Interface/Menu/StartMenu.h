@@ -31,8 +31,8 @@ void delete_StartMenu(Interface* Iself);
 void StartMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
 INTERFACE_INFO StartMenu_update(Interface* Iself);
 void StartMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
+void StartMenu_deal_event(Interface* self);
 
-static void _StartMenu_deal_event(StartMenu* self);
 static void _StartMenu_init_image(StartMenu* self);
 static void _StartMenu_load_image(StartMenu* self);
 static ALLEGRO_BITMAP* _StartMenu_current_image(StartMenu* self);

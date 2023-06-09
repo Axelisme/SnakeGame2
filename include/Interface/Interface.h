@@ -15,6 +15,8 @@ typedef enum INTERFACE_TYPE {
     INTERFACE_GUIDE_MENU,
     INTERFACE_LEVEL,
     INTERFACE_BASIC,
+    INTERFACE_SINGLE,
+    INTERFACE_MULTI,
     INTERFACE_NONE,
 } INTERFACE_TYPE;
 
@@ -46,6 +48,8 @@ typedef struct Interface {
     bool should_kill;
     // Display
     int background_light;
+    int background_light_max;
+    int background_light_min;
     int background_light_up_step;
     int background_light_down_step;
     // event
@@ -54,6 +58,7 @@ typedef struct Interface {
     void (*draw)(struct Interface*, ALLEGRO_BITMAP*);
     INTERFACE_INFO (*update)(struct Interface*);
     void (*event_record)(struct Interface*, ALLEGRO_EVENT);
+    void (*event_dealer)(struct Interface*);
     void (*deleter) (struct Interface*);
 } Interface;
 
@@ -64,9 +69,10 @@ void delete_Interface(Interface* self);
 void Interface_draw(Interface* self, ALLEGRO_BITMAP* backbuffer);
 INTERFACE_INFO Interface_update(Interface* self);
 void Interface_event_record(Interface* self, ALLEGRO_EVENT event);
-bool Interface_update_light(Interface* self, int dirc);
+void Interface_deal_event(Interface* self);
+bool Interface_light_up(Interface* self);
+bool Interface_light_down(Interface* self);
 void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer);
 
-static void _Interface_deal_event(Interface* self);
 
 #endif // INTERFACCE_H

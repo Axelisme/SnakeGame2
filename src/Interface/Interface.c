@@ -23,12 +23,14 @@ Interface* new_Interface() {
 }
 void Interface_init(Interface* self) {
     if (self == nullptr) {raise_warn("try to init NULL interface");return;}
-    show_msg("init interface");
+    show_msg("Interface_init");
     // Info
     self->info = _default_info();
     self->should_kill = true;
     // Display
     self->background_light = MIN_LIGHT;
+    self->background_light_max = MAX_LIGHT;
+    self->background_light_min = MIN_LIGHT;
     self->background_light_up_step = BASIC_LIGHT_STEP;
     self->background_light_down_step = BASIC_LIGHT_STEP;
     // event
@@ -37,6 +39,7 @@ void Interface_init(Interface* self) {
     self->draw = Interface_draw;
     self->update = Interface_update;
     self->event_record = Interface_event_record;
+    self->event_dealer = Interface_deal_event;
     self->deleter = Interface_destroy;
 }
 void Interface_destroy(Interface* self) {
@@ -57,14 +60,14 @@ INTERFACE_INFO Interface_update(Interface* self) {
     if (self == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
     switch (self->info.state) {
         case INTERFACE_INITIALING:
-            if (Interface_update_light(self, 1))
+            if (Interface_light_up(self))
                 self->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_RUNING:
-            _Interface_deal_event(self);
+            self->event_dealer(self);
             break;
         case INTERFACE_EXITING:
-            if (Interface_update_light(self, -1))
+            if (Interface_light_down(self))
                 self->info.state = (self->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
             break;
         case INTERFACE_STOP:
@@ -84,23 +87,30 @@ void Interface_event_record(Interface* self, ALLEGRO_EVENT event) {
     if (event.type == ALLEGRO_EVENT_KEY_DOWN)
         self->event = event;
 }
-bool Interface_update_light(Interface* self, int step) {
-    if (step > 0) {
-        self->background_light += self->background_light_up_step;
-        if (self->background_light > MAX_LIGHT) {
-            self->background_light = MAX_LIGHT;
-            return true;
-        }
-        else return false;
-    } else if (step < 0) {
-        self->background_light -= self->background_light_down_step;
-        if (self->background_light < MIN_LIGHT) {
-            self->background_light = MIN_LIGHT;
-            return true;
-        }
-        else return false;
+void Interface_deal_event(Interface* self) {
+    if (self->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
+    self->info.state = INTERFACE_EXITING;
+    self->info.child.next_interface = INTERFACE_NONE;
+    self->should_kill = true;
+    self->event.type = NO_EVENT;
+}
+bool Interface_light_up(Interface* self) {
+    if (self == nullptr) {raise_warn("try to light up NULL interface");return true;}
+    self->background_light += self->background_light_up_step;
+    if (self->background_light > self->background_light_max) {
+        self->background_light = self->background_light_max;
+        return true;
     }
-    return false;
+    else return false;
+}
+bool Interface_light_down(Interface* self) {
+    if (self == nullptr) {raise_warn("try to light down NULL interface");return true;}
+    self->background_light -= self->background_light_down_step;
+    if (self->background_light < self->background_light_min) {
+        self->background_light = self->background_light_min;
+        return true;
+    }
+    else return false;
 }
 void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer) {
     if (image == nullptr) {raise_warn("try to draw NULL image");return;}
@@ -115,13 +125,4 @@ void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer) {
     al_draw_scaled_bitmap(image, 0, 0, image_w, image_h, 0, 0, screen_w, screen_h, 0);
 }
 
-static void _Interface_deal_event(Interface* self) {
-    if (self->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
-    if (self->event.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-        self->info.state = INTERFACE_EXITING;
-        self->info.child.next_interface = INTERFACE_NONE;
-        self->should_kill = true;
-    }
-    self->event.type = NO_EVENT;
-}
 

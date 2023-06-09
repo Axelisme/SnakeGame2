@@ -22,6 +22,7 @@ void LevelMenu_init(LevelMenu* self) {
     Iself->draw = LevelMenu_draw;
     Iself->update = LevelMenu_update;
     Iself->event_record = LevelMenu_event_record;
+    Iself->event_dealer = LevelMenu_deal_event;
     Iself->deleter = delete_LevelMenu;
     // Info
     self->menu_state = LEVEL_MENU_LEVEL_1;
@@ -60,17 +61,17 @@ INTERFACE_INFO LevelMenu_update(Interface* Iself) {
     // update by state
     switch (Iself->info.state) {
         case INTERFACE_INITIALING:
-            if (Interface_update_light(Iself, 1))
+            if (Interface_light_up(Iself))
                 Iself->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_STOP:
             Iself->info.state = INTERFACE_INITIALING;
             break;
         case INTERFACE_RUNING:
-            _LevelMenu_deal_event(self);
+            Iself->event_dealer(Iself);
             break;
         case INTERFACE_EXITING:
-            if (Interface_update_light(Iself, -1))
+            if (Interface_light_down(Iself))
                 Iself->info.state = (Iself->should_kill) ? INTERFACE_DIED : INTERFACE_STOP;
             break;
         case INTERFACE_DIED:
@@ -98,9 +99,8 @@ void LevelMenu_event_record(Interface* Iself, ALLEGRO_EVENT event) {
             break;
     }
 }
-
-static void _LevelMenu_deal_event(LevelMenu* self) {
-    Interface* Iself = (Interface*)self;
+void LevelMenu_deal_event(Interface* Iself) {
+    LevelMenu* self = (LevelMenu*)Iself;
     if (Iself->event.type == NO_EVENT) return;
     if (Iself->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
     switch (Iself->event.keyboard.keycode) {

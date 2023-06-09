@@ -31,8 +31,8 @@ void delete_LevelMenu(Interface* Iself);
 void LevelMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
 INTERFACE_INFO LevelMenu_update(Interface* Iself);
 void LevelMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
+void LevelMenu_deal_event(Interface* self);
 
-static void _LevelMenu_deal_event(LevelMenu* self);
 static void _LevelMenu_init_image(LevelMenu* self);
 static void _LevelMenu_load_image(LevelMenu* self);
 static ALLEGRO_BITMAP* _LevelMenu_current_image(LevelMenu* self);

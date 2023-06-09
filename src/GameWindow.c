@@ -170,8 +170,14 @@ static Interface* _create_Interface(CHILD_INFO type_info) {
             break;
         case INTERFACE_NONE:
             raise_warn("can't create INTERFACE_NONE");
+            break;
+        case INTERFACE_SINGLE:
+            raise_warn("create inner interface: INTERFACE_SINGLE");
+            return (Interface*)new_SingleMenu("");
+            break;
         case INTERFACE_LEVEL:
         case INTERFACE_BASIC:
+            raise_warn("create inner interface: INTERFACE_BASIC");
             return new_Interface();
         default:
             raise_err("unknown interface type");

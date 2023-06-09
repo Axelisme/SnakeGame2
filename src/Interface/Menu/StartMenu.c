@@ -24,6 +24,7 @@ void StartMenu_init(StartMenu* self) {
     Iself->draw = StartMenu_draw;
     Iself->update = StartMenu_update;
     Iself->event_record = StartMenu_event_record;
+    Iself->event_dealer = StartMenu_deal_event;
     Iself->deleter = delete_StartMenu;
     // Info
     self->menu_state = START_MENU_STATE_START;
@@ -62,17 +63,17 @@ INTERFACE_INFO StartMenu_update(Interface* Iself) {
     // update by state
     switch (Iself->info.state) {
         case INTERFACE_INITIALING:
-            if (Interface_update_light(Iself, 1))
+            if (Interface_light_up(Iself))
                 Iself->info.state = INTERFACE_RUNING;
             break;
         case INTERFACE_STOP:
             Iself->info.state = INTERFACE_INITIALING;
             break;
         case INTERFACE_RUNING:
-            _StartMenu_deal_event(self);
+            Iself->event_dealer(Iself);
             break;
         case INTERFACE_EXITING:
-            if (Interface_update_light(Iself, -1))
+            if (Interface_light_down(Iself))
                 Iself->info.state = (Iself->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
             break;
         case INTERFACE_DIED:
@@ -101,8 +102,8 @@ void StartMenu_event_record(Interface* Iself, ALLEGRO_EVENT event) {
     }
 }
 
-static void _StartMenu_deal_event(StartMenu* self) {
-    Interface* Iself = (Interface*)self;
+void StartMenu_deal_event(Interface* Iself) {
+    StartMenu* self = (StartMenu*)Iself;
     if (Iself->event.type == NO_EVENT) return;
     if (Iself->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
     switch (Iself->event.keyboard.keycode) {

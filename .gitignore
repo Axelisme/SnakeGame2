@@ -3,7 +3,6 @@ build
 
 bin/Debug
 bin/Release
-Test
 
 oldsrc
 oldinclude

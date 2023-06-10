@@ -7,6 +7,7 @@ typedef SingleMenu InMenu;
 
 InMenu* new_InMenu();
 void InMenu_init(InMenu* self);
-void InMenu_deal_event(Interface* Iself);
+
+static void _InMenu_deal_event(Interface* Iself);
 
 #endif // MENU_H

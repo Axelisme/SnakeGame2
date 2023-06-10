@@ -38,7 +38,7 @@ static void _StartMenu_enter_state(StartMenu* self) {
     switch (self->menu_state) {
         case START_MENU_STATE_LEVEL:
             Iself->info.state = INTERFACE_EXITING;
-            Iself->info.child.next_interface = INTERFACE_LEVEL_MENU;
+            Iself->info.child.interface_type = INTERFACE_LEVEL_MENU;
             Iself->should_kill = false;
             break;
         case START_MENU_STATE_MUSIC:
@@ -46,12 +46,12 @@ static void _StartMenu_enter_state(StartMenu* self) {
             break;
         case START_MENU_STATE_GUIDE:
             Iself->info.state = INTERFACE_EXITING;
-            Iself->info.child.next_interface = INTERFACE_GUIDE_MENU;
+            Iself->info.child.interface_type = INTERFACE_GUIDE_MENU;
             Iself->should_kill = false;
             break;
         case START_MENU_STATE_EXIT:
             Iself->info.state = INTERFACE_EXITING;
-            Iself->info.child.next_interface = INTERFACE_NONE;
+            Iself->info.child.interface_type = INTERFACE_NONE;
             Iself->should_kill = true;
             break;
         default:

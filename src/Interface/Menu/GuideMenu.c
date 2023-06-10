@@ -24,7 +24,7 @@ void GuideMenu_deal_event(Interface* Iself) {
             case ALLEGRO_KEY_G:
             case ALLEGRO_KEY_ESCAPE:
                 Iself->info.state = INTERFACE_EXITING;
-                Iself->info.child.next_interface = INTERFACE_NONE;
+                Iself->info.child.interface_type = INTERFACE_NONE;
                 Iself->should_kill = true;
                 break;
             default:

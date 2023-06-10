@@ -30,6 +30,5 @@ ALLEGRO_BITMAP* _MultiMenu_current_image(MultiMenu* self);
 int _MultiMenu_next_state(MultiMenu* self);
 int _MultiMenu_prev_state(MultiMenu* self);
 void _MultiMenu_enter_state(MultiMenu* self);
-void _MultiMenu_escape(MultiMenu* self);
 
 #endif // MULTI_MENU_H

@@ -5,14 +5,14 @@ INTERFACE_INFO _default_info() {
     INTERFACE_INFO info;
     info.type = INTERFACE_BASIC;
     info.state = INTERFACE_INITIALING;
-    info.child.next_interface = INTERFACE_NONE;
+    info.child.interface_type = INTERFACE_NONE;
     info.child.level = 0;
     return info;
 }
 INTERFACE_INFO _fall_back_info() {
     INTERFACE_INFO info;
     info.state = INTERFACE_DIED;
-    info.child.next_interface = INTERFACE_NONE;
+    info.child.interface_type = INTERFACE_NONE;
     return info;
 }
 
@@ -94,7 +94,7 @@ void Interface_deal_event(Interface* self) {
 }
 void _Interface_escape(Interface* self) {
     self->info.state = INTERFACE_EXITING;
-    self->info.child.next_interface = INTERFACE_NONE;
+    self->info.child.interface_type = INTERFACE_NONE;
     self->should_kill = true;
 }
 bool _Interface_light_up(Interface* self) {

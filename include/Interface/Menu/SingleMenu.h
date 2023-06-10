@@ -6,6 +6,8 @@
 typedef struct SingleMenu {
     // inherited from Interface
     Interface interface;
+    // info
+    void * info;
     // in menu image
     ALLEGRO_BITMAP *  image;
 } SingleMenu;

@@ -5,14 +5,13 @@
 #include "Interface/Menu/StartMenu.h"
 #include "Interface/Menu/GuideMenu.h"
 #include "Interface/Menu/LevelMenu.h"
-#include <string.h>
-#include <stdio.h>
-#include <unistd.h>
+#include "Interface/Menu/LevelStart.h"
+#include "Interface/Level.h"
 
 const char GAMEWINDOW_TITLE[] = "SnakeGame2";
 const char BACKGROUND_SOUND_PATH[] = "data/music/level_bgm.ogg";
 const char GAME_ICON_PATH[] = "data/image/icon.png";
-bool Mute = false;
+static bool Mute = false;
 
 GameWindow* new_GameWindow() {
     GameWindow* self = (GameWindow*)al_calloc(1,sizeof(GameWindow));
@@ -88,14 +87,14 @@ GAMEWINDOW_STATE GameWindow_update(GameWindow* self) {
     switch (state_info.state) {
         case INTERFACE_STOP: { // add a new interface base on the infomation from top interface
             if (self->interface_num==INTERFACE_MAX_NUM) {raise_err("interface stack overflow");return GAMEWINDOW_EXIT;}
-            if (state_info.child.next_interface == INTERFACE_NONE) {raise_err("interface stop but give none new interface, ignore");return GAMEWINDOW_RUNING;}
+            if (state_info.child.interface_type == INTERFACE_NONE) {raise_err("interface stop but give none new interface, ignore");return GAMEWINDOW_RUNING;}
             Interface* next_interface = _create_Interface(state_info.child);
             self->interfaces[self->interface_num++] = next_interface;
             break;
         }
         case INTERFACE_DIED: { // delete the top interface and return to the previous interface if next interface is INTERFACE_NONE
             self->interfaces[self->interface_num-1] = nullptr;
-            if (state_info.child.next_interface != INTERFACE_NONE) {
+            if (state_info.child.interface_type != INTERFACE_NONE) {
                 Interface* next_interface = _create_Interface(state_info.child);
                 self->interfaces[self->interface_num-1] = next_interface;
             }
@@ -153,9 +152,9 @@ static void _GameWindow_load(GameWindow* self) {
     Interface* first_interface = _create_Interface(first_interface_info);
     self->interfaces[self->interface_num++] = first_interface;
 }
-static Interface* _create_Interface(CHILD_INFO type_info) {
+static Interface* _create_Interface(CHILD_INFO info) {
     // TODO
-    switch (type_info.next_interface) {
+    switch (info.interface_type) {
         case INTERFACE_IN_MENU:
             return (Interface*)new_InMenu();
             break;
@@ -167,6 +166,12 @@ static Interface* _create_Interface(CHILD_INFO type_info) {
             break;
         case INTERFACE_LEVEL_MENU:
             return (Interface*)new_LevelMenu();
+            break;
+        case INTERFACE_LEVEL_START:
+            return (Interface*)new_LevelStart(info.level);
+            break;
+        case INTERFACE_LEVEL:
+            return (Interface*)new_Level(info.level);
             break;
         case INTERFACE_NONE:
             raise_warn("can't create INTERFACE_NONE");
@@ -180,7 +185,6 @@ static Interface* _create_Interface(CHILD_INFO type_info) {
             raise_warn("create inner interface: INTERFACE_MULTI");
             return (Interface*)new_MultiMenu(nullptr,0);
             break;
-        case INTERFACE_LEVEL:
         case INTERFACE_BASIC:
             raise_warn("create inner interface: INTERFACE_BASIC");
             return new_Interface();

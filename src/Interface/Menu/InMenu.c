@@ -16,12 +16,12 @@ void InMenu_init(InMenu* self) {
     Iself->info.type = INTERFACE_IN_MENU;
     Iself->background_light = MAX_LIGHT;
     Iself->background_light_down_step = 2;
-    Iself->event_dealer = InMenu_deal_event;
+    Iself->event_dealer = _InMenu_deal_event;
 }
-void InMenu_deal_event(Interface* Iself) {
+void _InMenu_deal_event(Interface* Iself) {
     if (Iself->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
     Iself->info.state = INTERFACE_EXITING;
-    Iself->info.child.next_interface = INTERFACE_START_MENU;
+    Iself->info.child.interface_type = INTERFACE_START_MENU;
     Iself->should_kill = true;
     Iself->event.type = NO_EVENT;
 }

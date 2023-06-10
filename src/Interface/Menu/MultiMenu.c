@@ -101,7 +101,6 @@ void MultiMenu_event_record(Interface* Iself, ALLEGRO_EVENT event) {
 void MultiMenu_deal_event(Interface* Iself) {
     MultiMenu* self = (MultiMenu*)Iself;
     if (Iself->event.type == NO_EVENT) return;
-    if (Iself->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
     switch (Iself->event.keyboard.keycode) {
         case ALLEGRO_KEY_UP:
             self->menu_state = _MultiMenu_prev_state(self);

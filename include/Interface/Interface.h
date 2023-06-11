@@ -1,5 +1,5 @@
-#ifndef INTERFACCE_H
-#define INTERFACCE_H
+#ifndef INTERFACE_H
+#define INTERFACE_H
 
 #include "global.h"
 
@@ -23,7 +23,7 @@ typedef enum INTERFACE_TYPE {
 
 typedef enum INTERFACE_STATE {
     INTERFACE_INITIALING,
-    INTERFACE_RUNING,
+    INTERFACE_RUNNING,
     INTERFACE_EXITING,
     INTERFACE_STOP,
     INTERFACE_DIED
@@ -77,4 +77,4 @@ bool _Interface_light_down(Interface* self);
 void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer);
 
 
-#endif // INTERFACCE_H
+#endif // INTERFACE_H

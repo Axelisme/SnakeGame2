@@ -61,9 +61,9 @@ INTERFACE_INFO Interface_update(Interface* self) {
     switch (self->info.state) {
         case INTERFACE_INITIALING:
             if (_Interface_light_up(self))
-                self->info.state = INTERFACE_RUNING;
+                self->info.state = INTERFACE_RUNNING;
             break;
-        case INTERFACE_RUNING:
+        case INTERFACE_RUNNING:
             self->event_dealer(self);
             break;
         case INTERFACE_EXITING:
@@ -71,7 +71,7 @@ INTERFACE_INFO Interface_update(Interface* self) {
                 self->info.state = (self->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
             break;
         case INTERFACE_STOP:
-            self->info.state = INTERFACE_RUNING;
+            self->info.state = INTERFACE_RUNNING;
             break;
         case INTERFACE_DIED:
             break;
@@ -83,7 +83,7 @@ INTERFACE_INFO Interface_update(Interface* self) {
 }
 void Interface_event_record(Interface* self, ALLEGRO_EVENT event) {
     if (self == nullptr) {raise_warn("try to record event on NULL interface");return;}
-    if (self->info.state != INTERFACE_RUNING && self->info.state != INTERFACE_INITIALING) return;
+    if (self->info.state != INTERFACE_RUNNING && self->info.state != INTERFACE_INITIALING) return;
     if (event.type == ALLEGRO_EVENT_KEY_DOWN)
         self->event = event;
 }

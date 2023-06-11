@@ -28,7 +28,7 @@ void GameWindow_init(GameWindow* self) {
     self->background_music = nullptr;
     self->Mute = GameWindow_get_mute();
     // state
-    self->state = GAMEWINDOW_RUNING;
+    self->state = GAMEWINDOW_RUNNING;
     // event
     self->event.type = -1;
     // Interface
@@ -87,7 +87,7 @@ GAMEWINDOW_STATE GameWindow_update(GameWindow* self) {
     switch (state_info.state) {
         case INTERFACE_STOP: { // add a new interface base on the infomation from top interface
             if (self->interface_num==INTERFACE_MAX_NUM) {raise_err("interface stack overflow");return GAMEWINDOW_EXIT;}
-            if (state_info.child.interface_type == INTERFACE_NONE) {raise_err("interface stop but give none new interface, ignore");return GAMEWINDOW_RUNING;}
+            if (state_info.child.interface_type == INTERFACE_NONE) {raise_err("interface stop but give none new interface, ignore");return GAMEWINDOW_RUNNING;}
             Interface* next_interface = _create_Interface(state_info.child);
             self->interfaces[self->interface_num++] = next_interface;
             break;
@@ -105,7 +105,7 @@ GAMEWINDOW_STATE GameWindow_update(GameWindow* self) {
     }
     // return GAME_EXIT if there is no interface
     if (self->interface_num==0) return GAMEWINDOW_EXIT;
-    return GAMEWINDOW_RUNING;
+    return GAMEWINDOW_RUNNING;
 }
 void GameWindow_event_record(GameWindow* self, ALLEGRO_EVENT event) {
     self->event.type = -1;

@@ -17,7 +17,7 @@ void LevelStart_init(LevelStart* self, LEVEL_ID level_id) {
     if (!self) {raise_warn("Try to init NULL level start interface");return;}
     const char* IMAGE_PATH = _LevelStart_get_image_path(level_id);
     SingleMenu_init(self, IMAGE_PATH);
-    // inheret from Interface
+    // inherited from Interface
     Interface* Iself = (Interface*)self;
     Iself->info.type = INTERFACE_LEVEL_START;
     Iself->background_light_max = 150;

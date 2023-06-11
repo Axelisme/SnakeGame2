@@ -55,18 +55,18 @@ void MultiMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
 }
 INTERFACE_INFO MultiMenu_update(Interface* Iself) {
     MultiMenu* self = (MultiMenu*)Iself;
-    // check validility
+    // check valid
     if (self == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
     // update by state
     switch (Iself->info.state) {
         case INTERFACE_INITIALING:
             if (_Interface_light_up(Iself))
-                Iself->info.state = INTERFACE_RUNING;
+                Iself->info.state = INTERFACE_RUNNING;
             break;
         case INTERFACE_STOP:
             Iself->info.state = INTERFACE_INITIALING;
             break;
-        case INTERFACE_RUNING:
+        case INTERFACE_RUNNING:
             Iself->event_dealer(Iself);
             break;
         case INTERFACE_EXITING:
@@ -84,7 +84,7 @@ INTERFACE_INFO MultiMenu_update(Interface* Iself) {
 void MultiMenu_event_record(Interface* Iself, ALLEGRO_EVENT event) {
     MultiMenu* self = (MultiMenu*)Iself;
     if (self == nullptr) {raise_warn("try to record event on NULL interface");return;}
-    if (Iself->info.state != INTERFACE_RUNING && Iself->info.state != INTERFACE_INITIALING) return;
+    if (Iself->info.state != INTERFACE_RUNNING && Iself->info.state != INTERFACE_INITIALING) return;
     if (event.type != ALLEGRO_EVENT_KEY_DOWN) return;
     switch (event.keyboard.keycode) {
         case ALLEGRO_KEY_UP:

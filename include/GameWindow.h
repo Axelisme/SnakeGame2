@@ -1,5 +1,5 @@
-#ifndef GANEWINDOW_H
-#define GANEWINDOW_H
+#ifndef GAMEWINDOW_H
+#define GAMEWINDOW_H
 
 #include "global.h"
 #include "Interface/Interface.h"
@@ -10,7 +10,7 @@
 #define INTERFACE_MAX_NUM 10
 
 typedef enum GAMEWINDOW_STATE {
-    GAMEWINDOW_RUNING = 1,
+    GAMEWINDOW_RUNNING = 1,
     GAMEWINDOW_EXIT = 0
 } GAMEWINDOW_STATE;
 
@@ -47,4 +47,4 @@ static void _GameWindow_load(GameWindow* self);
 static Interface* _create_Interface(CHILD_INFO type_info);
 static void _GameWindow_deal_event(GameWindow* self);
 
-#endif // GANEWINDOW_H
+#endif // GAMEWINDOW_H

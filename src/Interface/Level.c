@@ -42,7 +42,7 @@ void Level_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
 void Level_event_recorder(Interface* Iself, ALLEGRO_EVENT event) {
     Level* self = (Level*)Iself;
     if (self == nullptr) {raise_warn("try to record event on NULL interface");return;}
-    if (Iself->info.state != INTERFACE_RUNING && Iself->info.state != INTERFACE_INITIALING) return;
+    if (Iself->info.state != INTERFACE_RUNNING && Iself->info.state != INTERFACE_INITIALING) return;
     if (event.type != ALLEGRO_EVENT_KEY_DOWN) return;
     switch (event.keyboard.keycode) {
         case ALLEGRO_KEY_UP:

@@ -1,9 +1,6 @@
 
 #include "Interface/Level.h"
 
-
-
-
 Level* new_Level(LEVEL_ID level_id) {
     Level* level = (Level*)al_calloc(1,sizeof(Level));
     Level_init(level, level_id);

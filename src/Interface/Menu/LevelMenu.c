@@ -39,7 +39,6 @@ static void _LevelMenu_enter_state(LevelMenu* self) {
         case LEVEL_MENU_LEVEL_2:
         case LEVEL_MENU_LEVEL_3:
         case LEVEL_MENU_LEVEL_4:
-            show_msg("LevelMenu enter state: enter level");
             Iself->should_kill = false;
             Iself->info.state = INTERFACE_EXITING;
             Iself->info.child.interface_type = INTERFACE_LEVEL_START;

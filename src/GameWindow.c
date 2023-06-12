@@ -40,7 +40,7 @@ void GameWindow_init(GameWindow* self) {
 }
 void GameWindow_destroy(GameWindow* self) {
     // destroy interface
-    show_msg("Destroy Interface");
+    show_msg("Destroy Interface:");
     for(int i=0;i<self->interface_num;i++) {
         Interface* interface = self->interfaces[i];
         if(interface) interface->deleter(interface);
@@ -147,13 +147,12 @@ static void _GameWindow_load(GameWindow* self) {
     al_set_sample_instance_playmode(self->background_music, ALLEGRO_PLAYMODE_LOOP);
     al_attach_sample_instance_to_mixer(self->background_music, al_get_default_mixer());
     // Create interface
-    show_msg("Create first interface");
+    show_msg("Create first interface:");
     CHILD_INFO first_interface_info = {FIRST_INTERFACE, 1};
     Interface* first_interface = _create_Interface(first_interface_info);
     self->interfaces[self->interface_num++] = first_interface;
 }
 static Interface* _create_Interface(CHILD_INFO info) {
-    // TODO
     switch (info.interface_type) {
         case INTERFACE_IN_MENU:
             return (Interface*)new_InMenu();

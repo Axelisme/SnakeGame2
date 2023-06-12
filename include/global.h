@@ -1,6 +1,5 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
-#undef __STRICT_ANSI__
 
 #include "allegro5/allegro.h"
 #include "allegro5/allegro_primitives.h"
@@ -12,7 +11,7 @@
 #include <stdbool.h>
 
 // Debug
-#define Debug 0
+#define Debug 1
 
 // Color
 #define COLOR_NUM 9

@@ -19,7 +19,7 @@ void delete_SingleMenu(Interface* Iself);
 void SingleMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
 void SingleMenu_load_image(SingleMenu* self, const char* image_path);
 
-static void _SingleMenu_init_image(SingleMenu* self);
+static void _SingleMenu_free_image(SingleMenu* self);
 
 
 #endif // SINGLE_MENU_H

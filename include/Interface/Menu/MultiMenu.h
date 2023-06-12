@@ -24,7 +24,7 @@ INTERFACE_INFO MultiMenu_update(Interface* Iself);
 void MultiMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
 void MultiMenu_deal_event(Interface* Iself);
 
-void _MultiMenu_init_image(MultiMenu* self, int image_num);
+void _MultiMenu_free_image(MultiMenu* self, int image_num);
 void _MultiMenu_load_image(MultiMenu* self, const char** image_paths, int image_num);
 ALLEGRO_BITMAP* _MultiMenu_current_image(MultiMenu* self);
 int _MultiMenu_next_state(MultiMenu* self);

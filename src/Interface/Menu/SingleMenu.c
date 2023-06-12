@@ -8,16 +8,17 @@ SingleMenu* new_SingleMenu(const char* image_path) {
 }
 void SingleMenu_init(SingleMenu* self, const char* image_path) {
     if (self == nullptr) {raise_err("try to init NULL interface");return;}
-    show_msg("SingleMenu_init");
-    // inherited from Interface
     Interface* Iself = (Interface*)self;
     Interface_init(Iself);
+    show_msg("SingleMenu_init");
+    // inherited from Interface
     Iself->info.type = INTERFACE_SINGLE;
     Iself->deleter = delete_SingleMenu;
     Iself->draw = SingleMenu_draw;
+    Iself->deleter = delete_SingleMenu;
     // in menu image
     self->image = nullptr;
-    _SingleMenu_init_image(self);
+    _SingleMenu_free_image(self);
     SingleMenu_load_image(self, image_path);
     if (self->image == nullptr) {
         raise_warn("failed to load image! use default draw method");
@@ -26,11 +27,11 @@ void SingleMenu_init(SingleMenu* self, const char* image_path) {
 }
 void SingleMenu_destroy(SingleMenu* self) {
     show_msg("SingleMenu_destroy");
+    // free in menu image
+    _SingleMenu_free_image(self);
     // inherited from Interface
     Interface* Iself = (Interface*)self;
     Interface_destroy(Iself);
-    // free in menu image
-    _SingleMenu_init_image(self);
 }
 void delete_SingleMenu(Interface* Iself) {
     SingleMenu* self = (SingleMenu*)Iself;
@@ -43,7 +44,7 @@ void SingleMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     SingleMenu* self = (SingleMenu*)Iself;
     if (Iself->info.state == INTERFACE_DIED) return;
     Interface_draw(Iself, backbuffer);
-    if (self->image) _draw_image(self->image, backbuffer);
+    if (self->image) _draw_image(self->image, backbuffer, DIRECTION_UP);
     else raise_warn("try to draw NULL image");
 }
 void SingleMenu_load_image(SingleMenu* self, const char* image_path) {
@@ -52,7 +53,7 @@ void SingleMenu_load_image(SingleMenu* self, const char* image_path) {
         raise_warn("failed to load image!");
 }
 
-static void _SingleMenu_init_image(SingleMenu* self) {
+static void _SingleMenu_free_image(SingleMenu* self) {
     if (self->image) al_destroy_bitmap(self->image);
     self->image = nullptr;
 }

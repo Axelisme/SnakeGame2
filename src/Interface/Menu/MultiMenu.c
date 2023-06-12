@@ -8,33 +8,34 @@ MultiMenu* new_MultiMenu(const char** image_paths, int image_num) {
 }
 void MultiMenu_init(MultiMenu* self, const char** image_paths, int image_num) {
     if (self == nullptr) {raise_warn("try to init a nullptr MultiMenu"); return;}
-    show_msg("MultiMenu_init");
-    // inherited from Interface
     Interface* Iself = (Interface*)self;
     Interface_init(Iself);
+    show_msg("MultiMenu_init");
+    // inherited from Interface
     Iself->info.type = INTERFACE_MULTI;
     Iself->draw = MultiMenu_draw;
     Iself->update = MultiMenu_update;
     Iself->event_record = MultiMenu_event_record;
     Iself->event_dealer = MultiMenu_deal_event;
+    Iself->deleter = delete_MultiMenu;
     // Info
     self->menu_state = 0;
     // Image
     self->image_num = image_num;
     self->images = (ALLEGRO_BITMAP**)al_calloc(image_num, sizeof(ALLEGRO_BITMAP*));
-    _MultiMenu_init_image(self, image_num);
+    _MultiMenu_free_image(self, image_num);
     _MultiMenu_load_image(self, image_paths, image_num);
     // method
     self->enter_state = _MultiMenu_enter_state;
 }
 void MultiMenu_destroy(MultiMenu* self) {
     show_msg("MultiMenu_destroy");
+    // free image
+    _MultiMenu_free_image(self, self->image_num);
+    al_free(self->images);
     // inherited from Interface
     Interface* Iself = (Interface*)self;
     Interface_destroy(Iself);
-    // free image
-    _MultiMenu_init_image(self, self->image_num);
-    al_free(self->images);
 }
 void delete_MultiMenu(Interface* Iself) {
     MultiMenu* self = (MultiMenu*)Iself;
@@ -50,7 +51,7 @@ void MultiMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     Interface_draw(Iself, backbuffer);
     // draw image
     ALLEGRO_BITMAP* image = _MultiMenu_current_image(self);
-    if (image) _draw_image(image, backbuffer);
+    if (image) _draw_image(image, backbuffer, DIRECTION_UP);
     else raise_warn("try to draw NULL image");
 }
 INTERFACE_INFO MultiMenu_update(Interface* Iself) {
@@ -103,16 +104,20 @@ void MultiMenu_deal_event(Interface* Iself) {
     if (Iself->event.type == NO_EVENT) return;
     switch (Iself->event.keyboard.keycode) {
         case ALLEGRO_KEY_UP:
+            show_msg("MultiMenu event: up");
             self->menu_state = _MultiMenu_prev_state(self);
             break;
         case ALLEGRO_KEY_DOWN:
+            show_msg("MultiMenu event: down");
             self->menu_state = _MultiMenu_next_state(self);
             break;
         case ALLEGRO_KEY_SPACE:
         case ALLEGRO_KEY_ENTER:
+            show_msg("MultiMenu event: enter");
             self->enter_state(self);
             break;
         case ALLEGRO_KEY_ESCAPE:
+            show_msg("MultiMenu event: escape");
             _Interface_escape(Iself);
             break;
         default:
@@ -122,7 +127,7 @@ void MultiMenu_deal_event(Interface* Iself) {
     Iself->event.type = NO_EVENT;
 }
 
-void _MultiMenu_init_image(MultiMenu* self, int image_num) {
+void _MultiMenu_free_image(MultiMenu* self, int image_num) {
     for (int i = 0; i < image_num; i++) {
         if (self->images[i] != nullptr)
             al_destroy_bitmap(self->images[i]);

@@ -1,5 +1,6 @@
 
 #include "Interface/Interface.h"
+#include "Utility/Direction.h"
 
 INTERFACE_INFO _default_info() {
     INTERFACE_INFO info;
@@ -43,7 +44,7 @@ void Interface_init(Interface* self) {
     self->deleter = Interface_destroy;
 }
 void Interface_destroy(Interface* self) {
-    return;
+    show_msg("Interface_destroy");
 }
 void delete_Interface(Interface* self) {
     Interface_destroy(self);
@@ -115,17 +116,28 @@ bool _Interface_light_down(Interface* self) {
     }
     else return false;
 }
-void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer) {
+void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction) {
     if (image == nullptr) {raise_warn("try to draw NULL image");return;}
     al_set_target_bitmap(backbuffer);
     // get screen size
-    int screen_w = al_get_bitmap_width(backbuffer);
-    int screen_h = al_get_bitmap_height(backbuffer);
+    const int screen_w = al_get_bitmap_width(backbuffer);
+    const int screen_h = al_get_bitmap_height(backbuffer);
     // get image size
-    int image_w = al_get_bitmap_width(image);
-    int image_h = al_get_bitmap_height(image);
+    const int image_w = al_get_bitmap_width(image);
+    const int image_h = al_get_bitmap_height(image);
+    // get image center position
+    const int img_center_x = image_w / 2;
+    const int img_center_y = image_h / 2;
+    // get screen center position
+    const int screen_center_x = screen_w / 2;
+    const int screen_center_y = screen_h / 2;
+    // get scale
+    const float scale_x = (float)screen_w / image_w;
+    const float scale_y = (float)screen_h / image_h;
+    // get angle
+    const float angle = Direction_to_angle(direction);
     // draw
-    al_draw_scaled_bitmap(image, 0, 0, image_w, image_h, 0, 0, screen_w, screen_h, 0);
+    al_draw_scaled_rotated_bitmap(image, img_center_x, img_center_y, screen_center_x, screen_center_y, scale_x, scale_y, angle, 0);
 }
 
 

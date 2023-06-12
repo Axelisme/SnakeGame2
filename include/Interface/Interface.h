@@ -2,6 +2,7 @@
 #define INTERFACE_H
 
 #include "global.h"
+#include "Utility/Direction.h"
 
 #define MAX_LIGHT 255
 #define MIN_LIGHT 0
@@ -74,7 +75,7 @@ void Interface_deal_event(Interface* self);
 void _Interface_escape(Interface* self);
 bool _Interface_light_up(Interface* self);
 bool _Interface_light_down(Interface* self);
-void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer);
+void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction);
 
 
 #endif // INTERFACE_H

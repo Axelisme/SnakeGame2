@@ -4,6 +4,7 @@
 #include "global.h"
 #include "Utility/Position.h"
 #include "Utility/Direction.h"
+#include "Utility/ShiftWindow.h"
 
 #define TYPE_NUM 9
 typedef enum OBJ_TYPE {
@@ -26,7 +27,7 @@ typedef struct Object {
     // Display
     ALLEGRO_BITMAP * Image;
     // method
-    void (*draw)(struct Object*, ALLEGRO_BITMAP*);
+    void (*draw)(struct Object*, ShiftWindow*);
     void (*deleter)(struct Object*);
 } Object;
 
@@ -35,6 +36,6 @@ Object* new_Object(Pos pos);
 void Object_init(Object* self, Pos pos);
 void Object_destroy(Object* self);
 void delete_Object(Object* self);
-void Object_draw(Object* self, ALLEGRO_BITMAP* backbuffer);
+void Object_draw(Object* self, ShiftWindow* sw);
 
 #endif // OBJECT_H

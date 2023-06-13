@@ -10,6 +10,12 @@ typedef enum LEVEL_ID {
     LEVEL_4
 } LEVEL_ID;
 
+typedef enum LEVEL_STATE {
+    LS_PLAYING = 0,
+    LS_WIN,
+    LS_LOSE
+} LEVEL_STATE;
+
 typedef struct Level {
     // Inherited from Interface
     Interface interface;

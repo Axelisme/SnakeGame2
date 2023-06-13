@@ -18,12 +18,20 @@ void Object_init(Object* self, Pos pos) {
 }
 void Object_destroy(Object* self) {
     show_msg("Object_destroy");
-    if (self->Image != nullptr) al_destroy_bitmap(self->Image);
+    if (self->Image) al_destroy_bitmap(self->Image);
 }
 void delete_Object(Object* self) {
     Object_destroy(self);
     al_free(self);
 }
-void Object_draw(Object* self, ALLEGRO_BITMAP* backbuffer) {
-    draw_image(self->Image, backbuffer, self->dir);
+void Object_draw(Object* self, ShiftWindow* sw) {
+    if (!self->Image) return;
+    if (!SW_isInWindow(sw, self->pos)) return;
+    Pos UL = SW_getPixelPos(sw, add_const(self->pos, -1));
+    Pos LR = SW_getPixelPos(sw, add_const(self->pos, 2));
+    ALLEGRO_BITMAP* submap = al_create_sub_bitmap(sw->backbuffer, UL.x, UL.y, LR.x-UL.x, LR.y-UL.y);
+    al_set_target_bitmap(submap);
+    if (self->Image) draw_image(self->Image, submap, self->dir);
+    else al_clear_to_color(RED);
+    al_set_target_bitmap(sw->backbuffer);
 }

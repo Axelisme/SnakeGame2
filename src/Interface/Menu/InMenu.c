@@ -20,8 +20,6 @@ void InMenu_init(InMenu* self) {
 }
 void _InMenu_deal_event(Interface* Iself) {
     if (Iself->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
-    Iself->info.state = INTERFACE_EXITING;
-    Iself->info.child.interface_type = INTERFACE_START_MENU;
-    Iself->should_kill = true;
+    Interface_set_kill(Iself, INTERFACE_START_MENU);
     Iself->event.type = NO_EVENT;
 }

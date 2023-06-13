@@ -39,13 +39,11 @@ static void _LevelMenu_enter_state(LevelMenu* self) {
         case LEVEL_MENU_LEVEL_2:
         case LEVEL_MENU_LEVEL_3:
         case LEVEL_MENU_LEVEL_4:
-            Iself->should_kill = false;
-            Iself->info.state = INTERFACE_EXITING;
-            Iself->info.child.interface_type = INTERFACE_LEVEL_START;
+            Interface_set_stop(Iself, INTERFACE_LEVEL_START);
             Iself->info.child.level = self->menu_state + 1;
             break;
         case LEVEL_MENU_EXIT:
-            _Interface_escape(Iself);
+            Interface_set_kill(Iself, INTERFACE_NONE);
             break;
         default:
             raise_warn("LevelMenu enter state: unexpected state");

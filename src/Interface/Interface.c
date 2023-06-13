@@ -61,18 +61,18 @@ INTERFACE_INFO Interface_update(Interface* self) {
     if (self == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
     switch (self->info.state) {
         case INTERFACE_INITIALING:
-            if (_Interface_light_up(self))
+            if (Interface_light_up(self))
                 self->info.state = INTERFACE_RUNNING;
             break;
         case INTERFACE_RUNNING:
             self->event_dealer(self);
             break;
         case INTERFACE_EXITING:
-            if (_Interface_light_down(self))
+            if (Interface_light_down(self))
                 self->info.state = (self->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
             break;
         case INTERFACE_STOP:
-            self->info.state = INTERFACE_RUNNING;
+            self->info.state = INTERFACE_INITIALING;
             break;
         case INTERFACE_DIED:
             break;
@@ -90,15 +90,20 @@ void Interface_event_record(Interface* self, ALLEGRO_EVENT event) {
 }
 void Interface_deal_event(Interface* self) {
     if (self->event.type != ALLEGRO_EVENT_KEY_DOWN) return;
-    _Interface_escape(self);
+    Interface_set_kill(self, INTERFACE_NONE);
     self->event.type = NO_EVENT;
 }
-void _Interface_escape(Interface* self) {
+void Interface_set_kill(Interface* self, INTERFACE_TYPE next_type) {
     self->info.state = INTERFACE_EXITING;
-    self->info.child.interface_type = INTERFACE_NONE;
+    self->info.child.interface_type = next_type;
     self->should_kill = true;
 }
-bool _Interface_light_up(Interface* self) {
+void Interface_set_stop(Interface* self, INTERFACE_TYPE next_type) {
+    self->info.state = INTERFACE_EXITING;
+    self->info.child.interface_type = next_type;
+    self->should_kill = false;
+}
+bool Interface_light_up(Interface* self) {
     if (self == nullptr) {raise_warn("try to light up NULL interface");return true;}
     self->background_light += self->background_light_up_step;
     if (self->background_light > self->background_light_max) {
@@ -107,7 +112,7 @@ bool _Interface_light_up(Interface* self) {
     }
     else return false;
 }
-bool _Interface_light_down(Interface* self) {
+bool Interface_light_down(Interface* self) {
     if (self == nullptr) {raise_warn("try to light down NULL interface");return true;}
     self->background_light -= self->background_light_down_step;
     if (self->background_light < self->background_light_min) {
@@ -116,7 +121,7 @@ bool _Interface_light_down(Interface* self) {
     }
     else return false;
 }
-void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction) {
+void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction) {
     if (image == nullptr) {raise_warn("try to draw NULL image");return;}
     al_set_target_bitmap(backbuffer);
     // get screen size

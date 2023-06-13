@@ -51,7 +51,7 @@ void MultiMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     Interface_draw(Iself, backbuffer);
     // draw image
     ALLEGRO_BITMAP* image = _MultiMenu_current_image(self);
-    if (image) _draw_image(image, backbuffer, DIRECTION_UP);
+    if (image) draw_image(image, backbuffer, DIRECTION_UP);
     else raise_warn("try to draw NULL image");
 }
 INTERFACE_INFO MultiMenu_update(Interface* Iself) {
@@ -61,7 +61,7 @@ INTERFACE_INFO MultiMenu_update(Interface* Iself) {
     // update by state
     switch (Iself->info.state) {
         case INTERFACE_INITIALING:
-            if (_Interface_light_up(Iself))
+            if (Interface_light_up(Iself))
                 Iself->info.state = INTERFACE_RUNNING;
             break;
         case INTERFACE_STOP:
@@ -71,7 +71,7 @@ INTERFACE_INFO MultiMenu_update(Interface* Iself) {
             Iself->event_dealer(Iself);
             break;
         case INTERFACE_EXITING:
-            if (_Interface_light_down(Iself))
+            if (Interface_light_down(Iself))
                 Iself->info.state = (Iself->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
             break;
         case INTERFACE_DIED:
@@ -118,7 +118,7 @@ void MultiMenu_deal_event(Interface* Iself) {
             break;
         case ALLEGRO_KEY_ESCAPE:
             show_msg("MultiMenu event: escape");
-            _Interface_escape(Iself);
+            Interface_set_kill(Iself, INTERFACE_NONE);
             break;
         default:
             raise_warn("try to deal with unknown event");

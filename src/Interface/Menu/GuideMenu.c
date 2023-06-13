@@ -23,9 +23,7 @@ void GuideMenu_deal_event(Interface* Iself) {
         switch (Iself->event.keyboard.keycode) {
             case ALLEGRO_KEY_G:
             case ALLEGRO_KEY_ESCAPE:
-                Iself->info.state = INTERFACE_EXITING;
-                Iself->info.child.interface_type = INTERFACE_NONE;
-                Iself->should_kill = true;
+                Interface_set_kill(Iself, INTERFACE_NONE);
                 break;
             default:
                 break;

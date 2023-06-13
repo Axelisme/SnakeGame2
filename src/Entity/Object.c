@@ -25,5 +25,5 @@ void delete_Object(Object* self) {
     al_free(self);
 }
 void Object_draw(Object* self, ALLEGRO_BITMAP* backbuffer) {
-    _draw_image(self->Image, backbuffer, self->dir);
+    draw_image(self->Image, backbuffer, self->dir);
 }

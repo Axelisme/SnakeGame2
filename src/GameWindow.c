@@ -11,7 +11,7 @@
 const char GAMEWINDOW_TITLE[] = "SnakeGame2";
 const char BACKGROUND_SOUND_PATH[] = "data/music/level_bgm.ogg";
 const char GAME_ICON_PATH[] = "data/image/icon.png";
-static bool Mute = false;
+static bool Mute = true;
 
 GameWindow* new_GameWindow() {
     GameWindow* self = (GameWindow*)al_calloc(1,sizeof(GameWindow));

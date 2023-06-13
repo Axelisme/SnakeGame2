@@ -44,7 +44,7 @@ void SingleMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     SingleMenu* self = (SingleMenu*)Iself;
     if (Iself->info.state == INTERFACE_DIED) return;
     Interface_draw(Iself, backbuffer);
-    if (self->image) _draw_image(self->image, backbuffer, DIRECTION_UP);
+    if (self->image) draw_image(self->image, backbuffer, DIRECTION_UP);
     else raise_warn("try to draw NULL image");
 }
 void SingleMenu_load_image(SingleMenu* self, const char* image_path) {

@@ -21,8 +21,10 @@ Level* new_Level(LEVEL_ID level_id);
 void Level_init(Level* self, LEVEL_ID level_id);
 void Level_destroy(Level* self);
 void delete_Level(Interface* Iself);
-void Level_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
-void Level_event_recorder(Interface* Iself, ALLEGRO_EVENT event);
-void Level_event_dealer(Interface* Iself);
+
+static void Level_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
+static void Level_event_recorder(Interface* Iself, ALLEGRO_EVENT event);
+static void Level_event_dealer(Interface* Iself);
+static void Level_loader(Level* self, LEVEL_ID level_id);
 
 #endif // LEVEL_H

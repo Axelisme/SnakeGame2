@@ -72,10 +72,11 @@ void Interface_draw(Interface* self, ALLEGRO_BITMAP* backbuffer);
 INTERFACE_INFO Interface_update(Interface* self);
 void Interface_event_record(Interface* self, ALLEGRO_EVENT event);
 void Interface_deal_event(Interface* self);
-void _Interface_escape(Interface* self);
-bool _Interface_light_up(Interface* self);
-bool _Interface_light_down(Interface* self);
-void _draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction);
+void Interface_set_kill(Interface* self, INTERFACE_TYPE next_type);
+void Interface_set_stop(Interface* self, INTERFACE_TYPE next_type);
+bool Interface_light_up(Interface* self);
+bool Interface_light_down(Interface* self);
+void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction);
 
 
 #endif // INTERFACE_H

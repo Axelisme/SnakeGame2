@@ -37,22 +37,16 @@ static void _StartMenu_enter_state(StartMenu* self) {
     if (self->menu_state == START_MENU_STATE_START) return;
     switch (self->menu_state) {
         case START_MENU_STATE_LEVEL:
-            Iself->info.state = INTERFACE_EXITING;
-            Iself->info.child.interface_type = INTERFACE_LEVEL_MENU;
-            Iself->should_kill = false;
+            Interface_set_stop(Iself, INTERFACE_LEVEL_MENU);
             break;
         case START_MENU_STATE_MUSIC:
             GameWindow_toggle_mute();
             break;
         case START_MENU_STATE_GUIDE:
-            Iself->info.state = INTERFACE_EXITING;
-            Iself->info.child.interface_type = INTERFACE_GUIDE_MENU;
-            Iself->should_kill = false;
+            Interface_set_stop(Iself, INTERFACE_GUIDE_MENU);
             break;
         case START_MENU_STATE_EXIT:
-            Iself->info.state = INTERFACE_EXITING;
-            Iself->info.child.interface_type = INTERFACE_NONE;
-            Iself->should_kill = true;
+            Interface_set_kill(Iself, INTERFACE_NONE);
             break;
         default:
             raise_warn("unknown state");

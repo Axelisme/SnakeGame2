@@ -67,8 +67,6 @@ static const char* _LevelStart_get_image_path(LEVEL_ID level_id) {
 }
 static void _LevelStart_enter_level(LevelStart* self, LEVEL_ID level_id) {
     Interface* Iself = (Interface*)self;
-    Iself->info.state = INTERFACE_EXITING;
-    Iself->info.child.interface_type = INTERFACE_LEVEL;
+    Interface_set_kill(Iself, INTERFACE_LEVEL);
     Iself->info.child.level = level_id;
-    Iself->should_kill = true;
 }

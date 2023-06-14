@@ -1,5 +1,6 @@
 
 #include "Interface/Menu/LevelStart.h"
+#include "Interface/LevelView.h"
 #include "GameWindow.h"
 
 const char LEVEL_1_START_IMAGE_PATH[] = "data/image/level1_start.png";

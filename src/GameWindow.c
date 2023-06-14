@@ -6,7 +6,8 @@
 #include "Interface/Menu/GuideMenu.h"
 #include "Interface/Menu/LevelMenu.h"
 #include "Interface/Menu/LevelStart.h"
-#include "Interface/Level.h"
+#include "Interface/Menu/LevelWin.h"
+#include "Interface/LevelView.h"
 
 const char GAMEWINDOW_TITLE[] = "SnakeGame2";
 const char BACKGROUND_SOUND_PATH[] = "data/music/level_bgm.ogg";
@@ -171,6 +172,9 @@ static Interface* _create_Interface(CHILD_INFO info) {
             break;
         case INTERFACE_LEVEL:
             return (Interface*)new_Level(info.level);
+            break;
+        case INTERFACE_LEVEL_WIN:
+            return (Interface*)new_LevelWin(info.level);
             break;
         case INTERFACE_NONE:
             raise_warn("can't create INTERFACE_NONE");

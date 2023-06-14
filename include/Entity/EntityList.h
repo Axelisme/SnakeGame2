@@ -22,12 +22,13 @@ void EntityList_merge(EntityList* self, EntityList* other);
 
 typedef struct EntityArray {
     int size;
-    Entity** EA;
+    Entity** array;
 } EntityArray;
 
 void EntityArray_init(EntityArray* self);
 void EntityArray_destroy(EntityArray* self);
 void EntityArray_clear(EntityArray* self);
 void EntityArray_push_back(EntityArray* self, Entity* entity);
+bool EntityArray_have(EntityArray* self, Entity* entity);
 
 #endif // ENTITYLIST_H

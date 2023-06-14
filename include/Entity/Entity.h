@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "Entity/Object.h"
+#include "Object/Object.h"
 #include "Utility/ShiftWindow.h"
 
 typedef enum EntityType {
@@ -24,6 +24,7 @@ typedef struct Entity {
     // Status
     bool beSupported;
     struct Entity* activator;
+    int TriggerTimes;
     // Objects
     int objNum;
     Object** objList;
@@ -31,9 +32,9 @@ typedef struct Entity {
     struct Entity* prev;
     struct Entity* next;
     // method
-    void (*setDefault)(struct Entity*);
+    void (*reset)(struct Entity*);
     void (*addObject)(struct Entity*, Object*);
-    void (*draw)(struct Entity*, ShiftWindow*);
+    void (*draw)(struct Entity*, ShiftWindow*, ALLEGRO_BITMAP*);
     void (*shift)(struct Entity*, Direction);
     void (*trigger)(struct Entity*, void*, void*);
     void (*deleter)(struct Entity*);
@@ -43,9 +44,9 @@ Entity* new_Entity();
 void Entity_init(Entity* self);
 void Entity_destroy(Entity* self);
 void delete_Entity(Entity* self);
-void Entity_setDefault(Entity* self);
+void Entity_status_reset(Entity* self);
 void Entity_addObject(Entity* self, Object* obj);
-void Entity_draw(Entity* self, ShiftWindow* sw);
+void Entity_draw(Entity* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer);
 void Entity_shift(Entity* self, Direction dir);
 void Entity_trigger(Entity* self, void* Vmap, void* Voverlaps);
 

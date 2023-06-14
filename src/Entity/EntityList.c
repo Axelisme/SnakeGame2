@@ -91,19 +91,24 @@ void EntityList_merge(EntityList* self, EntityList* other) {
 }
 
 void EntityArray_init(EntityArray* self) {
-    self->EA = NULL;
+    self->array = NULL;
     self->size = 0;
 }
 void EntityArray_destroy(EntityArray* self) {
     EntityArray_clear(self);
 }
 void EntityArray_clear(EntityArray* self) {
-    al_free(self->EA);
-    self->EA = NULL;
+    al_free(self->array);
+    self->array = NULL;
     self->size = 0;
 }
 void EntityArray_push_back(EntityArray* self, Entity* entity) {
-    self->EA = al_realloc(self->EA, sizeof(Entity*) * (self->size + 1));
-    self->EA[self->size] = entity;
+    self->array = al_realloc(self->array, sizeof(Entity*) * (self->size + 1));
+    self->array[self->size] = entity;
     self->size++;
+}
+bool EntityArray_have(EntityArray* self, Entity* entity) {
+    for (int i = 0; i < self->size; i++) if (self->array[i] == entity)
+            return true;
+    return false;
 }

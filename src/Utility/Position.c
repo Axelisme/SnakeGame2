@@ -4,8 +4,7 @@
 #include "math.h"
 
 Pos make_Pos(pos_t y, pos_t x) {
-    Pos pos = {y, x};
-    return pos;
+    return (Pos) {y, x};
 }
 bool equal(const Pos A, const Pos B) {
     return (A.y == B.y && A.x == B.x);
@@ -18,6 +17,9 @@ Pos sub(const Pos A, const Pos B) {
 }
 Pos add_const(const Pos A, const pos_t B) {
     return make_Pos(A.y + B, A.x + B);
+}
+Pos mul_const(const Pos A, const pos_t B) {
+    return make_Pos(A.y * B, A.x * B);
 }
 Pos heading_pos(const Pos pos, const Direction dir) {
     return add(pos, DIR_TO_POS(dir));

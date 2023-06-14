@@ -8,15 +8,18 @@ Entity* new_Entity() {
     return self;
 }
 void Entity_init(Entity* self) {
+    // Properties
     self->type = E_BASIC;
     self->isFixed = true;
     self->canOverlap = false;
-    Entity_setDefault(self);
+    // Status
+    Entity_status_reset(self);
+    self->TriggerTimes = 1;
     self->objNum = 0;
     self->objList = NULL;
     self->prev = NULL;
     self->next = NULL;
-    self->setDefault = Entity_setDefault;
+    self->reset = Entity_status_reset;
     self->addObject = Entity_addObject;
     self->draw = Entity_draw;
     self->shift = Entity_shift;
@@ -35,7 +38,7 @@ void delete_Entity(Entity* self) {
     Entity_destroy(self);
     al_free(self);
 }
-void Entity_setDefault(Entity* self) {
+void Entity_status_reset(Entity* self) {
     self->beSupported = false;
     self->activator = NULL;
 }
@@ -44,11 +47,11 @@ void Entity_addObject(Entity* self, Object* obj) {
     self->objList = (Object**)al_realloc(self->objList, sizeof(Object*)*self->objNum);
     self->objList[self->objNum-1] = obj->copy(obj);
 }
-void Entity_draw(Entity* self, ShiftWindow* sw) {
+void Entity_draw(Entity* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer) {
     if (!self->objList) return;
     for (int i = 0; i < self->objNum; i++) {
         Object* obj = self->objList[i];
-        obj->draw(obj, sw);
+        obj->draw(obj, sw, backbuffer);
     }
 }
 void Entity_shift(Entity* self, Direction dir) {

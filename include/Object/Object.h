@@ -6,28 +6,25 @@
 #include "Utility/Direction.h"
 #include "Utility/ShiftWindow.h"
 
-#define TYPE_NUM 9
-typedef enum OBJ_TYPE {
-    O_EDGE = -1,
-    O_GROUND,
-    O_BODY,
-    O_END,
-    O_APPLE,
-    O_STONE,
-    O_SPIKE,
-    O_BUTTON,
-    O_BASIC
-} OBJ_TYPE;
+extern ALLEGRO_BITMAP* apple_img;
+extern ALLEGRO_BITMAP* button_img;
+extern ALLEGRO_BITMAP* end_img;
+extern ALLEGRO_BITMAP* ground_img;
+extern ALLEGRO_BITMAP* snake_head_img;
+extern ALLEGRO_BITMAP* snake_body_straight_img;
+extern ALLEGRO_BITMAP* snake_body_turn_img;
+extern ALLEGRO_BITMAP* snake_tail_img;
+extern ALLEGRO_BITMAP* spike_img;
+extern ALLEGRO_BITMAP* stone_img;
 
 typedef struct Object {
     // Info
-    OBJ_TYPE type;
     Pos pos;
     Direction dir;
     // Display
     ALLEGRO_BITMAP * Image;
     // method
-    void (*draw)(struct Object*, ShiftWindow*);
+    void (*draw)(struct Object*, ShiftWindow*, ALLEGRO_BITMAP*);
     void (*shift)(struct Object*, Pos);
     struct Object* (*copy)(struct Object*);
     void (*deleter)(struct Object*);
@@ -43,7 +40,7 @@ void Object_init(Object* self, Pos pos);
 void Object_destroy(Object* self);
 void delete_Object(Object* self);
 Object* Object_copy(Object* self);
-static void Object_draw(Object* self, ShiftWindow* sw);
+static void Object_draw(Object* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer);
 static void Object_shift(Object* self, Pos delta);
 
 #endif // OBJECT_H

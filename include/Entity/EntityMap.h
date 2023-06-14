@@ -4,24 +4,30 @@
 #include "Entity/Entity.h"
 #include "Entity/EntityList.h"
 #include "Entity/Snake.h"
-#include "Interface/Level.h"
+
+typedef enum PLAYER_STATE {
+    PLAYING = 0,
+    WIN,
+    LOSE
+} PLAYER_STATE;
 
 typedef struct EntityMap {
     // level state
-    LEVEL_STATE levelState;
+    PLAYER_STATE levelState;
     // map state
-    int MapWidth;
-    int MapHeight;
+    Pos mapSize;
     Entity*** entityMap;
+    // gravity
+    Direction gravity;
 } EntityMap;
 
-void EntityMap_init(EntityMap* self, int width, int height);
+void EntityMap_init(EntityMap* self, Pos mapSize);
 void EntityMap_destroy(EntityMap* self);
+void EntityMap_clear(EntityMap* self);
+bool MapCheck(EntityMap* self, Pos pos);
 Entity* MapRps(EntityMap* self, Pos pos, Entity* entity);
 Entity* MapGet(EntityMap* self, Pos pos);
-
 void Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps);
 void Entity_unmark(Entity* self, EntityMap* map);
-bool Entity_canShift(Entity* self, Direction dir, EntityMap* map);
 
 #endif // ENTITYMAP_H

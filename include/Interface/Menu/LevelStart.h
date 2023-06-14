@@ -2,7 +2,7 @@
 #define LEVEL_START_H
 
 #include "Interface/Menu/SingleMenu.h"
-#include "Interface/Level.h"
+#include "Interface/LevelView.h"
 
 typedef struct LevelStartInfo {
     LEVEL_ID level;

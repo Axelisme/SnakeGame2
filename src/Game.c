@@ -6,7 +6,7 @@ Game* new_Game() {
     Game_init(self);
     return self;
 }
-void Allegro_init(Game* self) {
+void Allegro_init() {
     // Initial Allegro
     show_msg("Initial Allegro");
     if (! al_init()) raise_err("allegro initial fail");
@@ -33,7 +33,7 @@ void Game_init(Game* self) {
     // Info
     strncpy(self->name, "Game", NAME_MAX_LENGTH);
     // allegro
-    Allegro_init(self);
+    Allegro_init();
     // game body
     GameWindow_init(&self->window);
     // event queue
@@ -71,8 +71,8 @@ void Game_run(Game* self) {
     al_start_timer(self->render_timer);
     // game loop
     show_msg("Game loop start");
-    bool runing_flag = true;
-    while (runing_flag) {
+    bool running_flag = true;
+    while (running_flag) {
         // get event
         ALLEGRO_EVENT event;
         al_wait_for_event(self->event_queue, &event);
@@ -80,7 +80,7 @@ void Game_run(Game* self) {
             case ALLEGRO_EVENT_TIMER:
                 if (event.timer.source == self->update_timer){       // update
                     if (GAMEWINDOW_EXIT == GameWindow_update(&self->window))
-                        runing_flag = false;
+                        running_flag = false;
                 }
                 else if (event.timer.source == self->render_timer)  // draw
                     GameWindow_draw(&self->window);

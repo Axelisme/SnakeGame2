@@ -28,14 +28,22 @@ typedef struct Object {
     ALLEGRO_BITMAP * Image;
     // method
     void (*draw)(struct Object*, ShiftWindow*);
+    void (*shift)(struct Object*, Pos);
+    struct Object* (*copy)(struct Object*);
     void (*deleter)(struct Object*);
 } Object;
+
+// ObjectClass
+void ObjectClass_init();
+void ObjectClass_destroy();
 
 // Object
 Object* new_Object(Pos pos);
 void Object_init(Object* self, Pos pos);
 void Object_destroy(Object* self);
 void delete_Object(Object* self);
-void Object_draw(Object* self, ShiftWindow* sw);
+Object* Object_copy(Object* self);
+static void Object_draw(Object* self, ShiftWindow* sw);
+static void Object_shift(Object* self, Pos delta);
 
 #endif // OBJECT_H

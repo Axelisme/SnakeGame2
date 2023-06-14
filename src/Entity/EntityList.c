@@ -69,12 +69,6 @@ void EntityList_remove(EntityList* self, Entity* entity) {
     self->size--;
 }
 void EntityList_clear(EntityList* self) {
-    Entity* entity = self->front;
-    while (entity != NULL) {
-        Entity* next = entity->next;
-        entity->deleter(entity);
-        entity = next;
-    }
     self->front = NULL;
     self->back = NULL;
     self->size = 0;
@@ -93,9 +87,7 @@ void EntityList_merge(EntityList* self, EntityList* other) {
         self->back = other->back;
     }
     self->size += other->size;
-    other->front = NULL;
-    other->back = NULL;
-    other->size = 0;
+    EntityList_clear(other);
 }
 
 void EntityArray_init(EntityArray* self) {

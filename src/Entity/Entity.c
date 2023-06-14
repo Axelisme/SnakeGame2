@@ -16,7 +16,10 @@ void Entity_init(Entity* self) {
     self->objList = NULL;
     self->prev = NULL;
     self->next = NULL;
+    self->setDefault = Entity_setDefault;
+    self->addObject = Entity_addObject;
     self->draw = Entity_draw;
+    self->shift = Entity_shift;
     self->trigger = Entity_trigger;
     self->deleter = delete_Entity;
 }
@@ -39,7 +42,7 @@ void Entity_setDefault(Entity* self) {
 void Entity_addObject(Entity* self, Object* obj) {
     self->objNum++;
     self->objList = (Object**)al_realloc(self->objList, sizeof(Object*)*self->objNum);
-    self->objList[self->objNum-1] = obj;
+    self->objList[self->objNum-1] = obj->copy(obj);
 }
 void Entity_draw(Entity* self, ShiftWindow* sw) {
     if (!self->objList) return;

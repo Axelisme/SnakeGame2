@@ -31,7 +31,10 @@ typedef struct Entity {
     struct Entity* prev;
     struct Entity* next;
     // method
+    void (*setDefault)(struct Entity*);
+    void (*addObject)(struct Entity*, Object*);
     void (*draw)(struct Entity*, ShiftWindow*);
+    void (*shift)(struct Entity*, Direction);
     void (*trigger)(struct Entity*, void*, void*);
     void (*deleter)(struct Entity*);
 } Entity;

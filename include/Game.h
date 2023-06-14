@@ -20,6 +20,7 @@ typedef struct Game {
 
 Game* new_Game();
 void Game_init(Game* self);
+void Allegro_init();
 void Game_destroy(Game* self);
 void delete_Game(Game* self);
 void Game_run(Game* self);

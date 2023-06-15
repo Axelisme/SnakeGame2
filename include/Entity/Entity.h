@@ -16,6 +16,11 @@ typedef enum EntityType {
     E_BASIC
 } EntityType;
 
+typedef struct EntityMap EntityMap;
+typedef struct EntityList EntityList;
+typedef struct EntityArray EntityArray;
+typedef struct MapEngine MapEngine;
+
 typedef struct Entity {
     // Properties
     EntityType type;
@@ -23,7 +28,7 @@ typedef struct Entity {
     bool canOverlap;
     // Status
     bool beSupported;
-    void* activators;
+    EntityArray* activators;
     bool AliveAfterTrigger;
     // Objects
     int objNum;
@@ -36,7 +41,7 @@ typedef struct Entity {
     void (*addObject)(struct Entity*, Object*);
     void (*draw)(struct Entity*, ShiftWindow*, ALLEGRO_BITMAP*);
     void (*shift)(struct Entity*, Direction);
-    void (*trigger)(struct Entity*, void*, void*, void*);
+    void (*trigger)(struct Entity*, MapEngine*, EntityMap*, EntityArray*);
     void (*deleter)(struct Entity*);
 } Entity;
 
@@ -49,6 +54,6 @@ void Entity_addActivator(Entity* self, Entity* activator);
 void Entity_addObject(Entity* self, Object* obj);
 void Entity_draw(Entity* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer);
 void Entity_shift(Entity* self, Direction dir);
-void Entity_trigger(Entity* self, void* Vmap, void* VEngine, void* Voverlaps);
+void Entity_trigger(Entity* self, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps);
 
 #endif // ENTITY_H

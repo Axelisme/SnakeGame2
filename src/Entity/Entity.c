@@ -2,6 +2,7 @@
 #include "global.h"
 #include "Entity/Entity.h"
 #include "Entity/EntityList.h"
+#include "Engine.h"
 
 Entity* new_Entity(Object** objs, int num) {
     Entity* self = (Entity*)al_calloc(1,sizeof(Entity));
@@ -77,6 +78,6 @@ void Entity_shift(Entity* self, Direction dir) {
         obj->shift(obj, DIR_TO_POS(dir));
     }
 }
-void Entity_trigger(Entity* self, void* Vmap, void* VEngine, void* Voverlaps) {
+void Entity_trigger(Entity* self, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps) {
     self->AliveAfterTrigger = false;
 }

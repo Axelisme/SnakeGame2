@@ -20,21 +20,18 @@ void Edge_init(Edge* self, EdgeObject* edges, int num) {
     Eself->trigger = Edge_trigger;
 }
 
-void Edge_trigger(Entity* Eself, void* Vmap, void* VEngine, void* Voverlaps) {
+void Edge_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps) {
     Edge* self = (Edge*) Eself;
-    EntityMap* map = (EntityMap*) Vmap;
-    MapEngine* engine = (MapEngine*) VEngine;
-    EntityArray* overlaps = (EntityArray*) Voverlaps;
     show_msg("Edge_trigger: delete activators");
     EntityArray* activators = (EntityArray*) self->activators;
     for (int i = 0; i < activators->size; i++) {
-        Entity* activator = EA_get(self->activators, i);
-        Entity_unmark(activator, map);
+        Entity* activator = EA_get(Eself->activators, i);
+        Entity_unmark(activator, Map);
         if (activator->type != E_SNAKE) {
-            EntityList_remove(engine->entities, activator);
+            EntityList_remove(Engine->entities, activator);
             delete_Entity(activator);
         }
-        else engine->state = LOSE;
+        else Engine->state = LOSE;
     }
     self->AliveAfterTrigger = true;
 }

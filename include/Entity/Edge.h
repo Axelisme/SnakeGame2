@@ -9,6 +9,6 @@ typedef Entity Edge;
 Edge* new_Edge(EdgeObject* edges, int num);
 void Edge_init(Edge* self, EdgeObject* edges, int num);
 
-void Edge_trigger(Entity* Eself, void* Vmap, void* VEngine, void* Voverlaps);
+void Edge_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps);
 
 #endif // EDGE_H

@@ -107,7 +107,7 @@ static bool _canShift(Entity* self, Direction dir, EntityMap* map, EntityArray* 
 static void _dealWithOverlap(MapEngine* self, EntityMap* map, EntityArray* overlaps) {
     for (int i = 0; i < overlaps->size; i++) {
         Entity* e = overlaps->array[i];
-        e->trigger(e, map, self, overlaps);
+        e->trigger(e, self, map, overlaps);
         if (!e->AliveAfterTrigger) {
             EntityList_remove(self->entities, e);
             e->deleter(e);

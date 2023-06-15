@@ -1,25 +1,22 @@
 
 #include "Entity/Snake.h"
-#include "Object/Body.h"
 
-Snake* new_Snake(Object* bodies, int length) {
+Snake* new_Snake(BodyObject** bodies, int length) {
     Snake* snake = (Snake*) al_calloc(1, sizeof(Snake));
     Snake_init(snake, bodies, length);
     return snake;
 }
-void Snake_init(Snake* self, Object* bodies, int length) {
+void Snake_init(Snake* self, BodyObject** bodies, int length) {
     // Inherited from Entity
     Entity* Eself = (Entity*) self;
-    Entity_init(Eself);
+    Entity_init(Eself, (Object**)bodies, length);
     Eself->type = E_SNAKE;
     Eself->isFixed = false;
     Eself->canOverlap = false;
-    for (int i = 0; i < length; i++)
-        Eself->addObject(Eself, bodies + i);
     // Properties
-    self->heading = bodies->dir;
-    self->head = Eself->objList[0];
-    self->tail = Eself->objList[length-1];
+    self->heading = Eself->objList[0]->dir;
+    self->head = (BodyObject*) Eself->objList[0];
+    self->tail = (BodyObject*) Eself->objList[length-1];
 }
 void Snake_destroy(Snake* self) {
     Entity* Eself = (Entity*) self;
@@ -34,7 +31,7 @@ void delete_Snake(Entity* Eself) {
 }
 
 Pos Snake_next_pos(Snake* self, Direction dir) {
-    return heading_pos(self->head->pos, dir);
+    return heading_pos(self->head->object.pos, dir);
 }
 void Snake_move(Snake* self, Direction dir) {
     Entity* Eself = (Entity*) self;
@@ -42,7 +39,7 @@ void Snake_move(Snake* self, Direction dir) {
     Direction next_dir = dir;
     for (int i = 0; i < Eself->objNum; i++) {
         Object* obj = Eself->objList[i];
-        Body* body = (Body*) obj;
+        BodyObject* body = (BodyObject*) obj;
         Pos tmp_pos = obj->pos;
         obj->pos = next_pos;
         next_pos = tmp_pos;

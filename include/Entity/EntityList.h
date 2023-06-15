@@ -25,10 +25,13 @@ typedef struct EntityArray {
     Entity** array;
 } EntityArray;
 
+EntityArray* new_EntityArray();
 void EntityArray_init(EntityArray* self);
 void EntityArray_destroy(EntityArray* self);
+void delete_EntityArray(EntityArray* self);
 void EntityArray_clear(EntityArray* self);
 void EntityArray_push_back(EntityArray* self, Entity* entity);
+Entity* EA_get(EntityArray* self, int index);
 bool EntityArray_have(EntityArray* self, Entity* entity);
 
 #endif // ENTITYLIST_H

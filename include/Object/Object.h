@@ -6,6 +6,8 @@
 #include "Utility/Direction.h"
 #include "Utility/ShiftWindow.h"
 
+// Image
+extern ALLEGRO_BITMAP* edge_img;
 extern ALLEGRO_BITMAP* apple_img;
 extern ALLEGRO_BITMAP* button_img;
 extern ALLEGRO_BITMAP* end_img;
@@ -40,7 +42,7 @@ void Object_init(Object* self, Pos pos);
 void Object_destroy(Object* self);
 void delete_Object(Object* self);
 Object* Object_copy(Object* self);
-static void Object_draw(Object* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer);
-static void Object_shift(Object* self, Pos delta);
+void Object_draw(Object* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer);
+void Object_shift(Object* self, Pos delta);
 
 #endif // OBJECT_H

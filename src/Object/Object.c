@@ -2,6 +2,8 @@
 #include "Object/Object.h"
 #include "Interface/Interface.h"
 
+// Image
+static const char edge_img_path[]                = "data/image/edge.png";
 static const char apple_img_path[]               = "data/image/apple.png";
 static const char button_img_path[]              = "data/image/button.png";
 static const char end_img_path[]                 = "data/image/end.png";
@@ -12,6 +14,7 @@ static const char snake_body_turn_img_path[]     = "data/image/snakeBodyTurn.png
 static const char snake_tail_img_path[]          = "data/image/snakeTail.png";
 static const char spike_img_path[]               = "data/image/spike.png";
 static const char stone_img_path[]               = "data/image/stone.png";
+ALLEGRO_BITMAP* edge_img = nullptr;
 ALLEGRO_BITMAP* apple_img = nullptr;
 ALLEGRO_BITMAP* button_img = nullptr;
 ALLEGRO_BITMAP* end_img = nullptr;
@@ -25,6 +28,7 @@ ALLEGRO_BITMAP* stone_img = nullptr;
 
 void ObjectClass_init() {
     ObjectClass_destroy();
+    edge_img = al_load_bitmap(edge_img_path);
     apple_img = al_load_bitmap(apple_img_path);
     button_img = al_load_bitmap(button_img_path);
     end_img = al_load_bitmap(end_img_path);
@@ -37,6 +41,7 @@ void ObjectClass_init() {
     stone_img = al_load_bitmap(stone_img_path);
 }
 void ObjectClass_destroy() {
+    if (edge_img) al_destroy_bitmap(edge_img);
     if (apple_img) al_destroy_bitmap(apple_img);
     if (button_img) al_destroy_bitmap(button_img);
     if (end_img) al_destroy_bitmap(end_img);
@@ -47,6 +52,7 @@ void ObjectClass_destroy() {
     if (snake_tail_img) al_destroy_bitmap(snake_tail_img);
     if (spike_img) al_destroy_bitmap(spike_img);
     if (stone_img) al_destroy_bitmap(stone_img);
+    edge_img = nullptr;
     apple_img = nullptr;
     button_img = nullptr;
     end_img = nullptr;
@@ -87,7 +93,7 @@ Object* Object_copy(Object* self) {
     new_obj->Image = self->Image;
     return new_obj;
 }
-static void Object_draw(Object* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer) {
+void Object_draw(Object* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer) {
     if (!SW_isInWindow(sw, self->pos,1)) return;
     Pos UL = SW_getPixelPos(sw, add_const(self->pos, -1), backbuffer);
     Pos LR = SW_getPixelPos(sw, add_const(self->pos,  2), backbuffer);
@@ -97,6 +103,6 @@ static void Object_draw(Object* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffe
     else al_clear_to_color(RED);
     al_set_target_bitmap(backbuffer);
 }
-static void Object_shift(Object* self, Pos delta) {
+void Object_shift(Object* self, Pos delta) {
     self->pos = add(self->pos, delta);
 }

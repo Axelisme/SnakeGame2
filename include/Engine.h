@@ -18,6 +18,7 @@ typedef struct MapEngine {
     Pos mapSize;
     // Status
     PLAYER_STATE state;
+    Direction gravity;
     // Entities
     EntityList* entities;
     Entity* snake;

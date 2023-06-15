@@ -12,13 +12,9 @@ typedef enum PLAYER_STATE {
 } PLAYER_STATE;
 
 typedef struct EntityMap {
-    // level state
-    PLAYER_STATE levelState;
     // map state
     Pos mapSize;
     Entity*** entityMap;
-    // gravity
-    Direction gravity;
 } EntityMap;
 
 void EntityMap_init(EntityMap* self, Pos mapSize);

@@ -6,6 +6,7 @@ void MapEngine_init(MapEngine* self, Pos mapSize, EntityList* entities, Entity* 
     show_msg("MapEngine_init");
     self->mapSize = mapSize;
     self->state = PLAYING;
+    self->gravity = DIRECTION_DOWN;
     self->entities = entities;
     self->snake = snake;
 }
@@ -46,12 +47,12 @@ PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
     if (self->state != PLAYING) goto return_point;
 
     // check if entities are falling
-    keyLock |= _canShift(self->snake, map.gravity, &map, &shiftObjs);
+    keyLock |= _canShift(self->snake, self->gravity, &map, &shiftObjs);
     if (self->entities) for (Entity* e = self->entities->front; e; e = e->next)
-        _canShift(e, map.gravity, &map, &shiftObjs);
+        _canShift(e, self->gravity, &map, &shiftObjs);
 
     // shift all falling entities
-    _ShiftEntity(&shiftObjs, map.gravity, &map, &overlaps);
+    _ShiftEntity(&shiftObjs, self->gravity, &map, &overlaps);
 
     // deal with overlaps
     _dealWithOverlap(self, &map, &overlaps);
@@ -106,14 +107,13 @@ static bool _canShift(Entity* self, Direction dir, EntityMap* map, EntityArray* 
 static void _dealWithOverlap(MapEngine* self, EntityMap* map, EntityArray* overlaps) {
     for (int i = 0; i < overlaps->size; i++) {
         Entity* e = overlaps->array[i];
-        e->trigger(e, map, overlaps);
-        if (e->TriggerTimes <= 0) {
+        e->trigger(e, map, self, overlaps);
+        if (!e->AliveAfterTrigger) {
             EntityList_remove(self->entities, e);
             e->deleter(e);
         }
     }
     EntityArray_clear(overlaps);
-    self->state = map->levelState;
     _resetAll(self->entities, self->snake);
 }
 static Direction _getDirection(OPERATION op) {
@@ -140,7 +140,7 @@ static void _ShiftEntity(EntityArray* shiftObjs, Direction dir, EntityMap* map, 
     for (int i = 0; i < shiftObjs->size; i++) {
         Entity* e = shiftObjs->array[i];
         Entity_unmark(e, map);
-        e->shift(e, map->gravity);
+        e->shift(e, dir);
     }
     for (int i = 0; i < shiftObjs->size; i++)
         Entity_mark(shiftObjs->array[i], map, overlaps);

@@ -2,18 +2,19 @@
 #define SNAKE_H
 
 #include "Entity/Entity.h"
+#include "Object/BodyObject.h"
 
 typedef struct Snake {
     // inherited from Entity
     Entity entity;
     // Properties
     Direction heading;
-    Object* head;
-    Object* tail;
+    BodyObject* head;
+    BodyObject* tail;
 } Snake;
 
-Snake* new_Snake(Object* bodies, int length);
-void Snake_init(Snake* self, Object* bodies, int length);
+Snake* new_Snake(BodyObject** bodies, int length);
+void Snake_init(Snake* self, BodyObject** bodies, int length);
 void Snake_destroy(Snake* self);
 void delete_Snake(Entity* Eself);
 

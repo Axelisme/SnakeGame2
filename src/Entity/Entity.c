@@ -1,24 +1,31 @@
 
 #include "global.h"
 #include "Entity/Entity.h"
+#include "Entity/EntityList.h"
 
-Entity* new_Entity() {
+Entity* new_Entity(Object** objs, int num) {
     Entity* self = (Entity*)al_calloc(1,sizeof(Entity));
-    Entity_init(self);
+    Entity_init(self, objs, num);
     return self;
 }
-void Entity_init(Entity* self) {
+void Entity_init(Entity* self, Object** objs, int num) {
     // Properties
     self->type = E_BASIC;
     self->isFixed = true;
     self->canOverlap = false;
     // Status
+    self->activators = new_EntityArray();
     Entity_status_reset(self);
-    self->TriggerTimes = 1;
-    self->objNum = 0;
-    self->objList = NULL;
+    self->AliveAfterTrigger = false;
+    // Objects
+    self->objNum = num;
+    self->objList = (Object**)al_calloc(num, sizeof(Object*));
+    for (int i = 0; i < num; i++)
+        self->objList[i] = objs[i]->copy(objs[i]);
+    // for EntityList
     self->prev = NULL;
     self->next = NULL;
+    // method
     self->reset = Entity_status_reset;
     self->addObject = Entity_addObject;
     self->draw = Entity_draw;
@@ -28,11 +35,16 @@ void Entity_init(Entity* self) {
 }
 void Entity_destroy(Entity* self) {
     show_msg("Entity_destroy");
+    // Status
+    delete_EntityArray(self->activators);
+    // Objects
     if (self->objList) {
         for (int i = 0; i < self->objNum; i++)
             delete_Object(self->objList[i]);
         al_free(self->objList);
     }
+    self->objNum = 0;
+    self->objList = NULL;
 }
 void delete_Entity(Entity* self) {
     Entity_destroy(self);
@@ -40,7 +52,11 @@ void delete_Entity(Entity* self) {
 }
 void Entity_status_reset(Entity* self) {
     self->beSupported = false;
-    self->activator = NULL;
+    EntityArray_clear(self->activators);
+}
+void Entity_addActivator(Entity* self, Entity* activator) {
+    if (!EntityArray_have(self->activators, activator))
+        EntityArray_push_back(self->activators, activator);
 }
 void Entity_addObject(Entity* self, Object* obj) {
     self->objNum++;
@@ -58,11 +74,9 @@ void Entity_shift(Entity* self, Direction dir) {
     if (!self->objList) return;
     for (int i = 0; i < self->objNum; i++) {
         Object* obj = self->objList[i];
-        Pos pos = obj->pos;
-        Pos next_pos = heading_pos(pos, dir);
-        obj->pos = next_pos;
+        obj->shift(obj, DIR_TO_POS(dir));
     }
 }
-void Entity_trigger(Entity* self, void* Vmap, void* Voverlaps) {
-    return;
+void Entity_trigger(Entity* self, void* Vmap, void* VEngine, void* Voverlaps) {
+    self->AliveAfterTrigger = false;
 }

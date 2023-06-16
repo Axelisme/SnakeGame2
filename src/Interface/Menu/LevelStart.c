@@ -15,7 +15,8 @@ LevelStart* new_LevelStart(LEVEL_ID level_id) {
     return self;
 }
 void LevelStart_init(LevelStart* self, LEVEL_ID level_id) {
-    if (!self) {raise_warn("Try to init NULL level start interface");return;}
+    if (!self) {
+        raise_warn("Try to init NULL level start interface");return;}
     const char* IMAGE_PATH = _LevelStart_get_image_path(level_id);
     SingleMenu_init(self, IMAGE_PATH);
     show_msg("LevelStart_init");
@@ -34,7 +35,8 @@ void LevelStart_init(LevelStart* self, LEVEL_ID level_id) {
     self->info = (void*)info;
 }
 void LevelStart_destroy(LevelStart* self) {
-    if (!self) {raise_warn("Try to destroy NULL level start interface");return;}
+    if (!self) {
+        raise_warn("Try to destroy NULL level start interface");return;}
     show_msg("LevelStart_destroy");
     SingleMenu_destroy(self);
     al_free(self->info);

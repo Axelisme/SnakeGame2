@@ -10,7 +10,8 @@ LevelView* new_Level(LEVEL_ID level_id) {
     return level;
 }
 void Level_init(LevelView* self, LEVEL_ID level_id) {
-    if (self == nullptr) {raise_warn("Level_init: self is nullptr"); return;}
+    if (self == nullptr) {
+        raise_warn("Level_init: self is nullptr"); return;}
     Interface* Iself = (Interface*)self;
     Interface_init(Iself);
     show_msg("Level_init");
@@ -32,7 +33,8 @@ void Level_init(LevelView* self, LEVEL_ID level_id) {
     Level_loader(self, level_id);
 }
 void Level_destroy(LevelView* self) {
-    if (self == nullptr) {raise_warn("Level_destroy: self is nullptr"); return;}
+    if (self == nullptr) {
+        raise_warn("Level_destroy: self is nullptr"); return;}
     show_msg("Level_destroy");
     // Engine
     MapEngine_destroy(&self->engine);
@@ -53,7 +55,8 @@ void delete_Level(Interface* Iself) {
 
 static void Level_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     LevelView* self = (LevelView*)Iself;
-    if (self == nullptr) {raise_warn("Level_draw: self is nullptr"); return;}
+    if (self == nullptr) {
+        raise_warn("Level_draw: self is nullptr"); return;}
     // Inherited from Interface
     Interface_draw(Iself, backbuffer);
     // Draw level
@@ -61,7 +64,8 @@ static void Level_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
 }
 static void Level_event_recorder(Interface* Iself, ALLEGRO_EVENT event) {
     LevelView* self = (LevelView*)Iself;
-    if (self == nullptr) {raise_warn("try to record event on NULL interface");return;}
+    if (self == nullptr) {
+        raise_warn("try to record event on NULL interface");return;}
     if (Iself->info.state != INTERFACE_RUNNING && Iself->info.state != INTERFACE_INITIALING) return;
     if (event.type != ALLEGRO_EVENT_KEY_DOWN) return;
     switch (event.keyboard.keycode) {

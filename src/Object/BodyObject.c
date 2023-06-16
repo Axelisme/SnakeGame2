@@ -67,7 +67,8 @@ static ALLEGRO_BITMAP* BodyObject_get_Image(BodyObject* self, Direction* dir) {
             else if (from==DIRECTION_RIGHT && to==DIRECTION_UP)      *dir = DIRECTION_DOWN;
             else if (from==DIRECTION_DOWN  && to==DIRECTION_RIGHT)   *dir = DIRECTION_LEFT;
             else if (from==DIRECTION_LEFT  && to==DIRECTION_UP)      *dir = DIRECTION_LEFT;
-            else raise_warn("Body_get_Image: Unknown Body Direction");
+            else
+                raise_warn("Body_get_Image: Unknown Body Direction");
             return snake_body_turn_img;
         default:
             raise_warn("Body_get_Image: Invalid BodyType");

@@ -20,7 +20,8 @@ StartMenu* new_StartMenu() {
     return self;
 }
 void StartMenu_init(StartMenu* self) {
-    if (self == nullptr) {raise_warn("try to init NULL interface");return;}
+    if (self == nullptr) {
+        raise_warn("try to init NULL interface");return;}
     show_msg("StartMenu_init");
     // inherited from Interface
     Interface* Iself = (Interface*)self;

@@ -21,7 +21,8 @@ LevelMenu* new_LevelMenu() {
     return self;
 }
 void LevelMenu_init(LevelMenu* self) {
-    if (self == nullptr) {raise_warn("try to initial null LevelMenu");return;}
+    if (self == nullptr) {
+        raise_warn("try to initial null LevelMenu");return;}
     show_msg("LevelMenu init");
     // Inherited from Interface
     Interface* Iself = (Interface*)self;

@@ -39,8 +39,10 @@ void delete_SingleMenu(Interface* Iself) {
     al_free(self);
 }
 void SingleMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
-    if (Iself == nullptr) {raise_warn("try to draw NULL interface");return;}
-    if (backbuffer == nullptr) {raise_warn("try to draw interface on NULL backbuffer");return;}
+    if (Iself == nullptr) {
+        raise_warn("try to draw NULL interface");return;}
+    if (backbuffer == nullptr) {
+        raise_warn("try to draw interface on NULL backbuffer");return;}
     SingleMenu* self = (SingleMenu*)Iself;
     if (Iself->info.state == INTERFACE_DIED) return;
     Interface_draw(Iself, backbuffer);
@@ -49,8 +51,6 @@ void SingleMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
 }
 void SingleMenu_load_image(SingleMenu* self, const char* image_path) {
     self->image = al_load_bitmap(image_path);
-    if (self->image == nullptr)
-        raise_warn("failed to load image!");
 }
 
 static void _SingleMenu_free_image(SingleMenu* self) {

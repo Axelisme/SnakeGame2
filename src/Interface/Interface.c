@@ -23,7 +23,10 @@ Interface* new_Interface() {
     return interface;
 }
 void Interface_init(Interface* self) {
-    if (self == nullptr) {raise_warn("try to init NULL interface");return;}
+    if (self == nullptr) {
+        raise_warn("try to init NULL interface");
+        return;
+    }
     show_msg("Interface_init");
     // Info
     self->info = _default_info();
@@ -51,8 +54,10 @@ void delete_Interface(Interface* self) {
     al_free(self);
 }
 void Interface_draw(Interface* self, ALLEGRO_BITMAP* backbuffer) {
-    if (self == nullptr) {raise_warn("try to draw NULL interface");return;}
-    if (backbuffer == nullptr) {raise_err("try to draw interface on NULL backbuffer");return;}
+    if (self == nullptr) {
+        raise_warn("try to draw NULL interface");return;}
+    if (backbuffer == nullptr) {
+        raise_err("try to draw interface on NULL backbuffer");return;}
     if (self->info.state == INTERFACE_DIED) return;
     al_set_target_bitmap(backbuffer);
     al_clear_to_color(al_map_rgb(self->background_light, self->background_light, self->background_light));
@@ -104,7 +109,8 @@ void Interface_set_stop(Interface* self, INTERFACE_TYPE next_type) {
     self->should_kill = false;
 }
 bool Interface_light_up(Interface* self) {
-    if (self == nullptr) {raise_warn("try to light up NULL interface");return true;}
+    if (self == nullptr) {
+        raise_warn("try to light up NULL interface");return true;}
     self->background_light += self->background_light_up_step;
     if (self->background_light > self->background_light_max) {
         self->background_light = self->background_light_max;
@@ -113,7 +119,8 @@ bool Interface_light_up(Interface* self) {
     else return false;
 }
 bool Interface_light_down(Interface* self) {
-    if (self == nullptr) {raise_warn("try to light down NULL interface");return true;}
+    if (self == nullptr) {
+        raise_warn("try to light down NULL interface");return true;}
     self->background_light -= self->background_light_down_step;
     if (self->background_light < self->background_light_min) {
         self->background_light = self->background_light_min;
@@ -122,7 +129,8 @@ bool Interface_light_down(Interface* self) {
     else return false;
 }
 void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction) {
-    if (image == nullptr) {raise_warn("try to draw NULL image");return;}
+    if (image == nullptr) {
+        raise_warn("try to draw NULL image");return;}
     al_set_target_bitmap(backbuffer);
     // get screen size
     const int screen_w = al_get_bitmap_width(backbuffer);

@@ -25,7 +25,10 @@ PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
     if (self->state != PLAYING) return self->state;
 
     // Died if entities is null
-    if (!self->snake) {raise_warn("no snake exist"); self->state = LOSE;return self->state;}
+    if (!self->snake) {
+        raise_warn("no snake exist"); self->state = LOSE;
+        return self->state;
+    }
 
     // key lock
     bool keyLock = false;
@@ -133,6 +136,7 @@ static bool _SnakeCanMove(Snake* snake, Direction dir, EntityMap* map, EntityArr
     bool canMove = true;
     Pos next_pos = Snake_next_pos(snake, dir);
     Entity* next_entity = MapGet(map, next_pos);
+    if (next_entity == Esnake) return false;
     if (next_entity && !next_entity->canOverlap)
         canMove = _canShift(next_entity, dir, map, shiftEs);
     return canMove;

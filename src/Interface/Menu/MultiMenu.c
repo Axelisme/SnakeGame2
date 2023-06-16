@@ -7,7 +7,8 @@ MultiMenu* new_MultiMenu(const char** image_paths, int image_num) {
     return self;
 }
 void MultiMenu_init(MultiMenu* self, const char** image_paths, int image_num) {
-    if (self == nullptr) {raise_warn("try to init a nullptr MultiMenu"); return;}
+    if (self == nullptr) {
+        raise_warn("try to init a nullptr MultiMenu"); return;}
     Interface* Iself = (Interface*)self;
     Interface_init(Iself);
     show_msg("MultiMenu_init");
@@ -44,15 +45,18 @@ void delete_MultiMenu(Interface* Iself) {
 }
 void MultiMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     MultiMenu* self = (MultiMenu*)Iself;
-    if (self == nullptr) {raise_warn("try to draw NULL interface");return;}
-    if (backbuffer == nullptr) {raise_warn("try to draw interface on NULL backbuffer");return;}
+    if (self == nullptr) {
+        raise_warn("try to draw NULL interface");return;}
+    if (backbuffer == nullptr) {
+        raise_warn("try to draw interface on NULL backbuffer");return;}
     if (Iself->info.state == INTERFACE_DIED) return;
     // inherited from Interface
     Interface_draw(Iself, backbuffer);
     // draw image
     ALLEGRO_BITMAP* image = _MultiMenu_current_image(self);
     if (image) draw_image(image, backbuffer, DIRECTION_UP);
-    else raise_warn("try to draw NULL image");
+    else
+        raise_warn("try to draw NULL image");
 }
 INTERFACE_INFO MultiMenu_update(Interface* Iself) {
     MultiMenu* self = (MultiMenu*)Iself;

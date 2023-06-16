@@ -27,7 +27,8 @@ void Allegro_init() {
 
     // Initial sound
     show_msg("Initial sound");
-    if(!al_reserve_samples(3)) raise_warn("can't not initial sound");
+    if(!al_reserve_samples(3))
+        raise_warn("can't not initial sound");
 }
 void Game_init(Game* self) {
     // Info

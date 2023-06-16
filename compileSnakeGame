@@ -6,4 +6,5 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Release ../src
 cmake --build . --target SnakeGame --clean-first -- -j $(nproc)
 cd ..
+rm -rfd build/**
 ln -sf bin/Release/SnakeGame SnakeGame

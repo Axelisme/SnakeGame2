@@ -29,7 +29,7 @@ typedef struct Entity {
     // Status
     bool beSupported;
     EntityArray* activators;
-    bool AliveAfterTrigger;
+    bool Alive;
     // Objects
     ObjectVector objList;
     // for EntityList
@@ -56,5 +56,6 @@ void Entity_shift(Entity* self, Direction dir);
 void Entity_trigger(Entity* self, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps);
 void Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps);
 void Entity_unmark(Entity* self, EntityMap* map);
+bool inMap(Entity* entity, Pos mapSize);
 
 #endif // ENTITY_H

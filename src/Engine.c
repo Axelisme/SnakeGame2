@@ -4,6 +4,10 @@
 
 void MapEngine_init(MapEngine* self, Pos mapSize, EntityList* entities, Entity* snake) {
     show_msg("MapEngine_init");
+    if (!self || !entities || !snake) {
+        raise_err("MapEngine_init: init failed");
+        return;
+    }
     self->mapSize = mapSize;
     self->state = PLAYING;
     self->gravity = INIT_GRAVITY;
@@ -23,12 +27,6 @@ void MapEngine_draw(MapEngine* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer
 PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
     // check if game is over
     if (self->state != PLAYING) return self->state;
-
-    // Died if entities is null
-    if (!self->snake) {
-        raise_warn("no snake exist"); self->state = LOSE;
-        return self->state;
-    }
 
     // key lock
     bool keyLock = false;
@@ -74,6 +72,7 @@ PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
 
     // destroy map, overlap array, falling array
     return_point:
+    _removeDiedEntities(self, self->entities, self->snake);
     EntityMap_destroy(&map);
     EntityArray_destroy(&overlaps);
     EntityArray_destroy(&shiftEs);
@@ -88,33 +87,35 @@ static void _resetAll(EntityList* entities, Entity* snake) {
         e->reset(e);
 }
 static bool _canShift(Entity* self, Direction dir, EntityMap* map, EntityArray* shiftE) {
-    if (is_empty(&self->objList)) return false;
-    if (self->isFixed || self->beSupported) return false;
-    if (dir == DIRECTION_NONE) return false;
+    if (self->isFixed ||
+        self->beSupported ||
+        !self->Alive ||
+        dir == DIRECTION_NONE ||
+        is_empty(&self->objList)) return false;
+    EntityArray localShift; EntityArray_init(&localShift);
     Entity_unmark(self, map);
     for (int i = 0; i < len(&self->objList); i++) {
         Pos pos = ObjV_get(&self->objList, i)->pos;
         Pos next_pos = heading_pos(pos, dir);
         Entity* next_entity = MapGet(map, next_pos);
         if (!next_entity || next_entity->canOverlap) continue;
-        if (!_canShift(next_entity, dir, map, shiftE)) {
+        if (!_canShift(next_entity, dir, map, &localShift)) {
             self->beSupported = true;
             break;
         }
     }
     Entity_mark(self, map, NULL);
-    if (!self->beSupported && !EntityArray_have(shiftE,self)) 
+    if (!self->beSupported && !EntityArray_have(shiftE,self)) {
         EntityArray_push_back(shiftE, self);
+        EntityArray_merge(shiftE, &localShift);
+    }
+    EntityArray_destroy(&localShift);
     return !self->beSupported;
 }
 static void _dealWithOverlap(MapEngine* self, EntityMap* map, EntityArray* overlaps) {
     for (int i = 0; i < overlaps->size; i++) {
-        Entity* e = overlaps->array[i];
+        Entity* e = EA_get(overlaps, i);
         e->trigger(e, self, map, overlaps);
-        if (!e->AliveAfterTrigger) {
-            EntityList_remove(self->entities, e);
-            e->deleter(e);
-        }
     }
     EntityArray_clear(overlaps);
     _resetAll(self->entities, self->snake);
@@ -131,23 +132,32 @@ static Direction _getDirection(OPERATION op) {
     }
 }
 static bool _SnakeCanMove(Snake* snake, Direction dir, EntityMap* map, EntityArray* shiftEs) {
-    if (dir == DIRECTION_NONE) return true;
     Entity* Esnake = (Entity*)snake;
+    if (!Esnake->Alive) return false;
+    if (dir == DIRECTION_NONE) return true;
     bool canMove = true;
     Pos next_pos = Snake_next_pos(snake, dir);
     Entity* next_entity = MapGet(map, next_pos);
-    if (next_entity == Esnake) return false;
-    if (next_entity && !next_entity->canOverlap)
+    if (next_entity && !next_entity->canOverlap) {
+        Esnake->beSupported = true;
         canMove = _canShift(next_entity, dir, map, shiftEs);
+        Esnake->beSupported = false;
+    }
     return canMove;
 }
 static void _ShiftEntity(EntityArray* shiftEs, Direction dir, EntityMap* map, EntityArray* overlaps) {
     for (int i = 0; i < shiftEs->size; i++) {
-        Entity* e = shiftEs->array[i];
+        Entity* e = EA_get(shiftEs, i);
         Entity_unmark(e, map);
         e->shift(e, dir);
     }
     for (int i = 0; i < shiftEs->size; i++)
-        Entity_mark(shiftEs->array[i], map, overlaps);
+        Entity_mark(EA_get(shiftEs, i), map, overlaps);
     EntityArray_clear(shiftEs);
+}
+static void _removeDiedEntities(MapEngine* self, EntityList* entities, Entity* snake) {
+    for (Entity* e = entities->front; e; e = e->next) if (!e->Alive)
+        EntityList_remove(entities, e);
+    if (!snake->Alive)
+        self->state = LOSE;
 }

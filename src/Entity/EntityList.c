@@ -125,3 +125,11 @@ bool EntityArray_have(EntityArray* self, Entity* entity) {
             return true;
     return false;
 }
+void EntityArray_merge(EntityArray* self, EntityArray* other) {
+    if (self == other || other->size == 0) return;
+    self->array = al_realloc(self->array, sizeof(Entity*) * (self->size + other->size));
+    for (int i = 0; i < other->size; i++)
+        self->array[self->size + i] = other->array[i];
+    self->size += other->size;
+    EntityArray_clear(other);
+}

@@ -5,7 +5,7 @@
 #include "Entity/EntityMap.h"
 #include "Entity/EntityList.h"
 
-#define INIT_GRAVITY DIRECTION_NONE
+#define INIT_GRAVITY DIRECTION_DOWN
 
 typedef enum OPERATION {
     OP_MOVE_UP,
@@ -37,5 +37,6 @@ static void _dealWithOverlap(MapEngine* self, EntityMap* map, EntityArray* overl
 static Direction _getDirection(OPERATION op);
 static bool _SnakeCanMove(Snake* snake, Direction dir, EntityMap* map, EntityArray* overlaps);
 static void _ShiftEntity(EntityArray* shiftObjs, Direction dir, EntityMap* map, EntityArray* overlaps);
+static void _removeDiedEntities(MapEngine* self, EntityList* entities, Entity* snake);
 
 #endif // ENGINE_H

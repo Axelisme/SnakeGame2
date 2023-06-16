@@ -13,5 +13,4 @@ void Ground_init(Ground* self,ObjectVector* objs) {
     Eself->type = E_GROUND;
     Eself->isFixed = true;
     Eself->canOverlap = false;
-    Eself->AliveAfterTrigger = false;
 }

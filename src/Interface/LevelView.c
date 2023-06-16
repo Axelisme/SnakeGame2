@@ -1,6 +1,7 @@
 
 #include "Interface/LevelView.h"
 #include "Entity/Edge.h"
+#include "Entity/Stone.h"
 #include "Entity/Ground.h"
 #include "Entity/Snake.h"
 
@@ -143,35 +144,43 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     // set shift window
     ShiftWindow_init(&self->shift_window, map_size);
 
-    // set edge
-    EdgeObject edge;
-    ObjectVector edges; ObjectVector_init(&edges);
-    for (int i=0; i < 7; i++) {
-        EdgeObject_init(&edge, make_Pos(6,i));
-        ObjV_push_back(&edges, (Object*)&edge);
-        Object_destroy((Object*)&edge);
-    }
-    EntityList_push_back(&self->entity_list, (Entity*)new_Edge(&edges));
-    ObjectVector_destroy(&edges);
-
     // set ground
-    GroundObject ground; GroundObject_init(&ground, make_Pos(4,4));
     ObjectVector grounds; ObjectVector_init(&grounds);
-    ObjV_push_back(&grounds, (Object*)&ground);
-    Object_destroy((Object*)&ground);
+    GroundObject ground;
+    for (int i=0; i < 7; i++) {
+        GroundObject_init(&ground, make_Pos(6,i));
+        ObjV_push_back(&grounds, (Object*)&ground);
+        Object_destroy((Object*)&ground);
+    }
     EntityList_push_back(&self->entity_list, (Entity*)new_Ground(&grounds));
     ObjectVector_destroy(&grounds);
 
+    // set stone
+    ObjectVector stones; ObjectVector_init(&stones);
+    StoneObject stone1; StoneObject_init(&stone1, make_Pos(4,3));
+    StoneObject stone2; StoneObject_init(&stone2, make_Pos(4,2));
+    StoneObject stone3; StoneObject_init(&stone3, make_Pos(5,3));
+    ObjV_push_back(&stones, (Object*)&stone1);
+    ObjV_push_back(&stones, (Object*)&stone2);
+    ObjV_push_back(&stones, (Object*)&stone3);
+    Object_destroy((Object*)&stone1);
+    Object_destroy((Object*)&stone2);
+    Object_destroy((Object*)&stone3);
+    EntityList_push_back(&self->entity_list, (Entity*)new_Stone(&stones));
+
     // set snake
-    BodyObject head; BodyObject_init(&head, make_Pos(1,4), HEAD, DIRECTION_UP, DIRECTION_UP);
-    BodyObject body; BodyObject_init(&body, make_Pos(2,4), BODY, DIRECTION_UP, DIRECTION_UP);
-    BodyObject tail; BodyObject_init(&tail, make_Pos(3,4), TAIL, DIRECTION_UP, DIRECTION_UP);
     ObjectVector bodies; ObjectVector_init(&bodies);
+    BodyObject head; BodyObject_init(&head, make_Pos(0,0), HEAD, DIRECTION_UP, DIRECTION_UP);
     ObjV_push_back(&bodies, (Object*)&head);
-    ObjV_push_back(&bodies, (Object*)&body);
-    ObjV_push_back(&bodies, (Object*)&tail);
     Object_destroy((Object*)&head);
-    Object_destroy((Object*)&body);
+    BodyObject body;
+    for (int i=1; i < 5; i++) {
+        BodyObject_init(&body, make_Pos(i,0), BODY, DIRECTION_UP, DIRECTION_UP);
+        ObjV_push_back(&bodies, (Object*)&body);
+        Object_destroy((Object*)&body);
+    }
+    BodyObject tail; BodyObject_init(&tail, make_Pos(5,0), TAIL, DIRECTION_UP, DIRECTION_UP);
+    ObjV_push_back(&bodies, (Object*)&tail);
     Object_destroy((Object*)&tail);
     EntityList_push_back(&self->snakes, (Entity*)new_Snake(&bodies));
     ObjectVector_destroy(&bodies);

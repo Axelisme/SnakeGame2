@@ -33,5 +33,6 @@ void EntityArray_clear(EntityArray* self);
 void EntityArray_push_back(EntityArray* self, Entity* entity);
 Entity* EA_get(EntityArray* self, int index);
 bool EntityArray_have(EntityArray* self, Entity* entity);
+void EntityArray_merge(EntityArray* self, EntityArray* other);
 
 #endif // ENTITYLIST_H

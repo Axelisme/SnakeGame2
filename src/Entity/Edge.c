@@ -16,7 +16,6 @@ void Edge_init(Edge* self, ObjectVector* objs) {
     Eself->type = E_EDGE;
     Eself->isFixed = true;
     Eself->canOverlap = true;
-    Eself->AliveAfterTrigger = true;
     Eself->trigger = Edge_trigger;
 }
 
@@ -26,12 +25,6 @@ void Edge_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray*
     EntityArray* activators = (EntityArray*) self->activators;
     for (int i = 0; i < activators->size; i++) {
         Entity* activator = EA_get(Eself->activators, i);
-        Entity_unmark(activator, Map);
-        if (activator->type != E_SNAKE) {
-            EntityList_remove(Engine->entities, activator);
-            delete_Entity(activator);
-        }
-        else Engine->state = LOSE;
+        activator->Alive = false;
     }
-    self->AliveAfterTrigger = true;
 }

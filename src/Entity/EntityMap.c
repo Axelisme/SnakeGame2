@@ -29,13 +29,11 @@ Entity* MapRps(EntityMap* self, Pos pos, Entity* entity) {
     }
     Entity* old = self->entityMap[(int)pos.y][(int)pos.x];
     self->entityMap[(int)pos.y][(int)pos.x] = entity;
-    if (old) Entity_addActivator(old, entity);
+    if (old && entity)
+        Entity_addActivator(old, entity);
     return old;
 }
 Entity* MapGet(EntityMap* self, Pos pos) {
-    if (!MapCheck(self, pos)) {
-        raise_warn("MapRps: pos out of range");
-        return NULL;
-    }
+    if (!MapCheck(self, pos)) return NULL;
     return self->entityMap[(int)pos.y][(int)pos.x];
 }

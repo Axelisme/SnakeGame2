@@ -17,7 +17,7 @@ void Entity_init(Entity* self, ObjectVector* objs) {
     // Status
     self->activators = new_EntityArray();
     Entity_status_reset(self);
-    self->AliveAfterTrigger = false;
+    self->Alive = true;
     // Objects
     ObjectVector_init(&self->objList);
     ObjV_cat(&self->objList, objs);
@@ -59,23 +59,26 @@ void Entity_addObject(Entity* self, Object* obj) {
     ObjV_push_back(&self->objList, obj);
 }
 void Entity_draw(Entity* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer) {
-    if (is_empty(&self->objList)) return;
+    if (!self->Alive) return;
     for (int i = 0; i < len(&self->objList); i++) {
         Object* obj = ObjV_get(&self->objList, i);
         obj->draw(obj, sw, backbuffer);
     }
 }
 void Entity_shift(Entity* self, Direction dir) {
-    if (is_empty(&self->objList)) return;
+    if (!self->Alive) return;
     for (int i = 0; i < len(&self->objList) ; i++) {
         Object* obj = ObjV_get(&self->objList, i);
         obj->shift(obj, DIR_TO_POS(dir));
     }
 }
 void Entity_trigger(Entity* self, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps) {
-    self->AliveAfterTrigger = false;
+    self->reset(self);
+    self->Alive = false;
 }
 void Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps) {
+    if (!self->Alive) return;
+    if (!inMap(self, map->mapSize)) {self->Alive = false;return;}
     for (int i = 0; i < len(&self->objList); i++) {
         Pos pos = ObjV_get(&self->objList, i)->pos;
         Entity* origin = MapRps(map, pos, self);
@@ -84,10 +87,19 @@ void Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps) {
     }
 }
 void Entity_unmark(Entity* self, EntityMap* map) {
+    if (!self->Alive) return;
     for (int i = 0; i < len(&self->objList); i++) {
         Pos pos = ObjV_get(&self->objList, i)->pos;
         Entity* origin = MapRps(map, pos, NULL);
         if (origin != self)
             raise_warn("Entity_unmark: unmark on wrong entity");
     }
+}
+bool inMap(Entity* entity, Pos mapSize) {
+    for (int i = 0; i < len(&entity->objList); i++) {
+        Pos pos = ObjV_get(&entity->objList, i)->pos;
+        if (pos.x < 0 || pos.x >= mapSize.x || pos.y < 0 || pos.y >= mapSize.y)
+            return false;
+    }
+    return true;
 }

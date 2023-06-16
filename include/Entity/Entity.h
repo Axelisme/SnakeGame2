@@ -27,7 +27,7 @@ typedef struct Entity {
     bool isFixed;
     bool canOverlap;
     // Status
-    bool beSupported;
+    int beSupported;
     EntityArray* activators;
     bool Alive;
     // Objects
@@ -54,7 +54,7 @@ void Entity_addObject(Entity* self, Object* obj);
 void Entity_draw(Entity* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer);
 void Entity_shift(Entity* self, Direction dir);
 void Entity_trigger(Entity* self, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps);
-void Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps);
+bool Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps);
 void Entity_unmark(Entity* self, EntityMap* map);
 bool inMap(Entity* entity, Pos mapSize);
 

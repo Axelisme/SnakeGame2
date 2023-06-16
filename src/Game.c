@@ -80,8 +80,8 @@ void Game_run(Game* self) {
         al_wait_for_event(self->event_queue, &event);
         switch (event.type) {
             case ALLEGRO_EVENT_TIMER:
-                al_peek_next_event(self->event_queue, &next_event);
-                if (next_event.timer.source == event.timer.source)
+                bool have_next = al_peek_next_event(self->event_queue, &next_event);
+                if (have_next && next_event.timer.source == event.timer.source)
                     al_flush_event_queue(self->event_queue);
                 if (event.timer.source == self->update_timer){       // update
                     if (GAMEWINDOW_EXIT == GameWindow_update(&self->window))

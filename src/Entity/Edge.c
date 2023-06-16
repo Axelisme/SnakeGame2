@@ -1,7 +1,5 @@
 
 #include "Entity/Edge.h"
-#include "Entity/EntityMap.h"
-#include "Entity/EntityList.h"
 #include "Engine.h"
 
 Edge* new_Edge(ObjectVector* objs) {

@@ -4,6 +4,7 @@
 #include "Entity/Entity.h"
 #include "Entity/EntityMap.h"
 #include "Entity/EntityList.h"
+#include "Entity/EntityArray.h"
 
 #define INIT_GRAVITY DIRECTION_DOWN
 

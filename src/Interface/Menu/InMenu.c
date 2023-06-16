@@ -2,6 +2,7 @@
 #include "Interface/Menu/InMenu.h"
 
 const char IN_MENU_IMAGE_PATH[] = "data/image/menu/In_menu.png";
+//const char IN_MENU_IMAGE_PATH[] = "data/image/test2.png";
 
 InMenu* new_InMenu() {
     InMenu* self = new_SingleMenu(IN_MENU_IMAGE_PATH);

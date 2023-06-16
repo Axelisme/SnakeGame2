@@ -28,6 +28,7 @@
 // Other
 #define MAX_PATH_LEN 1024
 #define nullptr NULL
+#define unknown -1
 
 // Error
 void raise_err(const char* );

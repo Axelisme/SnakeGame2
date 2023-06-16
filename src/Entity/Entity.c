@@ -2,6 +2,7 @@
 #include "global.h"
 #include "Entity/Entity.h"
 #include "Entity/EntityList.h"
+#include "Entity/EntityArray.h"
 #include "Engine.h"
 
 Entity* new_Entity(ObjectVector* objs) {
@@ -48,7 +49,7 @@ void delete_Entity(Entity* self) {
     al_free(self);
 }
 void Entity_status_reset(Entity* self) {
-    self->beSupported = false;
+    self->beSupported = unknown;
     EntityArray_clear(self->activators);
 }
 void Entity_addActivator(Entity* self, Entity* activator) {
@@ -76,15 +77,16 @@ void Entity_trigger(Entity* self, MapEngine* Engine, EntityMap* Map, EntityArray
     self->reset(self);
     self->Alive = false;
 }
-void Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps) {
-    if (!self->Alive) return;
-    if (!inMap(self, map->mapSize)) {self->Alive = false;return;}
+bool Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps) {
+    if (!self->Alive) return false;
+    if (!inMap(self, map->mapSize)) return false;
     for (int i = 0; i < len(&self->objList); i++) {
         Pos pos = ObjV_get(&self->objList, i)->pos;
         Entity* origin = MapRps(map, pos, self);
-        if (origin && !EntityArray_have(overlaps,origin))
+        if (origin && !EntityArray_have(overlaps, origin))
             EntityArray_push_back(overlaps, origin);
     }
+    return true;
 }
 void Entity_unmark(Entity* self, EntityMap* map) {
     if (!self->Alive) return;

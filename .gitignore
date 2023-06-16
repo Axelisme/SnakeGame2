@@ -4,6 +4,9 @@ build
 bin/Debug
 bin/Release
 
+data/test
+Test
+
 oldsrc
 oldinclude
 

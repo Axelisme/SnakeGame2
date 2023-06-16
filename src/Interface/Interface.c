@@ -133,17 +133,17 @@ void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction dir
         raise_warn("try to draw NULL image");return;}
     al_set_target_bitmap(backbuffer);
     // get screen size
-    const int screen_w = al_get_bitmap_width(backbuffer);
-    const int screen_h = al_get_bitmap_height(backbuffer);
+    const float screen_w = al_get_bitmap_width(backbuffer);
+    const float screen_h = al_get_bitmap_height(backbuffer);
     // get image size
-    const int image_w = al_get_bitmap_width(image);
-    const int image_h = al_get_bitmap_height(image);
+    const float image_w = al_get_bitmap_width(image);
+    const float image_h = al_get_bitmap_height(image);
     // get image center position
-    const int img_center_x = image_w / 2;
-    const int img_center_y = image_h / 2;
+    const float img_center_x = image_w / 2;
+    const float img_center_y = image_h / 2;
     // get screen center position
-    const int screen_center_x = screen_w / 2;
-    const int screen_center_y = screen_h / 2;
+    const float screen_center_x = screen_w / 2;
+    const float screen_center_y = screen_h / 2;
     // get scale
     const float scale_x = (float)screen_w / image_w;
     const float scale_y = (float)screen_h / image_h;

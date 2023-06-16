@@ -13,8 +13,8 @@ typedef struct Snake {
     BodyObject* tail;
 } Snake;
 
-Snake* new_Snake(BodyObject** bodies, int length);
-void Snake_init(Snake* self, BodyObject** bodies, int length);
+Snake* new_Snake(ObjectVector* objs);
+void Snake_init(Snake* self, ObjectVector* objs);
 void Snake_destroy(Snake* self);
 void delete_Snake(Entity* Eself);
 

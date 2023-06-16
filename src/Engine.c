@@ -6,14 +6,12 @@ void MapEngine_init(MapEngine* self, Pos mapSize, EntityList* entities, Entity* 
     show_msg("MapEngine_init");
     self->mapSize = mapSize;
     self->state = PLAYING;
-    self->gravity = DIRECTION_DOWN;
+    self->gravity = INIT_GRAVITY;
     self->entities = entities;
     self->snake = snake;
 }
 void MapEngine_destroy(MapEngine* self) {
     show_msg("MapEngine_destroy");
-    if (self->entities) EntityList_destroy(self->entities);
-    if (self->snake) self->snake->deleter(self->snake);
 }
 void MapEngine_draw(MapEngine* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer) {
     if (!self->entities) return;
@@ -35,10 +33,10 @@ PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
     // initial mark map, overlap array, shift array
     EntityMap map; EntityMap_init(&map, self->mapSize);
     EntityArray overlaps; EntityArray_init(&overlaps);
-    EntityArray shiftObjs; EntityArray_init(&shiftObjs);
+    EntityArray shiftEs; EntityArray_init(&shiftEs);
 
     // mark map and get overlaps
-    if (self->entities) for (Entity* e = self->entities->front; e; e = e->next)
+    for (Entity* e = self->entities->front; e; e = e->next)
         Entity_mark(e, &map, &overlaps);
     Entity_mark(self->snake, &map, &overlaps);
 
@@ -47,34 +45,35 @@ PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
     if (self->state != PLAYING) goto return_point;
 
     // check if entities are falling
-    keyLock |= _canShift(self->snake, self->gravity, &map, &shiftObjs);
-    if (self->entities) for (Entity* e = self->entities->front; e; e = e->next)
-        _canShift(e, self->gravity, &map, &shiftObjs);
+    keyLock |= _canShift(self->snake, self->gravity, &map, &shiftEs);
+    for (Entity* e = self->entities->front; e; e = e->next)
+        _canShift(e, self->gravity, &map, &shiftEs);
 
     // shift all falling entities
-    _ShiftEntity(&shiftObjs, self->gravity, &map, &overlaps);
+    _ShiftEntity(&shiftEs, self->gravity, &map, &overlaps);
 
     // deal with overlaps
     _dealWithOverlap(self, &map, &overlaps);
     if (self->state != PLAYING) goto return_point;
 
     // perform operation if not key locked
+    if (keyLock && op != OP_NONE) show_msg("key locked");
     if (keyLock || op == OP_NONE) goto return_point;
     Direction dir = _getDirection(op);
-    if (_SnakeCanMove((Snake*)self->snake, dir, &map, &shiftObjs)) {
+    if (_SnakeCanMove((Snake*)self->snake, dir, &map, &shiftEs)) {
         Entity_unmark(self->snake, &map);
-        _ShiftEntity(&shiftObjs, dir, &map, &overlaps);
+        _ShiftEntity(&shiftEs, dir, &map, &overlaps);
         Snake_move((Snake*)self->snake, dir);
         Entity_mark(self->snake, &map, &overlaps);
     }
-    else EntityArray_clear(&shiftObjs);
+    else {show_msg("Snake can't move"); EntityArray_clear(&shiftEs);}
     _dealWithOverlap(self, &map, &overlaps);
 
     // destroy map, overlap array, falling array
     return_point:
     EntityMap_destroy(&map);
     EntityArray_destroy(&overlaps);
-    EntityArray_destroy(&shiftObjs);
+    EntityArray_destroy(&shiftEs);
 
     // return state
     return self->state;
@@ -82,26 +81,27 @@ PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
 
 static void _resetAll(EntityList* entities, Entity* snake) {
     snake->reset(snake);
-    if (entities) for (Entity* e = entities->front; e; e = e->next)
+    for (Entity* e = entities->front; e; e = e->next)
         e->reset(e);
 }
-static bool _canShift(Entity* self, Direction dir, EntityMap* map, EntityArray* shiftObjs) {
-    if (!self->objList) return false;
+static bool _canShift(Entity* self, Direction dir, EntityMap* map, EntityArray* shiftE) {
+    if (is_empty(&self->objList)) return false;
     if (self->isFixed || self->beSupported) return false;
+    if (dir == DIRECTION_NONE) return false;
     Entity_unmark(self, map);
-    for (int i = 0; i < self->objNum; i++) {
-        Pos pos = self->objList[i]->pos;
+    for (int i = 0; i < len(&self->objList); i++) {
+        Pos pos = ObjV_get(&self->objList, i)->pos;
         Pos next_pos = heading_pos(pos, dir);
         Entity* next_entity = MapGet(map, next_pos);
         if (!next_entity || next_entity->canOverlap) continue;
-        if (!_canShift(next_entity, dir, map, shiftObjs)) {
+        if (!_canShift(next_entity, dir, map, shiftE)) {
             self->beSupported = true;
             break;
         }
     }
     Entity_mark(self, map, NULL);
-    if (!self->beSupported && !EntityArray_have(shiftObjs,self)) 
-        EntityArray_push_back(shiftObjs, self);
+    if (!self->beSupported && !EntityArray_have(shiftE,self)) 
+        EntityArray_push_back(shiftE, self);
     return !self->beSupported;
 }
 static void _dealWithOverlap(MapEngine* self, EntityMap* map, EntityArray* overlaps) {
@@ -127,22 +127,23 @@ static Direction _getDirection(OPERATION op) {
             return DIRECTION_NONE;
     }
 }
-static bool _SnakeCanMove(Snake* snake, Direction dir, EntityMap* map, EntityArray* shiftObjs) {
+static bool _SnakeCanMove(Snake* snake, Direction dir, EntityMap* map, EntityArray* shiftEs) {
+    if (dir == DIRECTION_NONE) return true;
     Entity* Esnake = (Entity*)snake;
     bool canMove = true;
     Pos next_pos = Snake_next_pos(snake, dir);
     Entity* next_entity = MapGet(map, next_pos);
     if (next_entity && !next_entity->canOverlap)
-        canMove = _canShift(next_entity, dir, map, shiftObjs);
+        canMove = _canShift(next_entity, dir, map, shiftEs);
     return canMove;
 }
-static void _ShiftEntity(EntityArray* shiftObjs, Direction dir, EntityMap* map, EntityArray* overlaps) {
-    for (int i = 0; i < shiftObjs->size; i++) {
-        Entity* e = shiftObjs->array[i];
+static void _ShiftEntity(EntityArray* shiftEs, Direction dir, EntityMap* map, EntityArray* overlaps) {
+    for (int i = 0; i < shiftEs->size; i++) {
+        Entity* e = shiftEs->array[i];
         Entity_unmark(e, map);
         e->shift(e, dir);
     }
-    for (int i = 0; i < shiftObjs->size; i++)
-        Entity_mark(shiftObjs->array[i], map, overlaps);
-    EntityArray_clear(shiftObjs);
+    for (int i = 0; i < shiftEs->size; i++)
+        Entity_mark(shiftEs->array[i], map, overlaps);
+    EntityArray_clear(shiftEs);
 }

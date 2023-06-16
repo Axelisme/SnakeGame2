@@ -4,15 +4,15 @@
 #include "Entity/EntityList.h"
 #include "Engine.h"
 
-Edge* new_Edge(EdgeObject* edges, int num) {
+Edge* new_Edge(ObjectVector* objs) {
     Edge* edge = (Edge*) al_calloc(1, sizeof(Edge));
-    Edge_init(edge, edges, num);
+    Edge_init(edge, objs);
     return edge;
 }
-void Edge_init(Edge* self, EdgeObject* edges, int num) {
+void Edge_init(Edge* self, ObjectVector* objs) {
     // Inherited from Entity
     Entity* Eself = (Entity*) self;
-    Entity_init(Eself, (Object**)edges, num);
+    Entity_init(Eself, objs);
     Eself->type = E_EDGE;
     Eself->isFixed = true;
     Eself->canOverlap = true;

@@ -1,5 +1,8 @@
 
 #include "Interface/LevelView.h"
+#include "Entity/Edge.h"
+#include "Entity/Ground.h"
+#include "Entity/Snake.h"
 
 LevelView* new_Level(LEVEL_ID level_id) {
     LevelView* level = (LevelView*)al_calloc(1,sizeof(LevelView));
@@ -21,18 +24,21 @@ void Level_init(LevelView* self, LEVEL_ID level_id) {
     self->level_id = level_id;
     // state
     self->PState = PLAYING;
+    // Entity
+    EntityList_init(&self->entity_list);
+    EntityList_init(&self->snakes);
     // Display
     // Engine
-    ObjectClass_init();
     Level_loader(self, level_id);
 }
 void Level_destroy(LevelView* self) {
     if (self == nullptr) {raise_warn("Level_destroy: self is nullptr"); return;}
     show_msg("Level_destroy");
-    // ObjectClass
-    ObjectClass_destroy();
     // Engine
     MapEngine_destroy(&self->engine);
+    // Entity
+    EntityList_destroy(&self->entity_list);
+    EntityList_destroy(&self->snakes);
     // Display
     ShiftWindow_destroy(&self->shift_window);
     // Inherited from Interface
@@ -124,6 +130,48 @@ static void Level_deal_lose(LevelView* self) {
     Iself->info.child.level = self->level_id;
 }
 static void Level_loader(LevelView* self, LEVEL_ID level_id) {
-    // TODO: Load level
+    // TODO: Load level, use temporary solution
     show_msg("TODO: Load level");
+
+    // map size
+    Pos map_size = make_Pos(7,7);
+
+    // set shift window
+    ShiftWindow_init(&self->shift_window, map_size);
+
+    // set edge
+    EdgeObject edge;
+    ObjectVector edges; ObjectVector_init(&edges);
+    for (int i=0; i < 7; i++) {
+        EdgeObject_init(&edge, make_Pos(6,i));
+        ObjV_push_back(&edges, (Object*)&edge);
+        Object_destroy((Object*)&edge);
+    }
+    EntityList_push_back(&self->entity_list, (Entity*)new_Edge(&edges));
+    ObjectVector_destroy(&edges);
+
+    // set ground
+    GroundObject ground; GroundObject_init(&ground, make_Pos(4,4));
+    ObjectVector grounds; ObjectVector_init(&grounds);
+    ObjV_push_back(&grounds, (Object*)&ground);
+    Object_destroy((Object*)&ground);
+    EntityList_push_back(&self->entity_list, (Entity*)new_Ground(&grounds));
+    ObjectVector_destroy(&grounds);
+
+    // set snake
+    BodyObject head; BodyObject_init(&head, make_Pos(1,4), HEAD, DIRECTION_UP, DIRECTION_UP);
+    BodyObject body; BodyObject_init(&body, make_Pos(2,4), BODY, DIRECTION_UP, DIRECTION_UP);
+    BodyObject tail; BodyObject_init(&tail, make_Pos(3,4), TAIL, DIRECTION_UP, DIRECTION_UP);
+    ObjectVector bodies; ObjectVector_init(&bodies);
+    ObjV_push_back(&bodies, (Object*)&head);
+    ObjV_push_back(&bodies, (Object*)&body);
+    ObjV_push_back(&bodies, (Object*)&tail);
+    Object_destroy((Object*)&head);
+    Object_destroy((Object*)&body);
+    Object_destroy((Object*)&tail);
+    EntityList_push_back(&self->snakes, (Entity*)new_Snake(&bodies));
+    ObjectVector_destroy(&bodies);
+
+    // set map engine
+    MapEngine_init(&self->engine, map_size, &self->entity_list, self->snakes.front);
 }

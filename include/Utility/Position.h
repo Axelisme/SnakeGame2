@@ -15,6 +15,8 @@ Pos make_Pos(pos_t y, pos_t x);
 bool equal(const Pos A, const Pos B);
 Pos add(const Pos A, const Pos B);
 Pos sub(const Pos A, const Pos B);
+Pos mul(const Pos A, const Pos B);
+Pos divd(const Pos A, const Pos B);
 Pos add_const(const Pos A, const pos_t B);
 Pos mul_const(const Pos A, const pos_t B);
 Pos heading_pos(const Pos pos, const Direction dir);

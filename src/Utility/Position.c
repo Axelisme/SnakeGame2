@@ -15,6 +15,12 @@ Pos add(const Pos A, const Pos B) {
 Pos sub(const Pos A, const Pos B) {
     return make_Pos(A.y - B.y, A.x - B.x);
 }
+Pos mul(const Pos A, const Pos B) {
+    return make_Pos(A.y * B.y, A.x * B.x);
+}
+Pos divd(const Pos A, const Pos B) {
+    return make_Pos(A.y / B.y, A.x / B.x);
+}
 Pos add_const(const Pos A, const pos_t B) {
     return make_Pos(A.y + B, A.x + B);
 }

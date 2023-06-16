@@ -33,17 +33,3 @@ Entity* MapGet(EntityMap* self, Pos pos) {
     if (!MapCheck(self, pos)) {raise_warn("MapRps: pos out of range");return NULL;}
     return self->entityMap[(int)pos.y][(int)pos.x];
 }
-void Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps) {
-    if (!self->objList) return;
-    for (int i = 0; i < self->objNum; i++) {
-        Entity* origin = MapRps(map, self->objList[i]->pos, self);
-        if (origin && !EntityArray_have(overlaps,origin))
-            EntityArray_push_back(overlaps, origin);
-    }
-}
-void Entity_unmark(Entity* self, EntityMap* map) {
-    if (!self->objList) return;
-    for (int i = 0; i < self->objNum; i++)
-        if (MapRps(map, self->objList[i]->pos, NULL) != self)
-            raise_warn("Entity_unmark: unmark on wrong object");
-}

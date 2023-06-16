@@ -28,6 +28,7 @@ ALLEGRO_BITMAP* stone_img = nullptr;
 
 void ObjectClass_init() {
     ObjectClass_destroy();
+    show_msg("ObjectClass_init");
     edge_img = al_load_bitmap(edge_img_path);
     apple_img = al_load_bitmap(apple_img_path);
     button_img = al_load_bitmap(button_img_path);
@@ -39,8 +40,20 @@ void ObjectClass_init() {
     snake_tail_img = al_load_bitmap(snake_tail_img_path);
     spike_img = al_load_bitmap(spike_img_path);
     stone_img = al_load_bitmap(stone_img_path);
+    if (!edge_img)                  raise_warn("cat not load edge_img!");
+    if (!apple_img)                 raise_warn("cat not load apple_img!");
+    if (!button_img)                raise_warn("cat not load button_img!");
+    if (!end_img)                   raise_warn("cat not load end_img!");
+    if (!ground_img)                raise_warn("cat not load ground_img!");
+    if (!snake_head_img)            raise_warn("cat not load snake_head_img!");
+    if (!snake_body_straight_img)   raise_warn("cat not load snake_body_straight_img!");
+    if (!snake_body_turn_img)       raise_warn("cat not load snake_body_turn_img!");
+    if (!snake_tail_img)            raise_warn("cat not load snake_tail_img!");
+    if (!spike_img)                 raise_warn("cat not load spike_img!");
+    if (!stone_img)                 raise_warn("cat not load stone_img!");
 }
 void ObjectClass_destroy() {
+    show_msg("ObjectClass_destroy");
     if (edge_img) al_destroy_bitmap(edge_img);
     if (apple_img) al_destroy_bitmap(apple_img);
     if (button_img) al_destroy_bitmap(button_img);
@@ -71,17 +84,20 @@ Object* new_Object(Pos pos) {
     return object;
 }
 void Object_init(Object* self, Pos pos) {
-    show_msg("Object_init");
+    // Info
     self->pos = pos;
     self->dir = DIRECTION_UP;
+    // Display
     self->Image = nullptr;
+    self->viewSize = make_Pos(3, 3);
+    // method
     self->draw = Object_draw;
     self->shift = Object_shift;
     self->copy = Object_copy;
     self->deleter = delete_Object;
 }
 void Object_destroy(Object* self) {
-    show_msg("Object_destroy");
+    return;
 }
 void delete_Object(Object* self) {
     Object_destroy(self);
@@ -91,12 +107,15 @@ Object* Object_copy(Object* self) {
     Object* new_obj = new_Object(self->pos);
     new_obj->dir = self->dir;
     new_obj->Image = self->Image;
+    new_obj->viewSize = self->viewSize;
     return new_obj;
 }
 void Object_draw(Object* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer) {
     if (!SW_isInWindow(sw, self->pos,1)) return;
-    Pos UL = SW_getPixelPos(sw, add_const(self->pos, -1), backbuffer);
-    Pos LR = SW_getPixelPos(sw, add_const(self->pos,  2), backbuffer);
+    Pos ULShift = mul_const(add_const(self->viewSize, -1), -0.5);
+    Pos LRShift = mul_const(add_const(self->viewSize,  1), 0.5);
+    Pos UL = SW_getPixelPos(sw, add(self->pos, ULShift), backbuffer);
+    Pos LR = SW_getPixelPos(sw, add(self->pos, LRShift), backbuffer);
     ALLEGRO_BITMAP* submap = al_create_sub_bitmap(backbuffer, UL.x, UL.y, LR.x-UL.x, LR.y-UL.y);
     al_set_target_bitmap(submap);
     if (self->Image) draw_image(self->Image, submap, self->dir);

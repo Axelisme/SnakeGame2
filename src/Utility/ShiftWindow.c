@@ -34,10 +34,8 @@ Pos  SW_getShiftPos(ShiftWindow* self, Pos pos) {
     return sub(pos, self->upperLeft);
 }
 Pos  SW_getPixelPos(ShiftWindow* self, Pos pos, ALLEGRO_BITMAP* backbuffer) {
-    int TotalWidth = al_get_bitmap_width(backbuffer);
-    int TotalHeight = al_get_bitmap_height(backbuffer);
-    const pos_t WidthPerTile = (pos_t) TotalWidth / self->window_size.x;
-    const pos_t HeightPerTile = (pos_t) TotalHeight / self->window_size.y;
-    Pos shiftPos = SW_getShiftPos(self, pos);
-    return make_Pos(shiftPos.x * WidthPerTile, shiftPos.y * HeightPerTile);
+    const Pos TotalSize = make_Pos(al_get_bitmap_width(backbuffer), al_get_bitmap_height(backbuffer));
+    const Pos TileSize = divd(TotalSize, self->window_size);
+    const Pos shiftPos = SW_getShiftPos(self, pos);
+    return mul(shiftPos, TileSize);
 }

@@ -5,6 +5,8 @@
 #include "Entity/EntityMap.h"
 #include "Entity/EntityList.h"
 
+#define INIT_GRAVITY DIRECTION_NONE
+
 typedef enum OPERATION {
     OP_MOVE_UP,
     OP_MOVE_DOWN,

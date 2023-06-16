@@ -23,7 +23,5 @@ void EntityMap_clear(EntityMap* self);
 bool MapCheck(EntityMap* self, Pos pos);
 Entity* MapRps(EntityMap* self, Pos pos, Entity* entity);
 Entity* MapGet(EntityMap* self, Pos pos);
-void Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps);
-void Entity_unmark(Entity* self, EntityMap* map);
 
 #endif // ENTITYMAP_H

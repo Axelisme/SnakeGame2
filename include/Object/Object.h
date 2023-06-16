@@ -25,6 +25,7 @@ typedef struct Object {
     Direction dir;
     // Display
     ALLEGRO_BITMAP * Image;
+    Pos viewSize;
     // method
     void (*draw)(struct Object*, ShiftWindow*, ALLEGRO_BITMAP*);
     void (*shift)(struct Object*, Pos);

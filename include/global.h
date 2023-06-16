@@ -34,4 +34,7 @@ void raise_err(const char* );
 void raise_warn(const char* );
 void show_msg(const char* );
 
+// Macro
+#define swap(a,b) {typeof(a) tmp = a; a = b; b = tmp;}
+
 #endif // GLOBAL_H

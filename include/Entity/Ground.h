@@ -6,7 +6,7 @@
 
 typedef Entity Ground;
 
-Ground* new_Ground(GroundObject** objs, int num);
-void Ground_init(Ground* self, GroundObject** objs, int num);
+Ground* new_Ground(ObjectVector* objs);
+void Ground_init(Ground* self, ObjectVector* objs);
 
 #endif // GROUND_H

@@ -1,15 +1,15 @@
 
 #include "Entity/Ground.h"
 
-Ground* new_Ground(GroundObject** objs, int num) {
+Ground* new_Ground(ObjectVector* objs) {
     Ground* ground = (Ground*) al_calloc(1, sizeof(Ground));
-    Ground_init(ground, objs, num);
+    Ground_init(ground, objs);
     return ground;
 }
-void Ground_init(Ground* self, GroundObject** objs, int num) {
+void Ground_init(Ground* self,ObjectVector* objs) {
     // Inherited from Entity
     Entity* Eself = (Entity*) self;
-    Entity_init(Eself, (Object**)objs, num);
+    Entity_init(Eself, objs);
     Eself->type = E_GROUND;
     Eself->isFixed = true;
     Eself->canOverlap = false;

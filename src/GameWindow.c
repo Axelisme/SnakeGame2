@@ -1,5 +1,6 @@
 
 #include "GameWindow.h"
+#include "Object/Object.h"
 #include "Interface/Interface.h"
 #include "Interface/Menu/InMenu.h"
 #include "Interface/Menu/StartMenu.h"
@@ -40,6 +41,8 @@ void GameWindow_init(GameWindow* self) {
     al_play_sample_instance(self->background_music);
 }
 void GameWindow_destroy(GameWindow* self) {
+    // destroy ObjectClass
+    ObjectClass_destroy();
     // destroy interface
     show_msg("Destroy Interface:");
     for(int i=0;i<self->interface_num;i++) {
@@ -94,13 +97,13 @@ GAMEWINDOW_STATE GameWindow_update(GameWindow* self) {
             break;
         }
         case INTERFACE_DIED: { // delete the top interface and return to the previous interface if next interface is INTERFACE_NONE
+            top_interface->deleter(top_interface);
             self->interfaces[self->interface_num-1] = nullptr;
             if (state_info.child.interface_type != INTERFACE_NONE) {
                 Interface* next_interface = _create_Interface(state_info.child);
                 self->interfaces[self->interface_num-1] = next_interface;
             }
             else self->interface_num--;
-            top_interface->deleter(top_interface);
             break;
         }
     }
@@ -147,6 +150,8 @@ static void _GameWindow_load(GameWindow* self) {
     self->background_music = al_create_sample_instance(self->background_sample);
     al_set_sample_instance_playmode(self->background_music, ALLEGRO_PLAYMODE_LOOP);
     al_attach_sample_instance_to_mixer(self->background_music, al_get_default_mixer());
+    // ObjectClass
+    ObjectClass_init();
     // Create interface
     show_msg("Create first interface:");
     CHILD_INFO first_interface_info = {FIRST_INTERFACE, 1};

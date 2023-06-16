@@ -22,6 +22,9 @@ typedef struct LevelView {
     PLAYER_STATE PState;
     // Display
     ShiftWindow shift_window;
+    // Entity
+    EntityList entity_list;
+    EntityList snakes;
     // Engine
     MapEngine engine;
 } LevelView;

@@ -32,6 +32,7 @@ void Interface_init(Interface* self) {
     self->info = _default_info();
     self->should_kill = true;
     // Display
+    self->background_color = WRITE;
     self->background_light = MIN_LIGHT;
     self->background_light_max = MAX_LIGHT;
     self->background_light_min = MIN_LIGHT;
@@ -60,7 +61,11 @@ void Interface_draw(Interface* self, ALLEGRO_BITMAP* backbuffer) {
         raise_err("try to draw interface on NULL backbuffer");return;}
     if (self->info.state == INTERFACE_DIED) return;
     al_set_target_bitmap(backbuffer);
-    al_clear_to_color(al_map_rgb(self->background_light, self->background_light, self->background_light));
+    unsigned char r, g, b; al_unmap_rgb(self->background_color, &r, &g, &b);
+    r *= self->background_light/255.0;
+    g *= self->background_light/255.0;
+    b *= self->background_light/255.0;
+    al_clear_to_color(al_map_rgb(r, g, b));
 }
 INTERFACE_INFO Interface_update(Interface* self) {
     if (self == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
@@ -128,7 +133,7 @@ bool Interface_light_down(Interface* self) {
     }
     else return false;
 }
-void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction) {
+void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction, unsigned char opacity) {
     if (image == nullptr) {
         raise_warn("try to draw NULL image");return;}
     al_set_target_bitmap(backbuffer);
@@ -151,8 +156,10 @@ void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction dir
     const float scale_y = (direction == DIRECTION_UP || direction == DIRECTION_DOWN)? scale_h: scale_w;
     // get angle
     const float angle = Direction_to_angle(direction);
+    // get opacity
+    const ALLEGRO_COLOR mask = al_map_rgba_f(1, 1, 1, opacity/255.0);
     // draw
-    al_draw_scaled_rotated_bitmap(image, img_center_x, img_center_y, screen_center_x, screen_center_y, scale_x, scale_y, angle, 0);
+    al_draw_tinted_scaled_rotated_bitmap(image, mask, img_center_x, img_center_y, screen_center_x, screen_center_y, scale_x, scale_y, angle, 0);
 }
 
 

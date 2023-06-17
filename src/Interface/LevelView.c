@@ -7,6 +7,8 @@
 #include "Entity/Ground.h"
 #include "Entity/Snake.h"
 
+const char DIED_IMAGE_PATH[] = "data/image/menu/died.png";
+
 LevelView* new_Level(LEVEL_ID level_id) {
     LevelView* level = (LevelView*)al_calloc(1,sizeof(LevelView));
     Level_init(level, level_id);
@@ -21,6 +23,7 @@ void Level_init(LevelView* self, LEVEL_ID level_id) {
     // Inherited from Interface
     Iself->info.type = INTERFACE_LEVEL;
     Iself->draw = Level_draw;
+    Iself->update = Level_update;
     Iself->event_record = Level_event_recorder;
     Iself->event_dealer = Level_event_dealer;
     Iself->deleter = delete_Level;
@@ -30,10 +33,13 @@ void Level_init(LevelView* self, LEVEL_ID level_id) {
     // state
     self->PState = PLAYING;
     self->update_engine_count = 0;
+    self->died_image_opacity = 0;
+    self->died_image_opacity_step = DIED_STEP;
     // Entity
     EntityList_init(&self->entity_list);
     EntityList_init(&self->snakes);
     // Display
+    self->died_image = al_load_bitmap(DIED_IMAGE_PATH);
     // Engine
     Level_loader(self, level_id);
 }
@@ -48,6 +54,7 @@ void Level_destroy(LevelView* self) {
     EntityList_destroy(&self->snakes);
     // Display
     ShiftWindow_destroy(&self->shift_window);
+    al_destroy_bitmap(self->died_image);
     // Inherited from Interface
     Interface* Iself = (Interface*)self;
     Interface_destroy(Iself);
@@ -66,6 +73,38 @@ static void Level_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     Interface_draw(Iself, backbuffer);
     // Draw level
     MapEngine_draw(&self->engine, &self->shift_window, backbuffer);
+    // Draw Died
+    if (self->PState == LOSE)
+        draw_image(self->died_image, backbuffer, DIRECTION_UP, self->died_image_opacity);
+}
+static INTERFACE_INFO Level_update(Interface* Iself) {
+    LevelView* self = (LevelView*)Iself;
+    if (Iself == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
+    switch (Iself->info.state) {
+        case INTERFACE_INITIALING:
+            if (Interface_light_up(Iself))
+                Iself->info.state = INTERFACE_RUNNING;
+            break;
+        case INTERFACE_RUNNING:
+            if (Level_update_counter(self))
+                Iself->event_dealer(Iself);
+            break;
+        case INTERFACE_EXITING:
+            if (self->PState == LOSE && !Level_update_died_opacity(self))
+                break;
+            if (Interface_light_down(Iself))
+                Iself->info.state = (Iself->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
+            break;
+        case INTERFACE_STOP:
+            Iself->info.state = INTERFACE_INITIALING;
+            break;
+        case INTERFACE_DIED:
+            break;
+        default:
+            raise_err("unknown interface state");
+            break;
+    }
+    return Iself->info;
 }
 static void Level_event_recorder(Interface* Iself, ALLEGRO_EVENT event) {
     LevelView* self = (LevelView*)Iself;
@@ -93,7 +132,6 @@ static void Level_event_dealer(Interface* Iself) {
     SW_setCenter(&self->shift_window, Level_get_view_center(self));
     if      (self->PState == WIN)  Level_deal_win(self);
     else if (self->PState == LOSE) Level_deal_lose(self);
-    else if (!Level_update_counter(self)) return;
     else if (Iself->event.type == NO_EVENT)
         self->PState = MapEngine_process(&self->engine, OP_NONE);
     else switch (Iself->event.keyboard.keycode) {
@@ -144,6 +182,12 @@ static bool Level_update_counter(LevelView* self) {
     if (self->update_engine_count++ < self->update_engine_period) return false;
     self->update_engine_count = 0;
     return true;
+}
+static bool Level_update_died_opacity(LevelView* self) {
+    if (self->died_image_opacity >= 255) return true;
+    self->died_image_opacity += self->died_image_opacity_step;
+    if (self->died_image_opacity > 255) self->died_image_opacity = 255;
+    return false;
 }
 static Pos Level_get_view_center(LevelView* self) {
     // use snake head as center

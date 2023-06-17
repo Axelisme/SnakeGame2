@@ -54,7 +54,7 @@ void MultiMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     Interface_draw(Iself, backbuffer);
     // draw image
     ALLEGRO_BITMAP* image = _MultiMenu_current_image(self);
-    if (image) draw_image(image, backbuffer, DIRECTION_UP);
+    if (image) draw_image(image, backbuffer, DIRECTION_UP, NO_TRANSPARENT);
     else
         raise_warn("try to draw NULL image");
 }

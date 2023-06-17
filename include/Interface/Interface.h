@@ -8,6 +8,7 @@
 #define MIN_LIGHT 0
 #define BASIC_LIGHT_STEP 20
 #define NO_EVENT -1
+#define NO_TRANSPARENT 255
 
 typedef enum INTERFACE_TYPE {
     INTERFACE_IN_MENU,
@@ -50,6 +51,7 @@ typedef struct Interface {
     INTERFACE_INFO info;
     bool should_kill;
     // Display
+    ALLEGRO_COLOR background_color;
     int background_light;
     int background_light_max;
     int background_light_min;
@@ -77,7 +79,7 @@ void Interface_set_kill(Interface* self, INTERFACE_TYPE next_type);
 void Interface_set_stop(Interface* self, INTERFACE_TYPE next_type);
 bool Interface_light_up(Interface* self);
 bool Interface_light_down(Interface* self);
-void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction);
+void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction, unsigned char opacity);
 
 
 #endif // INTERFACE_H

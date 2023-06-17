@@ -124,7 +124,7 @@ void Object_draw(Object* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer) {
     Pos LR = SW_getPixelPos(sw, add(self->pos, LRShift), backbuffer);
     ALLEGRO_BITMAP* submap = al_create_sub_bitmap(backbuffer, UL.x-2, UL.y-2, LR.x-UL.x+4, LR.y-UL.y+4);
     al_set_target_bitmap(submap);
-    if (self->Image) draw_image(self->Image, submap, self->dir);
+    if (self->Image) draw_image(self->Image, submap, self->dir, NO_TRANSPARENT);
     else al_clear_to_color(RED);
     al_set_target_bitmap(backbuffer);
 }

@@ -14,6 +14,7 @@ static const char snake_body_turn_img_path[]     = "data/image/snakeBodyTurn.png
 static const char snake_tail_img_path[]          = "data/image/snakeTail.png";
 static const char spike_img_path[]               = "data/image/spike.png";
 static const char stone_img_path[]               = "data/image/stone.png";
+static const char box_img_path[]                 = "data/image/box.png";
 ALLEGRO_BITMAP* edge_img = nullptr;
 ALLEGRO_BITMAP* apple_img = nullptr;
 ALLEGRO_BITMAP* button_img = nullptr;
@@ -25,6 +26,7 @@ ALLEGRO_BITMAP* snake_body_turn_img = nullptr;
 ALLEGRO_BITMAP* snake_tail_img = nullptr;
 ALLEGRO_BITMAP* spike_img = nullptr;
 ALLEGRO_BITMAP* stone_img = nullptr;
+ALLEGRO_BITMAP* box_img = nullptr;
 
 void ObjectClass_init() {
     ObjectClass_destroy();
@@ -40,6 +42,7 @@ void ObjectClass_init() {
     snake_tail_img = al_load_bitmap(snake_tail_img_path);
     spike_img = al_load_bitmap(spike_img_path);
     stone_img = al_load_bitmap(stone_img_path);
+    box_img = al_load_bitmap(box_img_path);
     if (!edge_img)                  raise_warn("cat not load edge_img!");
     if (!apple_img)                 raise_warn("cat not load apple_img!");
     if (!button_img)                raise_warn("cat not load button_img!");
@@ -51,6 +54,7 @@ void ObjectClass_init() {
     if (!snake_tail_img)            raise_warn("cat not load snake_tail_img!");
     if (!spike_img)                 raise_warn("cat not load spike_img!");
     if (!stone_img)                 raise_warn("cat not load stone_img!");
+    if (!box_img)                   raise_warn("cat not load box_img!");
 }
 void ObjectClass_destroy() {
     show_msg("ObjectClass_destroy");
@@ -65,6 +69,7 @@ void ObjectClass_destroy() {
     if (snake_tail_img) al_destroy_bitmap(snake_tail_img);
     if (spike_img) al_destroy_bitmap(spike_img);
     if (stone_img) al_destroy_bitmap(stone_img);
+    if (box_img) al_destroy_bitmap(box_img);
     edge_img = nullptr;
     apple_img = nullptr;
     button_img = nullptr;
@@ -76,6 +81,7 @@ void ObjectClass_destroy() {
     snake_tail_img = nullptr;
     spike_img = nullptr;
     stone_img = nullptr;
+    box_img = nullptr;
 }
 
 Object* new_Object(Pos pos) {

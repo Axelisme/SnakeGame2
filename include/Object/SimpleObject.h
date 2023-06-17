@@ -33,4 +33,8 @@ typedef Object StoneObject;
 StoneObject* new_StoneObject(Pos pos);
 void StoneObject_init(StoneObject* self, Pos pos);
 
+typedef Object BoxObject;
+BoxObject* new_BoxObject(Pos pos);
+void BoxObject_init(BoxObject* self, Pos pos);
+
 #endif // SIMPLE_OBJECT_H

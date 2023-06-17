@@ -71,3 +71,13 @@ void StoneObject_init(StoneObject* self, Pos pos) {
     Object_init((Object*)self, pos);
     self->Image = stone_img;
 }
+
+BoxObject* new_BoxObject(Pos pos) {
+    BoxObject* box = (BoxObject*)al_calloc(1,sizeof(BoxObject));
+    BoxObject_init(box, pos);
+    return box;
+}
+void BoxObject_init(BoxObject* self, Pos pos) {
+    Object_init((Object*)self, pos);
+    self->Image = box_img;
+}

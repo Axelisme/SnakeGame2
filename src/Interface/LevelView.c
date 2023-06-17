@@ -2,6 +2,7 @@
 #include "Interface/LevelView.h"
 #include "Entity/Edge.h"
 #include "Entity/Stone.h"
+#include "Entity/Box.h"
 #include "Entity/Ground.h"
 #include "Entity/Snake.h"
 
@@ -165,15 +166,15 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     }
     EntityList_push_back(&self->entity_list, (Entity*)new_Ground(&grounds)); ObjectVector_destroy(&grounds);
 
-    // set stone
-    ObjectVector stones; ObjectVector_init(&stones);
-    StoneObject stone1; StoneObject_init(&stone1, make_Pos(4,3));
-    StoneObject stone2; StoneObject_init(&stone2, make_Pos(4,2));
-    StoneObject stone3; StoneObject_init(&stone3, make_Pos(5,3));
-    ObjV_push_back(&stones, (Object*)&stone1); Object_destroy((Object*)&stone1);
-    ObjV_push_back(&stones, (Object*)&stone2); Object_destroy((Object*)&stone2);
-    ObjV_push_back(&stones, (Object*)&stone3); Object_destroy((Object*)&stone3);
-    EntityList_push_back(&self->entity_list, (Entity*)new_Stone(&stones)); ObjectVector_destroy(&stones);
+    // set box
+    ObjectVector boxs; ObjectVector_init(&boxs);
+    BoxObject box1; BoxObject_init(&box1, make_Pos(4,3));
+    BoxObject box2; BoxObject_init(&box2, make_Pos(4,2));
+    BoxObject box3; BoxObject_init(&box3, make_Pos(5,3));
+    ObjV_push_back(&boxs, (Object*)&box1); Object_destroy((Object*)&box1);
+    ObjV_push_back(&boxs, (Object*)&box2); Object_destroy((Object*)&box2);
+    ObjV_push_back(&boxs, (Object*)&box3); Object_destroy((Object*)&box3);
+    EntityList_push_back(&self->entity_list, (Entity*)new_Box(&boxs)); ObjectVector_destroy(&boxs);
 
     // set snake
     ObjectVector bodies; ObjectVector_init(&bodies);

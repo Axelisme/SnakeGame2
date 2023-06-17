@@ -145,8 +145,10 @@ void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction dir
     const float screen_center_x = screen_w / 2;
     const float screen_center_y = screen_h / 2;
     // get scale
-    const float scale_x = (float)screen_w / image_w;
-    const float scale_y = (float)screen_h / image_h;
+    const float scale_w = (float)screen_w / image_w;
+    const float scale_h = (float)screen_h / image_h;
+    const float scale_x = (direction == DIRECTION_UP || direction == DIRECTION_DOWN)? scale_w: scale_h;
+    const float scale_y = (direction == DIRECTION_UP || direction == DIRECTION_DOWN)? scale_h: scale_w;
     // get angle
     const float angle = Direction_to_angle(direction);
     // draw

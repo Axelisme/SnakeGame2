@@ -24,8 +24,10 @@ void Level_init(LevelView* self, LEVEL_ID level_id) {
     Iself->deleter = delete_Level;
     // Info
     self->level_id = level_id;
+    self->update_engine_period = UPDATE_ENGINE_PERIOD;
     // state
     self->PState = PLAYING;
+    self->update_engine_count = 0;
     // Entity
     EntityList_init(&self->entity_list);
     EntityList_init(&self->snakes);
@@ -86,8 +88,10 @@ static void Level_event_recorder(Interface* Iself, ALLEGRO_EVENT event) {
 }
 static void Level_event_dealer(Interface* Iself) {
     LevelView* self = (LevelView*)Iself;
+    SW_setCenter(&self->shift_window, Level_get_view_center(self));
     if      (self->PState == WIN)  Level_deal_win(self);
     else if (self->PState == LOSE) Level_deal_lose(self);
+    else if (!Level_update_counter(self)) return;
     else if (Iself->event.type == NO_EVENT)
         self->PState = MapEngine_process(&self->engine, OP_NONE);
     else switch (Iself->event.keyboard.keycode) {
@@ -134,56 +138,61 @@ static void Level_deal_lose(LevelView* self) {
     Interface_set_kill(Iself, INTERFACE_LEVEL);
     Iself->info.child.level = self->level_id;
 }
+static bool Level_update_counter(LevelView* self) {
+    if (self->update_engine_count++ < self->update_engine_period) return false;
+    self->update_engine_count = 0;
+    return true;
+}
+static Pos Level_get_view_center(LevelView* self) {
+    // use snake head as center
+    Snake* snake = (Snake*) self->snakes.front;
+    Pos head = snake->head->object.pos;
+    return add_const(head, 0.5);
+}
 static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     // TODO: Load level, use temporary solution
     show_msg("TODO: Load level");
 
     // map size
-    Pos map_size = make_Pos(7,7);
-
-    // set shift window
-    ShiftWindow_init(&self->shift_window, map_size);
+    Pos map_size = make_Pos(10,10);
 
     // set ground
     ObjectVector grounds; ObjectVector_init(&grounds);
     GroundObject ground;
-    for (int i=0; i < 7; i++) {
-        GroundObject_init(&ground, make_Pos(6,i));
-        ObjV_push_back(&grounds, (Object*)&ground);
-        Object_destroy((Object*)&ground);
+    for (int i=0; i < map_size.y; i++) {
+        GroundObject_init(&ground, make_Pos(map_size.x-1,i));
+        ObjV_push_back(&grounds, (Object*)&ground); Object_destroy((Object*)&ground);
     }
-    EntityList_push_back(&self->entity_list, (Entity*)new_Ground(&grounds));
-    ObjectVector_destroy(&grounds);
+    EntityList_push_back(&self->entity_list, (Entity*)new_Ground(&grounds)); ObjectVector_destroy(&grounds);
 
     // set stone
     ObjectVector stones; ObjectVector_init(&stones);
     StoneObject stone1; StoneObject_init(&stone1, make_Pos(4,3));
     StoneObject stone2; StoneObject_init(&stone2, make_Pos(4,2));
     StoneObject stone3; StoneObject_init(&stone3, make_Pos(5,3));
-    ObjV_push_back(&stones, (Object*)&stone1);
-    ObjV_push_back(&stones, (Object*)&stone2);
-    ObjV_push_back(&stones, (Object*)&stone3);
-    Object_destroy((Object*)&stone1);
-    Object_destroy((Object*)&stone2);
-    Object_destroy((Object*)&stone3);
-    EntityList_push_back(&self->entity_list, (Entity*)new_Stone(&stones));
+    ObjV_push_back(&stones, (Object*)&stone1); Object_destroy((Object*)&stone1);
+    ObjV_push_back(&stones, (Object*)&stone2); Object_destroy((Object*)&stone2);
+    ObjV_push_back(&stones, (Object*)&stone3); Object_destroy((Object*)&stone3);
+    EntityList_push_back(&self->entity_list, (Entity*)new_Stone(&stones)); ObjectVector_destroy(&stones);
 
     // set snake
     ObjectVector bodies; ObjectVector_init(&bodies);
     BodyObject head; BodyObject_init(&head, make_Pos(0,0), HEAD, DIRECTION_UP, DIRECTION_UP);
-    ObjV_push_back(&bodies, (Object*)&head);
-    Object_destroy((Object*)&head);
+    ObjV_push_back(&bodies, (Object*)&head); Object_destroy((Object*)&head);
     BodyObject body;
     for (int i=1; i < 5; i++) {
         BodyObject_init(&body, make_Pos(i,0), BODY, DIRECTION_UP, DIRECTION_UP);
-        ObjV_push_back(&bodies, (Object*)&body);
-        Object_destroy((Object*)&body);
+        ObjV_push_back(&bodies, (Object*)&body); Object_destroy((Object*)&body);
     }
     BodyObject tail; BodyObject_init(&tail, make_Pos(5,0), TAIL, DIRECTION_UP, DIRECTION_UP);
-    ObjV_push_back(&bodies, (Object*)&tail);
-    Object_destroy((Object*)&tail);
-    EntityList_push_back(&self->snakes, (Entity*)new_Snake(&bodies));
-    ObjectVector_destroy(&bodies);
+    ObjV_push_back(&bodies, (Object*)&tail); Object_destroy((Object*)&tail);
+    EntityList_push_back(&self->snakes, (Entity*)new_Snake(&bodies)); ObjectVector_destroy(&bodies);
+
+    // set shift window
+    ShiftWindow_init(&self->shift_window, map_size, make_Pos(3,0), map_size);
+    Pos window_size = make_Pos(9,9);
+    //SW_window_resize(&self->shift_window, window_size);
+    SW_setCenter(&self->shift_window, Level_get_view_center(self));
 
     // set map engine
     MapEngine_init(&self->engine, map_size, &self->entity_list, self->snakes.front);

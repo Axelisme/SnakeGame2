@@ -4,6 +4,7 @@
 #include "Interface/Interface.h"
 #include "Utility/ShiftWindow.h"
 #include "Engine.h"
+#define UPDATE_ENGINE_PERIOD 6
 
 #define LEVEL_NUM 4
 typedef enum LEVEL_ID {
@@ -18,8 +19,10 @@ typedef struct LevelView {
     Interface interface;
     // Info
     LEVEL_ID level_id;
+    int update_engine_period;
     // state
     PLAYER_STATE PState;
+    int update_engine_count;
     // Display
     ShiftWindow shift_window;
     // Entity
@@ -39,6 +42,8 @@ static void Level_event_recorder(Interface* Iself, ALLEGRO_EVENT event);
 static void Level_event_dealer(Interface* Iself);
 static void Level_deal_win(LevelView* self);
 static void Level_deal_lose(LevelView* self);
+static bool Level_update_counter(LevelView* self);
+static Pos Level_get_view_center(LevelView* self);
 static void Level_loader(LevelView* self, LEVEL_ID level_id);
 
 #endif // LEVEL_H

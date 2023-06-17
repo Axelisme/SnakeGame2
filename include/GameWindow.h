@@ -3,10 +3,10 @@
 
 #include "global.h"
 #include "Interface/Interface.h"
-#define INIT_DISPLAY_WIDTH 800
-#define INIT_DISPLAY_HEIGHT 800
-#define DISPLAY_FPS 50
-#define FIRST_INTERFACE INTERFACE_LEVEL
+#define INIT_DISPLAY_WIDTH 900
+#define INIT_DISPLAY_HEIGHT 900
+#define DISPLAY_FPS 60
+#define FIRST_INTERFACE INTERFACE_IN_MENU
 #define INTERFACE_MAX_NUM 10
 
 typedef enum GAMEWINDOW_STATE {

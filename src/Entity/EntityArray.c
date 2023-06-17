@@ -1,5 +1,6 @@
 
 #include "Entity/EntityArray.h"
+#include <stdlib.h>
 
 EntityArray* new_EntityArray() {
     EntityArray* self = (EntityArray*) al_calloc(1,sizeof(EntityArray));
@@ -43,6 +44,9 @@ void EntityArray_merge(EntityArray* self, EntityArray* other) {
         self->array[self->size + i] = other->array[i];
     self->size += other->size;
     EntityArray_clear(other);
+}
+void EntityArray_sort(EntityArray* self) {
+    qsort(self->array, self->size, sizeof(Entity*), Entity_compare);
 }
 bool EA_is_empty(EntityArray* self) {
     return self->size == 0;

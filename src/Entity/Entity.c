@@ -105,3 +105,9 @@ bool inMap(Entity* entity, Pos mapSize) {
     }
     return true;
 }
+int Entity_compare(const void* a, const void* b) {
+    // sort by type
+    Entity* ea = *(Entity**)a;
+    Entity* eb = *(Entity**)b;
+    return ea->type - eb->type;
+}

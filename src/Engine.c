@@ -96,7 +96,7 @@ static bool _canShift(Entity* self, Direction dir, EntityMap* map, EntityArray* 
     Entity_unmark(self, map);
     for (int i = 0; i < len(&self->objList); i++) {
         Pos pos = ObjV_get(&self->objList, i)->pos;
-        Pos next_pos = heading_pos(pos, dir);
+        Pos next_pos = neighbor_pos(pos, dir);
         Entity* next_entity = MapGet(map, next_pos);
         if (!next_entity || next_entity->canOverlap || next_entity->beSupported == false) continue;
         if (next_entity->beSupported == true || !_canShift(next_entity, dir, map, &localShift)) {

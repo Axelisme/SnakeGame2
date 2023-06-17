@@ -17,7 +17,9 @@ void EntityArray_push_back(EntityArray* self, Entity* entity);
 Entity* EA_get(EntityArray* self, int index);
 bool EntityArray_have(EntityArray* self, Entity* entity);
 void EntityArray_merge(EntityArray* self, EntityArray* other);
+void EntityArray_sort(EntityArray* self);
 bool EA_is_empty(EntityArray* self);
 int EA_len(EntityArray* self);
+
 
 #endif // ENTITY_ARRAY_H

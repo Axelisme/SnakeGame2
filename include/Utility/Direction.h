@@ -10,5 +10,6 @@ typedef enum Direction {
 } Direction;
 
 float Direction_to_angle(Direction direction);
+Direction Opposite_direction(Direction direction);
 
 #endif // DIRECTION_H

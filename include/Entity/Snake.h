@@ -20,6 +20,6 @@ void delete_Snake(Entity* Eself);
 
 Pos Snake_next_pos(Snake* self, Direction dir);
 void Snake_move(Snake* self, Direction dir);
-
+void Snake_grow(Snake* self, EntityMap* map, EntityArray* overlays);
 
 #endif // SNAKE_H

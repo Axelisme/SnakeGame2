@@ -27,7 +27,7 @@ Pos add_const(const Pos A, const pos_t B) {
 Pos mul_const(const Pos A, const pos_t B) {
     return make_Pos(A.y * B, A.x * B);
 }
-Pos heading_pos(const Pos pos, const Direction dir) {
+Pos neighbor_pos(const Pos pos, const Direction dir) {
     return add(pos, DIR_TO_POS(dir));
 }
 Pos DIR_TO_POS(const Direction dir) {

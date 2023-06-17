@@ -58,5 +58,6 @@ void Entity_trigger(Entity* self, MapEngine* Engine, EntityMap* Map, EntityArray
 bool Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps);
 void Entity_unmark(Entity* self, EntityMap* map);
 bool inMap(Entity* entity, Pos mapSize);
+int Entity_compare(const void* a, const void* b);
 
 #endif // ENTITY_H

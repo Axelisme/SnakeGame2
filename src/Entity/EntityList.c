@@ -1,5 +1,6 @@
 
 #include "Entity/EntityList.h"
+#include "Entity/EntityArray.h"
 
 void EntityList_init(EntityList* self) {
     self->front = NULL;
@@ -56,6 +57,10 @@ void EntityList_pop_front(EntityList* self) {
     else
         self->back = NULL;
     self->size--;
+}
+void EntityList_from_array(EntityList* self, EntityArray* array) {
+    for (int i = 0; i < EA_len(array); i++)
+        EntityList_push_back(self, EA_get(array, i));
 }
 void EntityList_remove(EntityList* self, Entity* entity) {
     if (entity->prev != NULL)

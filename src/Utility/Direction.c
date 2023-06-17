@@ -12,3 +12,12 @@ float Direction_to_angle(Direction direction) {
         default:              return 0.0f;
     }
 }
+Direction Opposite_direction(Direction direction) {
+    switch (direction) {
+        case DIRECTION_UP:    return DIRECTION_DOWN;
+        case DIRECTION_RIGHT: return DIRECTION_LEFT;
+        case DIRECTION_DOWN:  return DIRECTION_UP;
+        case DIRECTION_LEFT:  return DIRECTION_RIGHT;
+        default:              return DIRECTION_NONE;
+    }
+}

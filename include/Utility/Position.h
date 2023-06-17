@@ -19,7 +19,7 @@ Pos mul(const Pos A, const Pos B);
 Pos divd(const Pos A, const Pos B);
 Pos add_const(const Pos A, const pos_t B);
 Pos mul_const(const Pos A, const pos_t B);
-Pos heading_pos(const Pos pos, const Direction dir);
+Pos neighbor_pos(const Pos pos, const Direction dir);
 Pos DIR_TO_POS(const Direction dir);
 Direction POS_TO_DIR(const Pos pos);
 

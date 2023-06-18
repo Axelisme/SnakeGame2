@@ -11,30 +11,31 @@
 10 10
 
 #gravity_direction
-down
+1 down
 
 #other_level_information_go_there
 
 #how_many_snakes
 1
 
-#snake1_length
+#snake_length
 4
-11 8
-12 8
-12 9
-12 10
+#snake position direction
+11 8 3
+12 8 3
+12 9 1
+12 10 1
 
 #how_many_entities
 3
 
-ground 3
-9 10
-10 10
-13 9
+6 ground 3
+9 10 0
+10 10 0
+13 9 0
 
-apple 1
-8 10
+0 apple 1
+8 10 0
 
-end 1
-12 9
+3 end 1
+12 9 0

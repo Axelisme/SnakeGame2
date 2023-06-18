@@ -210,6 +210,7 @@ level3 = {
     }
 
 # write_file(3,level3)
+# %%
 
 map4_high, map4_width = 10, 25
 map4 = np.zeros([map4_high, map4_width]).astype(int)

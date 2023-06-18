@@ -24,11 +24,20 @@ void Allegro_init() {
     al_install_keyboard(); // install keyboard event
     al_install_mouse();    // install mouse event
     al_install_audio();    // install audio event
+}
+void Allegro_destroy() {
+    // uninstall device
+    show_msg("Uninstall device");
+    al_uninstall_keyboard();
+    al_uninstall_mouse();
+    al_uninstall_audio();
 
-    // Initial sound
-    show_msg("Initial sound");
-    if(!al_reserve_samples(3))
-        raise_warn("can't not initial sound");
+    // destroy allegro
+    show_msg("Destroy allegro");
+    al_shutdown_primitives_addon();
+    al_shutdown_font_addon();
+    al_shutdown_ttf_addon();
+    al_shutdown_image_addon();
 }
 void Game_init(Game* self) {
     // Info
@@ -57,10 +66,15 @@ void Game_init(Game* self) {
 }
 void Game_destroy(Game* self) {
     if (self == nullptr) return;
+    // destroy game window
     GameWindow_destroy(&self->window);
+    // destroy event queue
     if (self->event_queue) al_destroy_event_queue(self->event_queue);
+    // destroy timer
     if (self->event_queue) al_destroy_timer(self->update_timer);
     if (self->event_queue) al_destroy_timer(self->render_timer);
+    // destroy allegro
+    Allegro_destroy();
 }
 void delete_Game(Game* self) {
     Game_destroy(self);

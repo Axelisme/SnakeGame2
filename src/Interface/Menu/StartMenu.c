@@ -1,6 +1,6 @@
 
 #include "Interface/Menu/StartMenu.h"
-#include "GameWindow.h"
+#include "SoundEngine.h"
 
 #define START_MENU_IMAGE_NUM 5
 const char START_MENU_START_IMAGE_PATH[] = "data/image/menu/game_menu_start.png";
@@ -41,7 +41,7 @@ static void _StartMenu_enter_state(StartMenu* self) {
             Interface_set_stop(Iself, INTERFACE_LEVEL_MENU);
             break;
         case START_MENU_STATE_MUSIC:
-            GameWindow_toggle_mute();
+            SE_toggle_mute();
             break;
         case START_MENU_STATE_GUIDE:
             Interface_set_stop(Iself, INTERFACE_GUIDE_MENU);

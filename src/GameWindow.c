@@ -1,5 +1,6 @@
 
 #include "GameWindow.h"
+#include "SoundEngine.h"
 #include "Object/Object.h"
 #include "Interface/Interface.h"
 #include "Interface/Menu/InMenu.h"
@@ -13,7 +14,7 @@
 const char GAMEWINDOW_TITLE[] = "SnakeGame2";
 const char BACKGROUND_SOUND_PATH[] = "data/music/level_bgm.ogg";
 const char GAME_ICON_PATH[] = "data/image/icon.png";
-static bool Mute = false;
+static bool Mute = INIT_MUTE;
 
 GameWindow* new_GameWindow() {
     GameWindow* self = (GameWindow*)al_calloc(1,sizeof(GameWindow));
@@ -21,41 +22,55 @@ GameWindow* new_GameWindow() {
     return self;
 }
 void GameWindow_init(GameWindow* self) {
-    // display
-    self->display = nullptr;
-    // Icon
-    self->icon = nullptr;
-    // sound
-    self->background_sample = nullptr;
-    self->background_music = nullptr;
-    self->Mute = GameWindow_get_mute();
     // state
     self->state = GAMEWINDOW_RUNNING;
     // event
     self->event.type = -1;
+    // Create Display
+    show_msg("Create Display");
+    al_set_new_display_refresh_rate(DISPLAY_FPS);
+    self->display = al_create_display(INIT_DISPLAY_WIDTH,INIT_DISPLAY_HEIGHT);
+    if (!self->display) raise_err("can't not create display window");
+    else {
+        al_set_window_position(self->display,0,0);
+        al_set_window_title(self->display, GAMEWINDOW_TITLE);
+    }
+    self->icon = al_load_bitmap(GAME_ICON_PATH);
+    if (!self->icon) raise_warn("can't not load icon");
+    else al_set_display_icon(self->display, self->icon);
+    // initial ObjectClass and InterfaceClass
+    ObjectClass_init();
+    InterfaceClass_init();
+    // initial sample instances
+    SE_init();
+    // Load background Sound
+    show_msg("Load background music");
+    self->background_sample = al_load_sample(BACKGROUND_SOUND_PATH);
+    if(!self->background_sample) raise_warn("can't not load background music");
+    else SE_add_sound(self->background_sample, ALLEGRO_PLAYMODE_LOOP);
     // Interface
-    self->interface_num = 0;
-    // load game window
-    _GameWindow_load(self);
-    // play background music
-    al_play_sample_instance(self->background_music);
+    show_msg("Create first interface:");
+    self->interface_num = 1;
+    CHILD_INFO first_interface_info = {FIRST_INTERFACE, 1};
+    Interface* first_interface = _create_Interface(first_interface_info);
+    self->interfaces[self->interface_num-1] = first_interface;
 }
 void GameWindow_destroy(GameWindow* self) {
-    // destroy ObjectClass
-    ObjectClass_destroy();
     // destroy interface
     show_msg("Destroy Interface:");
     for(int i=0;i<self->interface_num;i++) {
         Interface* interface = self->interfaces[i];
         if(interface) interface->deleter(interface);
     }
-    // destroy sound
-    show_msg("Destroy Sound");
-    if(self->background_music) {
-        al_stop_sample_instance(self->background_music);
-        al_destroy_sample_instance(self->background_music);
-    }
+    // clear sample instances
+    show_msg("Clear sample instances");
+    SE_destroy();
+    // destroy background sound
+    show_msg("Destroy background Sound");
     if(self->background_sample) al_destroy_sample(self->background_sample);
+    // destroy ObjectClass and InterfaceClass
+    InterfaceClass_destroy();
+    ObjectClass_destroy();
     // destroy display
     show_msg("Destroy Display");
     if (self->display) al_destroy_display(self->display);
@@ -79,10 +94,8 @@ GAMEWINDOW_STATE GameWindow_update(GameWindow* self) {
     if (self->state==GAMEWINDOW_EXIT) return GAMEWINDOW_EXIT;
     // deal with the game window level key event
     _GameWindow_deal_event(self);
-    // mute or unmute the background music
-    self->Mute = GameWindow_get_mute();
-    if (self->Mute) al_stop_sample_instance(self->background_music);
-    else al_play_sample_instance(self->background_music);
+    // update sound engine
+    SE_update();
     // update the top interface
     if (self->interface_num==0) return GAMEWINDOW_EXIT;
     Interface* top_interface = self->interfaces[self->interface_num-1];
@@ -129,35 +142,7 @@ void GameWindow_event_record(GameWindow* self, ALLEGRO_EVENT event) {
         }
     }
 }
-void GameWindow_set_mute(bool mute) {Mute = mute;}
-bool GameWindow_get_mute() {return Mute;}
-void GameWindow_toggle_mute() {Mute = !Mute;}
 
-static void _GameWindow_load(GameWindow* self) {
-    // Create Display
-    show_msg("Create Display");
-    al_set_new_display_refresh_rate(DISPLAY_FPS);
-    self->display = al_create_display(INIT_DISPLAY_WIDTH,INIT_DISPLAY_HEIGHT);
-    if(self->display==nullptr) raise_err("can't not create display window");
-    self->icon = al_load_bitmap(GAME_ICON_PATH);
-    al_set_window_position(self->display,0,0);
-    al_set_display_icon(self->display, self->icon);
-    al_set_window_title(self->display, GAMEWINDOW_TITLE);
-    // Create Sound
-    show_msg("Create background music");
-    self->background_sample = al_load_sample(BACKGROUND_SOUND_PATH);
-    if(self->background_sample==nullptr) raise_err("can't not load background music");
-    self->background_music = al_create_sample_instance(self->background_sample);
-    al_set_sample_instance_playmode(self->background_music, ALLEGRO_PLAYMODE_LOOP);
-    al_attach_sample_instance_to_mixer(self->background_music, al_get_default_mixer());
-    // ObjectClass
-    ObjectClass_init();
-    // Create interface
-    show_msg("Create first interface:");
-    CHILD_INFO first_interface_info = {FIRST_INTERFACE, 1};
-    Interface* first_interface = _create_Interface(first_interface_info);
-    self->interfaces[self->interface_num++] = first_interface;
-}
 static Interface* _create_Interface(CHILD_INFO info) {
     switch (info.interface_type) {
         case INTERFACE_IN_MENU:

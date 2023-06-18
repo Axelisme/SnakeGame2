@@ -4,7 +4,7 @@
 #include "GameWindow.h"
 #define NAME_MAX_LENGTH 1024
 #define UPDATE_FPS 60
-#define RENDER_FPS 30
+#define RENDER_FPS 40
 
 typedef struct Game {
     // Info
@@ -21,6 +21,7 @@ typedef struct Game {
 Game* new_Game();
 void Game_init(Game* self);
 void Allegro_init();
+void Allegro_destroy();
 void Game_destroy(Game* self);
 void delete_Game(Game* self);
 void Game_run(Game* self);

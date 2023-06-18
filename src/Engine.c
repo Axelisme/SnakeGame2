@@ -1,6 +1,8 @@
 
 #include "Engine.h"
 #include "Entity/Snake.h"
+#include "Interface/Interface.h"
+#include "SoundEngine.h"
 
 void MapEngine_init(MapEngine* self, Pos mapSize, EntityList* entities, Entity* snake) {
     show_msg("MapEngine_init");
@@ -161,6 +163,8 @@ static void _ShiftEntity(EntityArray* shiftEs, Direction dir, EntityMap* map, En
 static void _removeDiedEntities(MapEngine* self, EntityList* entities, Entity* snake) {
     for (Entity* e = entities->front; e; e = e->next) if (!e->Alive)
         EntityList_remove(entities, e);
-    if (!snake->Alive)
+    if (!snake->Alive) {
+        SE_add_sound(died_sound, ALLEGRO_PLAYMODE_ONCE);
         self->state = LOSE;
+    }
 }

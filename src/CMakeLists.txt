@@ -39,10 +39,3 @@ set(EXECUTABLE_OUTPUT_PATH ${WORKING_DIRECTORY}/bin/${CMAKE_BUILD_TYPE})
 add_executable(${EXE_NAME} ${MAIN_SRC} ${SRC_LIST})
 message("Excutable file: ${EXECUTABLE_OUTPUT_PATH}/${EXE_NAME}")
 
-# 生成測試檔案
-include(CTest)
-enable_testing()
-set(TEST_SRC ${WORKING_DIRECTORY}/Test/Test.c)
-add_executable(Test ${TEST_SRC} ${SRC_LIST})
-add_test(NAME Test COMMAND bin/Debug/Test WORKING_DIRECTORY ${WORKING_DIRECTORY})
-

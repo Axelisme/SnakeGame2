@@ -6,7 +6,7 @@
 #define INIT_DISPLAY_WIDTH 900
 #define INIT_DISPLAY_HEIGHT 900
 #define DISPLAY_FPS 60
-#define FIRST_INTERFACE INTERFACE_LEVEL
+#define FIRST_INTERFACE INTERFACE_IN_MENU
 #define INTERFACE_MAX_NUM 10
 
 typedef enum GAMEWINDOW_STATE {
@@ -21,8 +21,6 @@ typedef struct  GameWindow {
     ALLEGRO_BITMAP* icon;
     // sound
     ALLEGRO_SAMPLE* background_sample;
-    ALLEGRO_SAMPLE_INSTANCE* background_music;
-    bool Mute;
     // state
     GAMEWINDOW_STATE state;
     // event
@@ -39,11 +37,7 @@ void delete_GameWindow(GameWindow* self);
 void GameWindow_draw(GameWindow* self);
 GAMEWINDOW_STATE GameWindow_update(GameWindow* self);
 void GameWindow_event_record(GameWindow* self, ALLEGRO_EVENT event);
-void GameWindow_set_mute(bool mute);
-bool GameWindow_get_mute();
-void GameWindow_toggle_mute();
 
-static void _GameWindow_load(GameWindow* self);
 static Interface* _create_Interface(CHILD_INFO type_info);
 static void _GameWindow_deal_event(GameWindow* self);
 

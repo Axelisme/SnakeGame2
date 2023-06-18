@@ -67,6 +67,11 @@ typedef struct Interface {
     void (*deleter) (struct Interface*);
 } Interface;
 
+extern ALLEGRO_SAMPLE* died_sound;
+
+void InterfaceClass_init();
+void InterfaceClass_destroy();
+
 Interface* new_Interface();
 void Interface_init(Interface* self);
 void Interface_destroy(Interface* self);

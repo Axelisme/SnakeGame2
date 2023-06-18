@@ -17,6 +17,22 @@ INTERFACE_INFO _fall_back_info() {
     return info;
 }
 
+static const char DIED_SOUND_PATH[] = "data/music/died.wav";
+ALLEGRO_SAMPLE* died_sound = nullptr;
+
+void InterfaceClass_init() {
+    InterfaceClass_destroy();
+    show_msg("InterfaceClass_init");
+    died_sound = al_load_sample(DIED_SOUND_PATH);
+    if (!died_sound)
+        raise_warn("fail to load died sound");
+}
+void InterfaceClass_destroy() {
+    show_msg("InterfaceClass_destroy");
+    if (died_sound) al_destroy_sample(died_sound);
+    died_sound = nullptr;
+}
+
 Interface* new_Interface() {
     Interface* interface = (Interface*)al_calloc(1,sizeof(Interface));
     Interface_init(interface);

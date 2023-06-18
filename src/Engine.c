@@ -45,7 +45,7 @@ PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
 
     // deal with overlaps
     _dealWithOverlap(self, &map, &overlaps);
-    if (self->state != PLAYING) goto return_point;
+    if (!self->snake->Alive) goto return_point;
 
     // check if entities are falling
     keyLock |= _canShift(self->snake, self->gravity, &map, &shiftEs);
@@ -57,7 +57,7 @@ PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
 
     // deal with overlaps
     _dealWithOverlap(self, &map, &overlaps);
-    if (self->state != PLAYING) goto return_point;
+    if (!self->snake->Alive) goto return_point;
 
     // perform operation if not key locked
     if (keyLock && op != OP_NONE) show_msg("key locked");

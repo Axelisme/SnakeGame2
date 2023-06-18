@@ -265,7 +265,7 @@ static void Level_load_default_level(LevelView* self) {
 static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     // get level path
     char level_path[MAX_PATH_LEN];
-    sprintf(level_path, "%s/L%d", LEVEL_PATH, level_id);
+    sprintf(level_path, "%s/Level%d", LEVEL_PATH, level_id);
     show_msg("Load level:");
     show_msg(level_path);
 
@@ -279,13 +279,13 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
 
     // read map info
     Pos map_size;
-    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e", &map_size.y, &map_size.x);
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%lf %lf", &map_size.y, &map_size.x);
     Pos view_UL, view_LR;
-    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e", &view_UL.y, &view_LR.y);
-    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e", &view_UL.x, &view_LR.x);
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%lf %lf", &view_UL.y, &view_LR.y);
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%lf %lf", &view_UL.x, &view_LR.x);
     ShiftWindow_init(&self->shift_window, map_size, view_UL, view_LR);
     Pos window_size;
-    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e", &window_size.y, &window_size.x);
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%lf %lf", &window_size.y, &window_size.x);
     SW_window_resize(&self->shift_window, window_size);
     Direction gravity;
     readline(fp, line, MAX_LINE_LEN); sscanf(line, "%d", &gravity);
@@ -310,17 +310,17 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     }
     Pos pos;
     Direction dir, next_dir = DIRECTION_UP;
-    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e %d", &pos.y, &pos.x, &dir);
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%lf %lf %d", &pos.y, &pos.x, &dir);
     BodyObject head; BodyObject_init(&head, pos, HEAD, dir, next_dir);
     ObjV_push_back(&bodies, (Object*)&head); Object_destroy((Object*)&head);
     next_dir = dir;
     for (int i=1; i < body_num-1; i++) {
-        readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e %d", &pos.y, &pos.x, &dir);
+        readline(fp, line, MAX_LINE_LEN); sscanf(line, "%lf %lf %d", &pos.y, &pos.x, &dir);
         BodyObject body; BodyObject_init(&body, pos, BODY, dir, next_dir);
         ObjV_push_back(&bodies, (Object*)&body); Object_destroy((Object*)&body);
         next_dir = dir;
     }
-    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e %d", &pos.y, &pos.x, &dir);
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%lf %lf %d", &pos.y, &pos.x, &dir);
     BodyObject tail; BodyObject_init(&tail, pos, TAIL, dir, next_dir);
     ObjV_push_back(&bodies, (Object*)&tail); Object_destroy((Object*)&tail);
     EntityList_insert(&self->snakes, (Entity*)new_Snake(&bodies)); ObjectVector_destroy(&bodies);
@@ -348,6 +348,9 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     // close file
     fclose(fp);
 
+    // set map center
+    SW_setCenter(&self->shift_window, Level_get_view_center(self));
+
     // set map engine
     MapEngine_init(&self->engine, map_size, &self->entity_list, self->snakes.front);
     ME_setGravity(&self->engine, gravity);
@@ -364,7 +367,7 @@ static Entity* _create_Entity(FILE* fp) {
     Direction dir;
     ObjectVector objs; ObjectVector_init(&objs);
     for (int i=0; i < obj_num; i++) {
-        readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e %d", &pos.y, &pos.x, &dir);
+        readline(fp, line, MAX_LINE_LEN); sscanf(line, "%lf %lf %d", &pos.y, &pos.x, &dir);
         Object* obj = object_creator(pos);
         obj->dir = dir;
         ObjV_push_back(&objs, obj);

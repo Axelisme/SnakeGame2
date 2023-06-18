@@ -47,7 +47,7 @@ static ALLEGRO_BITMAP* BodyObject_get_Image(BodyObject* self, Direction* dir) {
     Direction to = self->to;
     switch (self->type) {
         case HEAD:
-            *dir = to;
+            *dir = from;
             return Oself->Image;
         case TAIL:
             *dir = to;

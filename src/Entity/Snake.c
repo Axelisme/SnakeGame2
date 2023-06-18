@@ -79,8 +79,8 @@ void Snake_grow(Snake* self, EntityMap* map, EntityArray* overlays) {
     }
     Entity_unmark(Eself, map);
     tail->type = BODY;
-    BodyObject* new_tail = new_BodyObject(new_tail_pos, TAIL, new_tail_to, new_tail_to);
-    ObjV_push_back(&Eself->objList, (Object*) new_tail);
-    self->tail = new_tail;
+    BodyObject new_tail; BodyObject_init(&new_tail, new_tail_pos, TAIL, new_tail_to, new_tail_to);
+    ObjV_push_back(&Eself->objList, (Object*) &new_tail); BodyObject_destroy(&new_tail);
+    self->tail = (BodyObject*) ObjV_get(&Eself->objList, -1);
     Entity_mark(Eself, map, overlays);
 }

@@ -36,6 +36,7 @@ void EntityList_insert(EntityList* self, Entity* entity) {
             cur->prev = entity;
         }
     }
+    self->size++;
 }
 void EntityList_remove(EntityList* self, Entity* entity) {
     if (entity->prev != NULL)

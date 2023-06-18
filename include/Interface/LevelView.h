@@ -6,7 +6,7 @@
 #include "Utility/ShiftWindow.h"
 #include "Engine.h"
 #define MAX_LINE_LEN 100
-#define UPDATE_ENGINE_PERIOD 3
+#define UPDATE_ENGINE_PERIOD 1
 #define DIED_STEP 4
 #define BACKGROUND_MOVE_SPEED make_Pos(1, 0.5)
 

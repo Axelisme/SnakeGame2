@@ -7,6 +7,6 @@
 typedef Entity Box;
 
 Box* new_Box(ObjectVector* objs);
-void Box_init(Box* self, ObjectVector* objs);
+static void Box_init(Box* self, ObjectVector* objs);
 
 #endif // BOX_H

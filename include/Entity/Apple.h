@@ -7,7 +7,7 @@
 typedef Entity Apple;
 
 Apple* new_Apple(Pos pos);
-void Apple_init(Apple* self, Pos pos);
+static void Apple_init(Apple* self, Pos pos);
 
 static void Apple_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps);
 

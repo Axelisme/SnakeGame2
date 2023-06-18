@@ -5,6 +5,7 @@
 #include "Entity/Stone.h"
 #include "Entity/Box.h"
 #include "Entity/Ground.h"
+#include "Entity/Spike.h"
 #include "Entity/Snake.h"
 
 static const char DIED_IMAGE_PATH[] = "data/image/menu/died.png";
@@ -212,12 +213,19 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
 
     // set ground
     ObjectVector grounds; ObjectVector_init(&grounds);
-    GroundObject ground;
     for (int i=0; i < map_size.x; i++) {
-        GroundObject_init(&ground, make_Pos(map_size.y-1,i));
+        GroundObject ground; GroundObject_init(&ground, make_Pos(map_size.y-1,i));
         ObjV_push_back(&grounds, (Object*)&ground); Object_destroy((Object*)&ground);
     }
     EntityList_insert(&self->entity_list, (Entity*)new_Ground(&grounds)); ObjectVector_destroy(&grounds);
+
+    // set spike
+    ObjectVector spikes; ObjectVector_init(&spikes);
+    for (int i=6; i < 8; i++) {
+        GroundObject spike; SpikeObject_init(&spike, make_Pos(map_size.y-2,i));
+        ObjV_push_back(&spikes, (Object*)&spike); Object_destroy((Object*)&spike);
+    }
+    EntityList_insert(&self->entity_list, (Entity*)new_Spike(&spikes)); ObjectVector_destroy(&spikes);
 
     // set box
     ObjectVector boxs; ObjectVector_init(&boxs);

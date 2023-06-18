@@ -6,7 +6,7 @@ Box* new_Box(ObjectVector* objs) {
     Box_init(box, objs);
     return box;
 }
-void Box_init(Box* self, ObjectVector* objs) {
+static void Box_init(Box* self, ObjectVector* objs) {
     Entity* Eself = (Entity*)self;
     Entity_init(Eself, objs);
     show_msg("Box_init");

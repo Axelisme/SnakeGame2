@@ -7,8 +7,8 @@
 typedef Entity Edge;
 
 Edge* new_Edge(ObjectVector* objs);
-void Edge_init(Edge* self, ObjectVector* objs);
+static void Edge_init(Edge* self, ObjectVector* objs);
 
-void Edge_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps);
+static void Edge_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps);
 
 #endif // EDGE_H

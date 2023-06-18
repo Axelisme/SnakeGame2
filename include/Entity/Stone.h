@@ -7,6 +7,6 @@
 typedef Entity Stone;
 
 Stone* new_Stone(Pos pos);
-void Stone_init(Stone* self, Pos pos);
+static void Stone_init(Stone* self, Pos pos);
 
 #endif // STONE_H

@@ -7,7 +7,7 @@ Apple* new_Apple(Pos pos) {
     Apple_init(apple, pos);
     return apple;
 }
-void Apple_init(Apple* self, Pos pos) {
+static void Apple_init(Apple* self, Pos pos) {
     show_msg("Apple_init");
     // Inherited from Entity
     Entity* Eself = (Entity*) self;

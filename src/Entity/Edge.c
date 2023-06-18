@@ -7,7 +7,7 @@ Edge* new_Edge(ObjectVector* objs) {
     Edge_init(edge, objs);
     return edge;
 }
-void Edge_init(Edge* self, ObjectVector* objs) {
+static void Edge_init(Edge* self, ObjectVector* objs) {
     // Inherited from Entity
     Entity* Eself = (Entity*) self;
     Entity_init(Eself, objs);
@@ -17,7 +17,7 @@ void Edge_init(Edge* self, ObjectVector* objs) {
     Eself->trigger = Edge_trigger;
 }
 
-void Edge_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps) {
+static void Edge_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps) {
     Edge* self = (Edge*) Eself;
     show_msg("Edge_trigger: delete activators");
     EntityArray* activators = (EntityArray*) self->activators;

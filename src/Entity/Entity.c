@@ -60,7 +60,6 @@ void Entity_addObject(Entity* self, Object* obj) {
     ObjV_push_back(&self->objList, obj);
 }
 void Entity_draw(Entity* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer) {
-    if (!self->Alive) return;
     for (int i = 0; i < len(&self->objList); i++) {
         Object* obj = ObjV_get(&self->objList, i);
         obj->draw(obj, sw, backbuffer);

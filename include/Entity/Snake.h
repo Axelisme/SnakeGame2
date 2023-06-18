@@ -14,8 +14,8 @@ typedef struct Snake {
 } Snake;
 
 Snake* new_Snake(ObjectVector* objs);
-void Snake_init(Snake* self, ObjectVector* objs);
-void Snake_destroy(Snake* self);
+static void Snake_init(Snake* self, ObjectVector* objs);
+static void Snake_destroy(Snake* self);
 void delete_Snake(Entity* Eself);
 
 Pos Snake_next_pos(Snake* self, Direction dir);

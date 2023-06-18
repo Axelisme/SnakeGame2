@@ -7,7 +7,7 @@ Snake* new_Snake(ObjectVector* objs) {
     Snake_init(snake, objs);
     return snake;
 }
-void Snake_init(Snake* self, ObjectVector* objs) {
+static void Snake_init(Snake* self, ObjectVector* objs) {
     show_msg("Snake_init");
     // Inherited from Entity
     Entity* Eself = (Entity*) self;
@@ -20,7 +20,7 @@ void Snake_init(Snake* self, ObjectVector* objs) {
     self->tail = (BodyObject*) ObjV_get(&Eself->objList, -1);
     self->heading = self->head->to;
 }
-void Snake_destroy(Snake* self) {
+static void Snake_destroy(Snake* self) {
     show_msg("Snake_destroy");
     Entity* Eself = (Entity*) self;
     Entity_destroy(Eself);

@@ -6,7 +6,7 @@ Stone* new_Stone(Pos pos) {
     Stone_init(stone, pos);
     return stone;
 }
-void Stone_init(Stone* self, Pos pos) {
+static void Stone_init(Stone* self, Pos pos) {
     Entity* Eself = (Entity*)self;
     ObjectVector stones; ObjectVector_init(&stones);
     StoneObject stone; StoneObject_init(&stone, pos);

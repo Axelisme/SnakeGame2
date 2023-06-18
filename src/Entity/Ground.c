@@ -6,7 +6,7 @@ Ground* new_Ground(ObjectVector* objs) {
     Ground_init(ground, objs);
     return ground;
 }
-void Ground_init(Ground* self,ObjectVector* objs) {
+static void Ground_init(Ground* self,ObjectVector* objs) {
     // Inherited from Entity
     Entity* Eself = (Entity*) self;
     Entity_init(Eself, objs);

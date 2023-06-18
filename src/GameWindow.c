@@ -5,6 +5,7 @@
 #include "Interface/Interface.h"
 #include "Interface/Menu/InMenu.h"
 #include "Interface/Menu/StartMenu.h"
+#include "Interface/Menu/MusicMenu.h"
 #include "Interface/Menu/GuideMenu.h"
 #include "Interface/Menu/LevelMenu.h"
 #include "Interface/Menu/LevelStart.h"
@@ -14,7 +15,6 @@
 const char GAMEWINDOW_TITLE[] = "SnakeGame2";
 const char BACKGROUND_SOUND_PATH[] = "data/music/level_bgm.ogg";
 const char GAME_ICON_PATH[] = "data/image/icon.png";
-static bool Mute = INIT_MUTE;
 
 GameWindow* new_GameWindow() {
     GameWindow* self = (GameWindow*)al_calloc(1,sizeof(GameWindow));
@@ -150,6 +150,9 @@ static Interface* _create_Interface(CHILD_INFO info) {
             break;
         case INTERFACE_START_MENU:
             return (Interface*)new_StartMenu();
+            break;
+        case INTERFACE_MUSIC_MENU:
+            return (Interface*)new_MusicMenu();
             break;
         case INTERFACE_GUIDE_MENU:
             return (Interface*)new_GuideMenu();

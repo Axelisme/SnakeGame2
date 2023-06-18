@@ -135,6 +135,7 @@ static void Level_event_recorder(Interface* Iself, ALLEGRO_EVENT event) {
         case ALLEGRO_KEY_G:
         case ALLEGRO_KEY_R:
         case ALLEGRO_KEY_S:
+        case ALLEGRO_KEY_M:
         case ALLEGRO_KEY_ESCAPE:
             Iself->event = event;
             break;
@@ -167,6 +168,9 @@ static void Level_event_dealer(Interface* Iself) {
                 break;
             case ALLEGRO_KEY_S:
                 Level_deal_win(self);
+                break;
+            case ALLEGRO_KEY_M:
+                Interface_set_stop(Iself, INTERFACE_MUSIC_MENU);
                 break;
             case ALLEGRO_KEY_G:
                 Interface_set_stop(Iself, INTERFACE_GUIDE_MENU);

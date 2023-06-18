@@ -41,7 +41,7 @@ static void _StartMenu_enter_state(StartMenu* self) {
             Interface_set_stop(Iself, INTERFACE_LEVEL_MENU);
             break;
         case START_MENU_STATE_MUSIC:
-            SE_toggle_mute();
+            Interface_set_stop(Iself, INTERFACE_MUSIC_MENU);
             break;
         case START_MENU_STATE_GUIDE:
             Interface_set_stop(Iself, INTERFACE_GUIDE_MENU);

@@ -15,7 +15,6 @@ void MultiMenu_init(MultiMenu* self, const char** image_paths, int image_num) {
     // inherited from Interface
     Iself->info.type = INTERFACE_MULTI;
     Iself->draw = MultiMenu_draw;
-    Iself->update = MultiMenu_update;
     Iself->event_record = MultiMenu_event_record;
     Iself->event_dealer = MultiMenu_deal_event;
     Iself->deleter = delete_MultiMenu;
@@ -55,36 +54,6 @@ void MultiMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
     // draw image
     ALLEGRO_BITMAP* image = _MultiMenu_current_image(self);
     if (image) draw_image(image, backbuffer, DIRECTION_UP, NO_TRANSPARENT);
-    else
-        raise_warn("try to draw NULL image");
-}
-INTERFACE_INFO MultiMenu_update(Interface* Iself) {
-    MultiMenu* self = (MultiMenu*)Iself;
-    // check valid
-    if (self == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
-    // update by state
-    switch (Iself->info.state) {
-        case INTERFACE_INITIALING:
-            if (Interface_light_up(Iself))
-                Iself->info.state = INTERFACE_RUNNING;
-            break;
-        case INTERFACE_STOP:
-            Iself->info.state = INTERFACE_INITIALING;
-            break;
-        case INTERFACE_RUNNING:
-            Iself->event_dealer(Iself);
-            break;
-        case INTERFACE_EXITING:
-            if (Interface_light_down(Iself))
-                Iself->info.state = (Iself->should_kill)? INTERFACE_DIED: INTERFACE_STOP;
-            break;
-        case INTERFACE_DIED:
-            break;
-        default:
-            raise_err("unknown interface state");
-            break;
-    }
-    return Iself->info;
 }
 void MultiMenu_event_record(Interface* Iself, ALLEGRO_EVENT event) {
     MultiMenu* self = (MultiMenu*)Iself;

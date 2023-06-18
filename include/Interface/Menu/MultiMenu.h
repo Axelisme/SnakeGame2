@@ -20,7 +20,6 @@ void MultiMenu_init(MultiMenu* self, const char** image_paths, int image_num);
 void MultiMenu_destroy(MultiMenu* self);
 void delete_MultiMenu(Interface* Iself);
 void MultiMenu_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer);
-INTERFACE_INFO MultiMenu_update(Interface* Iself);
 void MultiMenu_event_record(Interface* Iself, ALLEGRO_EVENT event);
 void MultiMenu_deal_event(Interface* Iself);
 

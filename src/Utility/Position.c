@@ -49,3 +49,6 @@ Direction POS_TO_DIR(const Pos pos) {
         else return DIRECTION_UP;
     }
 }
+Pos POS_TO_PIXEL(const Pos pos, ALLEGRO_BITMAP* bitmap) {
+    return make_Pos(pos.y * al_get_bitmap_height(bitmap), pos.x * al_get_bitmap_width(bitmap));
+}

@@ -2,6 +2,7 @@
 #define POSITION_H
 
 #include <stdbool.h>
+#include "global.h"
 #include "Utility/Direction.h"
 
 // position
@@ -22,5 +23,6 @@ Pos mul_const(const Pos A, const pos_t B);
 Pos neighbor_pos(const Pos pos, const Direction dir);
 Pos DIR_TO_POS(const Direction dir);
 Direction POS_TO_DIR(const Pos pos);
+Pos POS_TO_PIXEL(const Pos pos, ALLEGRO_BITMAP* bitmap);
 
 #endif // POSITION_H

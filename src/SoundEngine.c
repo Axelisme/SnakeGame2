@@ -45,6 +45,14 @@ static void SE_clear_sound() {
         al_destroy_sample_instance(sample_instances[i]);
     sample_instance_num = 0;
 }
+void SE_set_volume(float volume) {
+    if (volume<0) volume = 0;
+    if (volume>1) volume = 1;
+    al_set_mixer_gain(al_get_default_mixer(), volume);
+}
+float SE_get_volume() {
+    return al_get_mixer_gain(al_get_default_mixer());
+}
 void SE_set_mute(bool mute)  {Mute = mute;}
 bool SE_get_mute()           {return Mute;}
 void SE_toggle_mute()        {Mute = !Mute;}

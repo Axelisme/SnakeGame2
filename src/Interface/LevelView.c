@@ -7,7 +7,8 @@
 #include "Entity/Ground.h"
 #include "Entity/Snake.h"
 
-const char DIED_IMAGE_PATH[] = "data/image/menu/died.png";
+static const char DIED_IMAGE_PATH[] = "data/image/menu/died.png";
+static const char BACKGROUND_IMAGE_PATH[] = "data/image/background.png";
 
 LevelView* new_Level(LEVEL_ID level_id) {
     LevelView* level = (LevelView*)al_calloc(1,sizeof(LevelView));
@@ -30,6 +31,7 @@ void Level_init(LevelView* self, LEVEL_ID level_id) {
     // Info
     self->level_id = level_id;
     self->update_engine_period = UPDATE_ENGINE_PERIOD;
+    self->background_move_speed = BACKGROUND_MOVE_SPEED;
     // state
     self->PState = PLAYING;
     self->update_engine_count = 0;
@@ -40,6 +42,9 @@ void Level_init(LevelView* self, LEVEL_ID level_id) {
     EntityList_init(&self->snakes);
     // Display
     self->died_image = al_load_bitmap(DIED_IMAGE_PATH);
+    self->background = al_load_bitmap(BACKGROUND_IMAGE_PATH);
+    if (!self->died_image) raise_warn("Level_init: failed to load died image");
+    if (!self->background) raise_warn("Level_init: failed to load background image");
     // Engine
     Level_loader(self, level_id);
 }
@@ -54,7 +59,8 @@ void Level_destroy(LevelView* self) {
     EntityList_destroy(&self->snakes);
     // Display
     ShiftWindow_destroy(&self->shift_window);
-    al_destroy_bitmap(self->died_image);
+    if (self->died_image) al_destroy_bitmap(self->died_image);
+    if (self->background) al_destroy_bitmap(self->background);
     // Inherited from Interface
     Interface* Iself = (Interface*)self;
     Interface_destroy(Iself);
@@ -71,6 +77,8 @@ static void Level_draw(Interface* Iself, ALLEGRO_BITMAP* backbuffer) {
         raise_warn("Level_draw: self is nullptr"); return;}
     // Inherited from Interface
     Interface_draw(Iself, backbuffer);
+    // Draw background
+    SW_draw_background(&self->shift_window, backbuffer, self->background, self->background_move_speed);
     // Draw level
     MapEngine_draw(&self->engine, &self->shift_window, backbuffer);
     // Draw Died
@@ -200,7 +208,7 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     show_msg("TODO: Load level");
 
     // map size
-    Pos map_size = make_Pos(10,10);
+    Pos map_size = make_Pos(10,20);
 
     // set temp entity array
     EntityArray entity_array; EntityArray_init(&entity_array);
@@ -208,8 +216,8 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     // set ground
     ObjectVector grounds; ObjectVector_init(&grounds);
     GroundObject ground;
-    for (int i=0; i < map_size.y; i++) {
-        GroundObject_init(&ground, make_Pos(map_size.x-1,i));
+    for (int i=0; i < map_size.x; i++) {
+        GroundObject_init(&ground, make_Pos(map_size.y-1,i));
         ObjV_push_back(&grounds, (Object*)&ground); Object_destroy((Object*)&ground);
     }
     EntityArray_push_back(&entity_array, (Entity*)new_Ground(&grounds)); ObjectVector_destroy(&grounds);
@@ -250,9 +258,9 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     EntityList_from_array(&self->entity_list, &entity_array); EntityArray_destroy(&entity_array);
 
     // set shift window
-    ShiftWindow_init(&self->shift_window, map_size, make_Pos(0,0), map_size);
-    Pos window_size = make_Pos(9,9);
-    //SW_window_resize(&self->shift_window, window_size);
+    ShiftWindow_init(&self->shift_window, map_size, make_Pos(0,0), make_Pos(10,20));
+    Pos window_size = make_Pos(10, 10);
+    SW_window_resize(&self->shift_window, window_size);
     SW_setCenter(&self->shift_window, Level_get_view_center(self));
 
     // set map engine

@@ -13,8 +13,8 @@ typedef struct ShiftWindow {
     Pos view_LR;
     // shift window
     Pos window_size;
-    Pos upperLeft;
-    Pos lowerRight;
+    Pos window_UL;
+    Pos window_LR;
 } ShiftWindow;
 
 void ShiftWindow_init(ShiftWindow* self, Pos total_size, Pos view_UL, Pos view_LR);
@@ -25,5 +25,6 @@ void SW_setCenter(ShiftWindow* self, Pos center);
 bool SW_isInWindow(ShiftWindow* self, Pos pos, pos_t margin);
 Pos  SW_getShiftPos(ShiftWindow* self, Pos pos);
 Pos  SW_getPixelPos(ShiftWindow* self, Pos pos, ALLEGRO_BITMAP* backbuffer);
+void SW_draw_background(ShiftWindow* self, ALLEGRO_BITMAP* backbuffer, ALLEGRO_BITMAP* background, Pos scale);
 
 #endif // SHIFTWINDOW_H

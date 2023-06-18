@@ -6,6 +6,7 @@
 #include "Engine.h"
 #define UPDATE_ENGINE_PERIOD 6
 #define DIED_STEP 4
+#define BACKGROUND_MOVE_SPEED make_Pos(1, 0.5)
 
 #define LEVEL_NUM 4
 typedef enum LEVEL_ID {
@@ -21,6 +22,7 @@ typedef struct LevelView {
     // Info
     LEVEL_ID level_id;
     int update_engine_period;
+    Pos background_move_speed;
     // state
     PLAYER_STATE PState;
     int update_engine_count;
@@ -28,6 +30,7 @@ typedef struct LevelView {
     int died_image_opacity_step;
     // Display
     ShiftWindow shift_window;
+    ALLEGRO_BITMAP* background;
     ALLEGRO_BITMAP* died_image;
     // Entity
     EntityList entity_list;

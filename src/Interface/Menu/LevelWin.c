@@ -1,7 +1,7 @@
 
 #include "Interface/Menu/LevelWin.h"
 
-const char LEVEL_WIN_IMAGE_PATH[] = "data/image/menu/Level_win.png";
+const char LEVEL_WIN_IMAGE_PATH[] = "data/image/menu/win.png";
 
 LevelWin* new_LevelWin() {
     LevelWin* self = new_SingleMenu(LEVEL_WIN_IMAGE_PATH);

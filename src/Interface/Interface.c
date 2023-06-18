@@ -60,12 +60,14 @@ void Interface_draw(Interface* self, ALLEGRO_BITMAP* backbuffer) {
     if (backbuffer == nullptr) {
         raise_err("try to draw interface on NULL backbuffer");return;}
     if (self->info.state == INTERFACE_DIED) return;
+    ALLEGRO_BITMAP* old_target = al_get_target_bitmap();
     al_set_target_bitmap(backbuffer);
     unsigned char r, g, b; al_unmap_rgb(self->background_color, &r, &g, &b);
     r *= self->background_light/255.0;
     g *= self->background_light/255.0;
     b *= self->background_light/255.0;
     al_clear_to_color(al_map_rgb(r, g, b));
+    al_set_target_bitmap(old_target);
 }
 INTERFACE_INFO Interface_update(Interface* self) {
     if (self == nullptr) {raise_warn("try to update NULL interface");return _fall_back_info();}
@@ -136,6 +138,8 @@ bool Interface_light_down(Interface* self) {
 void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction direction, unsigned char opacity) {
     if (image == nullptr) {
         raise_warn("try to draw NULL image");return;}
+    // set target
+    ALLEGRO_BITMAP* old_target = al_get_target_bitmap();
     al_set_target_bitmap(backbuffer);
     // get screen size
     const float screen_w = al_get_bitmap_width(backbuffer);
@@ -160,6 +164,8 @@ void draw_image(ALLEGRO_BITMAP* image, ALLEGRO_BITMAP* backbuffer, Direction dir
     const ALLEGRO_COLOR mask = al_map_rgba_f(1, 1, 1, opacity/255.0);
     // draw
     al_draw_tinted_scaled_rotated_bitmap(image, mask, img_center_x, img_center_y, screen_center_x, screen_center_y, scale_x, scale_y, angle, 0);
+    // restore target
+    al_set_target_bitmap(old_target);
 }
 
 

@@ -4,7 +4,7 @@
 #include "Interface/Interface.h"
 #include "Utility/ShiftWindow.h"
 #include "Engine.h"
-#define UPDATE_ENGINE_PERIOD 6
+#define UPDATE_ENGINE_PERIOD 3
 #define DIED_STEP 4
 #define BACKGROUND_MOVE_SPEED make_Pos(1, 0.5)
 
@@ -53,6 +53,7 @@ static void Level_deal_lose(LevelView* self);
 static bool Level_update_counter(LevelView* self);
 static bool Level_update_died_opacity(LevelView* self);
 static Pos Level_get_view_center(LevelView* self);
+static void Level_load_default_level(LevelView* self);
 static void Level_loader(LevelView* self, LEVEL_ID level_id);
 
 #endif // LEVEL_H

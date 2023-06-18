@@ -10,7 +10,7 @@ void BodyObject_init(BodyObject* self, Pos pos, BodyType type, Direction from, D
     // Inherited from Object
     Object* Oself = (Object*)self;
     Object_init(Oself, pos);
-    Oself->Image = nullptr;
+    Oself->Image = snake_head_img;
     Oself->draw = BodyObject_draw;
     Oself->copy = BodyObject_copy;
     Oself->deleter = delete_BodyObject;
@@ -42,12 +42,13 @@ static Object* BodyObject_copy(Object* Oself) {
     return (Object*)new_obj;
 }
 static ALLEGRO_BITMAP* BodyObject_get_Image(BodyObject* self, Direction* dir) {
+    Object* Oself = (Object*)self;
     Direction from = self->from;
     Direction to = self->to;
     switch (self->type) {
         case HEAD:
             *dir = to;
-            return snake_head_img;
+            return Oself->Image;
         case TAIL:
             *dir = to;
             return snake_tail_img;

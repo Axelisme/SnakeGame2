@@ -4,6 +4,7 @@
 #include "Entity/Apple.h"
 #include "Entity/Stone.h"
 #include "Entity/Box.h"
+#include "Entity/End.h"
 #include "Entity/Ground.h"
 #include "Entity/Spike.h"
 #include "Entity/Snake.h"
@@ -204,10 +205,7 @@ static Pos Level_get_view_center(LevelView* self) {
     Pos head = snake->head->object.pos;
     return add_const(head, 0.5);
 }
-static void Level_loader(LevelView* self, LEVEL_ID level_id) {
-    // TODO: Load level, use temporary solution
-    show_msg("TODO: Load level");
-
+static void Level_load_default_level(LevelView* self) {
     // map size
     Pos map_size = make_Pos(10,20);
 
@@ -226,6 +224,9 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
         ObjV_push_back(&spikes, (Object*)&spike); Object_destroy((Object*)&spike);
     }
     EntityList_insert(&self->entity_list, (Entity*)new_Spike(&spikes)); ObjectVector_destroy(&spikes);
+
+    // set end
+    EntityList_insert(&self->entity_list, (Entity*)new_End(make_Pos(map_size.y-2,map_size.x-2)));
 
     // set box
     ObjectVector boxs; ObjectVector_init(&boxs);
@@ -264,4 +265,11 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
 
     // set map engine
     MapEngine_init(&self->engine, map_size, &self->entity_list, self->snakes.front);
+}
+static void Level_loader(LevelView* self, LEVEL_ID level_id) {
+    // TODO: Load level, use temporary solution
+    show_msg("TODO: Load level");
+
+    // use default level
+    Level_load_default_level(self);
 }

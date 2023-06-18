@@ -13,6 +13,7 @@ extern ALLEGRO_BITMAP* button_img;
 extern ALLEGRO_BITMAP* end_img;
 extern ALLEGRO_BITMAP* ground_img;
 extern ALLEGRO_BITMAP* snake_head_img;
+extern ALLEGRO_BITMAP* dead_snake_head_img;
 extern ALLEGRO_BITMAP* snake_body_straight_img;
 extern ALLEGRO_BITMAP* snake_body_turn_img;
 extern ALLEGRO_BITMAP* snake_tail_img;

@@ -18,6 +18,7 @@ static void Snake_init(Snake* self, ObjectVector* objs);
 static void Snake_destroy(Snake* self);
 void delete_Snake(Entity* Eself);
 
+static void Snake_draw(Entity* Eself, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer);
 Pos Snake_next_pos(Snake* self, Direction dir);
 void Snake_move(Snake* self, Direction dir);
 void Snake_grow(Snake* self, EntityMap* map, EntityArray* overlays);

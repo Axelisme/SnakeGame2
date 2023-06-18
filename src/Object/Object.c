@@ -9,6 +9,7 @@ static const char button_img_path[]              = "data/image/button.png";
 static const char end_img_path[]                 = "data/image/end.png";
 static const char ground_img_path[]              = "data/image/ground.png";
 static const char snake_head_img_path[]          = "data/image/snakeHead.png";
+static const char dead_snake_head_img_path[]     = "data/image/deadSnakeHead.png";
 static const char snake_body_straight_img_path[] = "data/image/snakeBodyStraight.png";
 static const char snake_body_turn_img_path[]     = "data/image/snakeBodyTurn.png";
 static const char snake_tail_img_path[]          = "data/image/snakeTail.png";
@@ -21,6 +22,7 @@ ALLEGRO_BITMAP* button_img = nullptr;
 ALLEGRO_BITMAP* end_img = nullptr;
 ALLEGRO_BITMAP* ground_img = nullptr;
 ALLEGRO_BITMAP* snake_head_img = nullptr;
+ALLEGRO_BITMAP* dead_snake_head_img = nullptr;
 ALLEGRO_BITMAP* snake_body_straight_img = nullptr;
 ALLEGRO_BITMAP* snake_body_turn_img = nullptr;
 ALLEGRO_BITMAP* snake_tail_img = nullptr;
@@ -37,6 +39,7 @@ void ObjectClass_init() {
     end_img = al_load_bitmap(end_img_path);
     ground_img = al_load_bitmap(ground_img_path);
     snake_head_img = al_load_bitmap(snake_head_img_path);
+    dead_snake_head_img = al_load_bitmap(dead_snake_head_img_path);
     snake_body_straight_img = al_load_bitmap(snake_body_straight_img_path);
     snake_body_turn_img = al_load_bitmap(snake_body_turn_img_path);
     snake_tail_img = al_load_bitmap(snake_tail_img_path);
@@ -49,6 +52,7 @@ void ObjectClass_init() {
     if (!end_img)                   raise_warn("cat not load end_img!");
     if (!ground_img)                raise_warn("cat not load ground_img!");
     if (!snake_head_img)            raise_warn("cat not load snake_head_img!");
+    if (!dead_snake_head_img)       raise_warn("cat not load dead_snake_head_img!");
     if (!snake_body_straight_img)   raise_warn("cat not load snake_body_straight_img!");
     if (!snake_body_turn_img)       raise_warn("cat not load snake_body_turn_img!");
     if (!snake_tail_img)            raise_warn("cat not load snake_tail_img!");
@@ -64,6 +68,7 @@ void ObjectClass_destroy() {
     if (end_img) al_destroy_bitmap(end_img);
     if (ground_img) al_destroy_bitmap(ground_img);
     if (snake_head_img) al_destroy_bitmap(snake_head_img);
+    if (dead_snake_head_img) al_destroy_bitmap(dead_snake_head_img);
     if (snake_body_straight_img) al_destroy_bitmap(snake_body_straight_img);
     if (snake_body_turn_img) al_destroy_bitmap(snake_body_turn_img);
     if (snake_tail_img) al_destroy_bitmap(snake_tail_img);
@@ -76,6 +81,7 @@ void ObjectClass_destroy() {
     end_img = nullptr;
     ground_img = nullptr;
     snake_head_img = nullptr;
+    dead_snake_head_img = nullptr;
     snake_body_straight_img = nullptr;
     snake_body_turn_img = nullptr;
     snake_tail_img = nullptr;

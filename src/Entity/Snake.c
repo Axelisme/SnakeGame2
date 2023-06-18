@@ -15,6 +15,7 @@ static void Snake_init(Snake* self, ObjectVector* objs) {
     Eself->type = E_SNAKE;
     Eself->isFixed = false;
     Eself->canOverlap = false;
+    Eself->draw = Snake_draw;
     // Properties
     self->head = (BodyObject*) ObjV_get(&Eself->objList, 0);
     self->tail = (BodyObject*) ObjV_get(&Eself->objList, -1);
@@ -33,6 +34,12 @@ void delete_Snake(Entity* Eself) {
     al_free(self);
 }
 
+static void Snake_draw(Entity* Eself, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer) {
+    Snake* self = (Snake*) Eself;
+    if (!Eself->Alive)
+        self->head->object.Image = dead_snake_head_img;
+    Entity_draw(Eself, sw, backbuffer);
+}
 Pos Snake_next_pos(Snake* self, Direction dir) {
     return neighbor_pos(self->head->object.pos, dir);
 }

@@ -6,8 +6,8 @@
 
 typedef Entity End;
 
-End* new_End(Pos pos);
-static void End_init(End* self, Pos pos);
+End* new_End(ObjectVector* objs);
+static void End_init(End* self, ObjectVector* objs);
 
 static void End_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps);
 

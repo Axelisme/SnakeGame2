@@ -27,10 +27,10 @@ void Entity_init(Entity* self, ObjectVector* objs) {
     self->next = NULL;
     // method
     self->reset = Entity_status_reset;
-    self->addObject = Entity_addObject;
     self->draw = Entity_draw;
     self->shift = Entity_shift;
     self->trigger = Entity_trigger;
+    self->setter = Entity_setter;
     self->deleter = delete_Entity;
 }
 void Entity_destroy(Entity* self) {
@@ -75,6 +75,9 @@ void Entity_shift(Entity* self, Direction dir) {
 void Entity_trigger(Entity* self, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps) {
     self->reset(self);
     self->Alive = false;
+}
+void Entity_setter(Entity* self, FILE* fp) {
+    return;
 }
 bool Entity_mark(Entity* self, EntityMap* map, EntityArray* overlaps) {
     if (!self->Alive) return false;

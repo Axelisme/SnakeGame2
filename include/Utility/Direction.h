@@ -2,7 +2,7 @@
 #define DIRECTION_H
 
 typedef enum Direction {
-    DIRECTION_UP,
+    DIRECTION_UP = 0,
     DIRECTION_DOWN,
     DIRECTION_LEFT,
     DIRECTION_RIGHT,

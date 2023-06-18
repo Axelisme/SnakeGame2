@@ -6,8 +6,8 @@
 
 typedef Entity Apple;
 
-Apple* new_Apple(Pos pos);
-static void Apple_init(Apple* self, Pos pos);
+Apple* new_Apple(ObjectVector* objs);
+static void Apple_init(Apple* self, ObjectVector* objs);
 
 static void Apple_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps);
 

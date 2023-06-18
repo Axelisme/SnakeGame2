@@ -1,9 +1,11 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
+#include <stdio.h>
 #include "Interface/Interface.h"
 #include "Utility/ShiftWindow.h"
 #include "Engine.h"
+#define MAX_LINE_LEN 100
 #define UPDATE_ENGINE_PERIOD 3
 #define DIED_STEP 4
 #define BACKGROUND_MOVE_SPEED make_Pos(1, 0.5)
@@ -55,5 +57,8 @@ static bool Level_update_died_opacity(LevelView* self);
 static Pos Level_get_view_center(LevelView* self);
 static void Level_load_default_level(LevelView* self);
 static void Level_loader(LevelView* self, LEVEL_ID level_id);
+
+static Entity* _create_Entity(FILE* fp);
+static void _get_Creator(EntityType type, ObjectCreator* creator, EntityCreator* entity_creator);
 
 #endif // LEVEL_H

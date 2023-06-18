@@ -82,6 +82,9 @@ PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
     // return state
     return self->state;
 }
+void ME_setGravity(MapEngine* self, Direction dir) {
+    self->gravity = dir;
+}
 
 static void _resetAll(EntityList* entities, Entity* snake) {
     snake->reset(snake);

@@ -2,17 +2,14 @@
 #include "Entity/End.h"
 #include "Engine.h"
 
-End* new_End(Pos pos) {
+End* new_End(ObjectVector* objs) {
     End* end = (End*) al_calloc(1, sizeof(End));
-    End_init(end, pos);
+    End_init(end, objs);
     return end;
 }
-static void End_init(End* self, Pos pos) {
+static void End_init(End* self, ObjectVector* objs) {
     Entity* Eself = (Entity*) self;
-    ObjectVector ends; ObjectVector_init(&ends);
-    EndObject end; EndObject_init(&end, pos);
-    ObjV_push_back(&ends, (Object*)&end); Object_destroy((Object*)&end);
-    Entity_init(Eself, &ends); ObjectVector_destroy(&ends);
+    Entity_init(Eself, objs);
     show_msg("End_init");
     // Inherited from Entity
     Eself->type = E_END;

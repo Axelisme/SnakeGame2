@@ -6,7 +6,7 @@
 
 typedef Entity Stone;
 
-Stone* new_Stone(Pos pos);
-static void Stone_init(Stone* self, Pos pos);
+Stone* new_Stone(ObjectVector* objs);
+static void Stone_init(Stone* self, ObjectVector* objs);
 
 #endif // STONE_H

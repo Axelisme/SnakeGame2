@@ -31,6 +31,7 @@ void MapEngine_init(MapEngine* self, Pos mapSize, EntityList* entities, Entity* 
 void MapEngine_destroy(MapEngine* self);
 void MapEngine_draw(MapEngine* self, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffer);
 PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op);
+void ME_setGravity(MapEngine* self, Direction dir);
 
 static void _resetAll(EntityList* entities, Entity* snake);
 static bool _canShift(Entity* self, Direction dir, EntityMap* map, EntityArray* shiftObjs);

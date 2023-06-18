@@ -1,7 +1,11 @@
 
+#include <stdio.h>
+#include "Utility/LevelRead.h"
 #include "Interface/LevelView.h"
+#include "Object/SimpleObject.h"
 #include "Entity/Edge.h"
 #include "Entity/Apple.h"
+#include "Entity/Button.h"
 #include "Entity/Stone.h"
 #include "Entity/Box.h"
 #include "Entity/End.h"
@@ -9,6 +13,7 @@
 #include "Entity/Spike.h"
 #include "Entity/Snake.h"
 
+static const char LEVEL_PATH[] = "data/level";
 static const char DIED_IMAGE_PATH[] = "data/image/menu/died.png";
 static const char BACKGROUND_IMAGE_PATH[] = "data/image/background.png";
 
@@ -225,9 +230,6 @@ static void Level_load_default_level(LevelView* self) {
     }
     EntityList_insert(&self->entity_list, (Entity*)new_Spike(&spikes)); ObjectVector_destroy(&spikes);
 
-    // set end
-    EntityList_insert(&self->entity_list, (Entity*)new_End(make_Pos(map_size.y-2,map_size.x-2)));
-
     // set box
     ObjectVector boxs; ObjectVector_init(&boxs);
     BoxObject box1; BoxObject_init(&box1, make_Pos(4,3));
@@ -237,12 +239,6 @@ static void Level_load_default_level(LevelView* self) {
     ObjV_push_back(&boxs, (Object*)&box2); Object_destroy((Object*)&box2);
     ObjV_push_back(&boxs, (Object*)&box3); Object_destroy((Object*)&box3);
     EntityList_insert(&self->entity_list, (Entity*)new_Box(&boxs)); ObjectVector_destroy(&boxs);
-
-    // set stone
-    EntityList_insert(&self->entity_list, (Entity*)new_Stone(make_Pos(3,3)));
-
-    // set apple
-    EntityList_insert(&self->entity_list, (Entity*)new_Apple(make_Pos(8,3)));
 
     // set snake
     ObjectVector bodies; ObjectVector_init(&bodies);
@@ -267,9 +263,157 @@ static void Level_load_default_level(LevelView* self) {
     MapEngine_init(&self->engine, map_size, &self->entity_list, self->snakes.front);
 }
 static void Level_loader(LevelView* self, LEVEL_ID level_id) {
-    // TODO: Load level, use temporary solution
-    show_msg("TODO: Load level");
+    // get level path
+    char level_path[MAX_PATH_LEN];
+    sprintf(level_path, "%s/L%d", LEVEL_PATH, level_id);
+    show_msg("Load level:");
+    show_msg(level_path);
 
-    // use default level
-    Level_load_default_level(self);
+    // load level
+    FILE* fp = fopen(level_path, "r");
+    if (!fp) {
+        raise_warn("fail to open level file, use default level");
+        Level_load_default_level(self); return;
+    }
+    char line[MAX_LINE_LEN];
+
+    // read map info
+    Pos map_size;
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e", &map_size.y, &map_size.x);
+    Pos view_UL, view_LR;
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e", &view_UL.y, &view_LR.y);
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e", &view_UL.x, &view_LR.x);
+    ShiftWindow_init(&self->shift_window, map_size, view_UL, view_LR);
+    Pos window_size;
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e", &window_size.y, &window_size.x);
+    SW_window_resize(&self->shift_window, window_size);
+    Direction gravity;
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%d", &gravity);
+
+    // read snake info
+    int snake_num;
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%d", &snake_num);
+    if (snake_num != 1) {
+        raise_err("snake more than one isn't implemented yet");
+        fclose(fp);
+        Level_load_default_level(self);
+        return;
+    }
+    ObjectVector bodies; ObjectVector_init(&bodies);
+    int body_num;
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%d", &body_num);
+    if (body_num < 3) {
+        raise_err("snake body number less than 3");
+        fclose(fp);
+        Level_load_default_level(self);
+        return;
+    }
+    Pos pos;
+    Direction dir, next_dir = DIRECTION_UP;
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e %d", &pos.y, &pos.x, &dir);
+    BodyObject head; BodyObject_init(&head, pos, HEAD, dir, next_dir);
+    ObjV_push_back(&bodies, (Object*)&head); Object_destroy((Object*)&head);
+    next_dir = dir;
+    for (int i=1; i < body_num-1; i++) {
+        readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e %d", &pos.y, &pos.x, &dir);
+        BodyObject body; BodyObject_init(&body, pos, BODY, dir, next_dir);
+        ObjV_push_back(&bodies, (Object*)&body); Object_destroy((Object*)&body);
+        next_dir = dir;
+    }
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e %d", &pos.y, &pos.x, &dir);
+    BodyObject tail; BodyObject_init(&tail, pos, TAIL, dir, next_dir);
+    ObjV_push_back(&bodies, (Object*)&tail); Object_destroy((Object*)&tail);
+    EntityList_insert(&self->snakes, (Entity*)new_Snake(&bodies)); ObjectVector_destroy(&bodies);
+
+    // read entities
+    int entity_num;
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%d", &entity_num);
+    if (entity_num < 0) {
+        raise_err("entity number less than 0");
+        fclose(fp);
+        Level_load_default_level(self);
+        return;
+    }
+    for (int i=0; i < entity_num; i++) {
+        Entity* entity = _create_Entity(fp);
+        if (!entity) {
+            raise_err("fail to create entity");
+            fclose(fp);
+            Level_load_default_level(self);
+            return;
+        }
+        EntityList_insert(&self->entity_list, entity);
+    }
+
+    // close file
+    fclose(fp);
+
+    // set map engine
+    MapEngine_init(&self->engine, map_size, &self->entity_list, self->snakes.front);
+    ME_setGravity(&self->engine, gravity);
+}
+static Entity* _create_Entity(FILE* fp) {
+    char line[MAX_LINE_LEN], temp[MAX_LINE_LEN];
+    EntityType type;
+    int obj_num;
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%d%s %d", &type, temp, &obj_num);
+    ObjectCreator object_creator;
+    EntityCreator entity_creator;
+    _get_Creator(type, &object_creator, &entity_creator);
+    Pos pos;
+    Direction dir;
+    ObjectVector objs; ObjectVector_init(&objs);
+    for (int i=0; i < obj_num; i++) {
+        readline(fp, line, MAX_LINE_LEN); sscanf(line, "%e %e %d", &pos.y, &pos.x, &dir);
+        Object* obj = object_creator(pos);
+        obj->dir = dir;
+        ObjV_push_back(&objs, obj);
+        obj->deleter(obj);
+    }
+    Entity* entity = entity_creator(&objs); ObjectVector_destroy(&objs);
+    int other_info;
+    readline(fp, line, MAX_LINE_LEN); sscanf(line, "%d", &other_info);
+    if (other_info)
+        entity->setter(entity, fp);
+    return entity;
+}
+static void _get_Creator(EntityType type, ObjectCreator* creator, EntityCreator* entity_creator) {
+    switch (type) {
+        case E_EDGE :
+            *creator = (ObjectCreator)new_EdgeObject;
+            *entity_creator = (EntityCreator)new_Edge;
+            break;
+        case E_APPLE :
+            *creator = (ObjectCreator)new_AppleObject;
+            *entity_creator = (EntityCreator)new_Apple;
+            break;
+        //case E_BUTTON :
+        //    *creator = (ObjectCreator)new_ButtonObject;
+        //    *entity_creator = (EntityCreator)new_Button;
+        //    break;
+        case E_SPIKE :
+            *creator = (ObjectCreator)new_SpikeObject;
+            *entity_creator = (EntityCreator)new_Spike;
+            break;
+        case E_END :
+            *creator = (ObjectCreator)new_EndObject;
+            *entity_creator = (EntityCreator)new_End;
+            break;
+        case E_BOX :
+            *creator = (ObjectCreator)new_BoxObject;
+            *entity_creator = (EntityCreator)new_Box;
+            break;
+        case E_STONE :
+            *creator = (ObjectCreator)new_StoneObject;
+            *entity_creator = (EntityCreator)new_Stone;
+            break;
+        case E_GROUND :
+            *creator = (ObjectCreator)new_GroundObject;
+            *entity_creator = (EntityCreator)new_Ground;
+            break;
+        default :
+            raise_err("unknown entity type");
+            *creator = NULL;
+            *entity_creator = NULL;
+    }
 }

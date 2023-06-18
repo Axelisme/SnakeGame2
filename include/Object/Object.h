@@ -35,6 +35,8 @@ typedef struct Object {
     void (*deleter)(struct Object*);
 } Object;
 
+typedef Object* (*ObjectCreator)(Pos);
+
 // ObjectClass
 void ObjectClass_init();
 void ObjectClass_destroy();

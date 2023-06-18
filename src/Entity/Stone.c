@@ -1,17 +1,14 @@
 
 #include "Entity/Stone.h"
 
-Stone* new_Stone(Pos pos) {
+Stone* new_Stone(ObjectVector* objs) {
     Stone* stone = (Stone*)al_calloc(1,sizeof(Stone));
-    Stone_init(stone, pos);
+    Stone_init(stone, objs);
     return stone;
 }
-static void Stone_init(Stone* self, Pos pos) {
+static void Stone_init(Stone* self, ObjectVector* objs) {
     Entity* Eself = (Entity*)self;
-    ObjectVector stones; ObjectVector_init(&stones);
-    StoneObject stone; StoneObject_init(&stone, pos);
-    ObjV_push_back(&stones, (Object*)&stone); Object_destroy((Object*)&stone);
-    Entity_init(Eself, &stones); ObjectVector_destroy(&stones);
+    Entity_init(Eself, objs);
     show_msg("Stone_init");
     // Inherited from Entity
     Eself->type = E_STONE;

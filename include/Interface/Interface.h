@@ -69,6 +69,7 @@ typedef struct Interface {
 } Interface;
 
 extern ALLEGRO_SAMPLE* died_sound;
+extern ALLEGRO_SAMPLE* level_win_music;
 
 void InterfaceClass_init();
 void InterfaceClass_destroy();

@@ -8,6 +8,7 @@ static const char MUSIC_MENU_EXIT_MUTE_IMAGE_PATH[] = "data/image/menu/music_exi
 static const char MUSIC_MENU_VOLUME_IMAGE_PATH[] = "data/image/menu/music_volume.png";
 static const char MUSIC_MENU_EXIT_IMAGE_PATH[] = "data/image/menu/music_exit.png";
 static const char MUSIC_MENU_CURSOR_IMAGE_PATH[] = "data/image/menu/music_cursor.png";
+static const char MUSIC_MENU_CURSOR_DARK_IMAGE_PATH[] = "data/image/menu/music_cursor_dark.png";
 
 static const Pos cursor_left = {0.49, 0.34};
 static const Pos cursor_right = {0.49, 0.76};
@@ -37,11 +38,13 @@ void MusicMenu_init(MusicMenu *self) {
     self->volume_mute_image = al_load_bitmap(MUSIC_MENU_VOLUME_MUTE_IMAGE_PATH);
     self->exit_mute_image = al_load_bitmap(MUSIC_MENU_EXIT_MUTE_IMAGE_PATH);
     self->music_cursor_image = al_load_bitmap(MUSIC_MENU_CURSOR_IMAGE_PATH);
+    self->music_cursor_image_dark = al_load_bitmap(MUSIC_MENU_CURSOR_DARK_IMAGE_PATH);
     if (!self->volume_image) raise_warn("fail to load volume image");
     if (!self->exit_image) raise_warn("fail to load exit image");
     if (!self->volume_mute_image) raise_warn("fail to load volume mute image");
     if (!self->exit_mute_image) raise_warn("fail to load exit mute image");
     if (!self->music_cursor_image) raise_warn("fail to load music cursor image");
+    if (!self->music_cursor_image_dark) raise_warn("fail to load music cursor dark image");
 }
 void MusicMenu_destroy(MusicMenu* self) {
     if (self == nullptr) {raise_warn("try to delete a nullptr MusicMenu");return;}
@@ -51,11 +54,13 @@ void MusicMenu_destroy(MusicMenu* self) {
     if (self->volume_mute_image) al_destroy_bitmap(self->volume_mute_image);
     if (self->exit_mute_image) al_destroy_bitmap(self->exit_mute_image);
     if (self->music_cursor_image) al_destroy_bitmap(self->music_cursor_image);
+    if (self->music_cursor_image_dark) al_destroy_bitmap(self->music_cursor_image_dark);
     self->volume_image = nullptr;
     self->exit_image = nullptr;
     self->volume_mute_image = nullptr;
     self->exit_mute_image = nullptr;
     self->music_cursor_image = nullptr;
+    self->music_cursor_image_dark = nullptr;
     // inherited from Interface
     Interface* Iself = (Interface*)self;
     Interface_destroy(Iself);
@@ -148,12 +153,13 @@ static void _MusicMenu_enter_state(MusicMenu* self) {
             break;
     }
 }
-static void _MusicMenu_draw_cursor(MusicMenu* music_menu, ALLEGRO_BITMAP* backbuffer) {
+static void _MusicMenu_draw_cursor(MusicMenu* self, ALLEGRO_BITMAP* backbuffer) {
     float volume = SE_get_volume();
     Pos cursor_pos = add(mul_const(sub(cursor_right, cursor_left), volume), cursor_left);
     Pos cursor_UL = sub(cursor_pos, mul_const(cursor_size, 0.5));
     Pos cursor_UL_pixel = POS_TO_PIXEL(cursor_UL, backbuffer);
     Pos cursor_size_pixel = POS_TO_PIXEL(cursor_size, backbuffer);
     ALLEGRO_BITMAP* sub_buffer = al_create_sub_bitmap(backbuffer, cursor_UL_pixel.x, cursor_UL_pixel.y, cursor_size_pixel.x, cursor_size_pixel.y);
-    draw_image(music_menu->music_cursor_image, sub_buffer, DIRECTION_UP, NO_TRANSPARENT);
+    ALLEGRO_BITMAP* image = (self->menu_state == MUSIC_MENU_VOLUME) ? self->music_cursor_image : self->music_cursor_image_dark;
+    draw_image(image, sub_buffer, DIRECTION_UP, NO_TRANSPARENT);
 }

@@ -18,19 +18,24 @@ INTERFACE_INFO _fall_back_info() {
 }
 
 static const char DIED_SOUND_PATH[] = "data/music/died.wav";
+static const char LEVEL_WIN_MUSIC_PATH[] = "data/music/win.wav";
 ALLEGRO_SAMPLE* died_sound = nullptr;
+ALLEGRO_SAMPLE* level_win_music = nullptr;
 
 void InterfaceClass_init() {
     InterfaceClass_destroy();
     show_msg("InterfaceClass_init");
     died_sound = al_load_sample(DIED_SOUND_PATH);
-    if (!died_sound)
-        raise_warn("fail to load died sound");
+    level_win_music = al_load_sample(LEVEL_WIN_MUSIC_PATH);
+    if (!died_sound) raise_warn("fail to load died sound");
+    if (!level_win_music) raise_warn("fail to load level win music");
 }
 void InterfaceClass_destroy() {
     show_msg("InterfaceClass_destroy");
     if (died_sound) al_destroy_sample(died_sound);
+    if (level_win_music) al_destroy_sample(level_win_music);
     died_sound = nullptr;
+    level_win_music = nullptr;
 }
 
 Interface* new_Interface() {

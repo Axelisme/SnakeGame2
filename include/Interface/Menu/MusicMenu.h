@@ -22,6 +22,7 @@ typedef struct MusicMenu {
     ALLEGRO_BITMAP* volume_mute_image;
     ALLEGRO_BITMAP* exit_mute_image;
     ALLEGRO_BITMAP* music_cursor_image;
+    ALLEGRO_BITMAP* music_cursor_image_dark;
 } MusicMenu;
 
 MusicMenu* new_MusicMenu();

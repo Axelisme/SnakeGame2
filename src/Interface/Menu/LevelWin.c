@@ -1,5 +1,6 @@
 
 #include "Interface/Menu/LevelWin.h"
+#include "SoundEngine.h"
 
 const char LEVEL_WIN_IMAGE_PATH[] = "data/image/menu/win.png";
 
@@ -15,6 +16,8 @@ void LevelWin_init(LevelWin* self) {
     Interface* Iself = (Interface*)self;
     Iself->info.type = INTERFACE_LEVEL_WIN;
     Iself->event_dealer = _LevelWin_deal_event;
+    // play music
+    SE_add_sound(level_win_music, ALLEGRO_PLAYMODE_ONCE);
 }
 
 static void _LevelWin_deal_event(Interface* Iself) {

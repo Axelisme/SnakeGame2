@@ -2,16 +2,19 @@
 #include "Entity/Apple.h"
 #include "Engine.h"
 
-Apple* new_Apple(ObjectVector* objs) {
+Apple* new_Apple(Pos pos) {
     Apple* apple = (Apple*) al_calloc(1, sizeof(Apple));
-    Apple_init(apple, objs);
+    Apple_init(apple, pos);
     return apple;
 }
-void Apple_init(Apple* self, ObjectVector* objs) {
+void Apple_init(Apple* self, Pos pos) {
     show_msg("Apple_init");
     // Inherited from Entity
     Entity* Eself = (Entity*) self;
-    Entity_init(Eself, objs);
+    ObjectVector apples; ObjectVector_init(&apples);
+    AppleObject apple; AppleObject_init(&apple, pos);
+    ObjV_push_back(&apples, (Object*)&apple); Object_destroy((Object*)&apple);
+    Entity_init(Eself, &apples); ObjectVector_destroy(&apples);
     Eself->type = E_APPLE;
     Eself->isFixed = true;
     Eself->canOverlap = true;

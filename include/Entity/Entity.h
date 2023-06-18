@@ -6,14 +6,14 @@
 
 typedef enum EntityType {
     E_EDGE = -1,
+    E_APPLE,
+    E_BUTTON,
+    E_SPIKE,
+    E_END,
+    E_BOX,
+    E_STONE,
     E_GROUND,
     E_SNAKE,
-    E_END,
-    E_APPLE,
-    E_STONE,
-    E_BOX,
-    E_SPIKE,
-    E_BUTTON,
     E_BASIC
 } EntityType;
 

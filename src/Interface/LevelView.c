@@ -210,9 +210,6 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     // map size
     Pos map_size = make_Pos(10,20);
 
-    // set temp entity array
-    EntityArray entity_array; EntityArray_init(&entity_array);
-
     // set ground
     ObjectVector grounds; ObjectVector_init(&grounds);
     GroundObject ground;
@@ -220,7 +217,7 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
         GroundObject_init(&ground, make_Pos(map_size.y-1,i));
         ObjV_push_back(&grounds, (Object*)&ground); Object_destroy((Object*)&ground);
     }
-    EntityArray_push_back(&entity_array, (Entity*)new_Ground(&grounds)); ObjectVector_destroy(&grounds);
+    EntityList_insert(&self->entity_list, (Entity*)new_Ground(&grounds)); ObjectVector_destroy(&grounds);
 
     // set box
     ObjectVector boxs; ObjectVector_init(&boxs);
@@ -230,13 +227,13 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     ObjV_push_back(&boxs, (Object*)&box1); Object_destroy((Object*)&box1);
     ObjV_push_back(&boxs, (Object*)&box2); Object_destroy((Object*)&box2);
     ObjV_push_back(&boxs, (Object*)&box3); Object_destroy((Object*)&box3);
-    EntityArray_push_back(&entity_array, (Entity*)new_Box(&boxs)); ObjectVector_destroy(&boxs);
+    EntityList_insert(&self->entity_list, (Entity*)new_Box(&boxs)); ObjectVector_destroy(&boxs);
+
+    // set stone
+    EntityList_insert(&self->entity_list, (Entity*)new_Stone(make_Pos(3,3)));
 
     // set apple
-    ObjectVector apples; ObjectVector_init(&apples);
-    AppleObject apple; AppleObject_init(&apple, make_Pos(8,3));
-    ObjV_push_back(&apples, (Object*)&apple); Object_destroy((Object*)&apple);
-    EntityArray_push_back(&entity_array, (Entity*)new_Apple(&apples)); ObjectVector_destroy(&apples);
+    EntityList_insert(&self->entity_list, (Entity*)new_Apple(make_Pos(8,3)));
 
     // set snake
     ObjectVector bodies; ObjectVector_init(&bodies);
@@ -249,13 +246,7 @@ static void Level_loader(LevelView* self, LEVEL_ID level_id) {
     }
     BodyObject tail; BodyObject_init(&tail, make_Pos(5,0), TAIL, DIRECTION_UP, DIRECTION_UP);
     ObjV_push_back(&bodies, (Object*)&tail); Object_destroy((Object*)&tail);
-    EntityList_push_back(&self->snakes, (Entity*)new_Snake(&bodies)); ObjectVector_destroy(&bodies);
-
-    // sort temp entity array
-    EntityArray_sort(&entity_array);
-
-    // set entity list
-    EntityList_from_array(&self->entity_list, &entity_array); EntityArray_destroy(&entity_array);
+    EntityList_insert(&self->snakes, (Entity*)new_Snake(&bodies)); ObjectVector_destroy(&bodies);
 
     // set shift window
     ShiftWindow_init(&self->shift_window, map_size, make_Pos(0,0), make_Pos(10,20));

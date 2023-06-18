@@ -8,59 +8,34 @@ void EntityList_init(EntityList* self) {
     self->size = 0;
 }
 void EntityList_destroy(EntityList* self) {
+    for (Entity* cur = self->front; cur != NULL; cur = cur->next)
+        cur->deleter(cur);
     EntityList_clear(self);
 }
-void EntityList_push_back(EntityList* self, Entity* entity) {
-    if (self->back == NULL) {
-        self->front = entity;
-        self->back = entity;
-    } else {
-        self->back->next = entity;
-        entity->prev = self->back;
-        self->back = entity;
-    }
-    self->size++;
-}
-void EntityList_push_front(EntityList* self, Entity* entity) {
+void EntityList_insert(EntityList* self, Entity* entity) {
+    // insert to sorted entity list
     if (self->front == NULL) {
         self->front = entity;
         self->back = entity;
     } else {
-        self->front->prev = entity;
-        entity->next = self->front;
-        self->front = entity;
+        Entity* cur = self->front;
+        while (cur && Entity_compare(&entity, &cur) > 0)
+            cur = cur->next;
+        if (cur == NULL) {
+            self->back->next = entity;
+            entity->prev = self->back;
+            self->back = entity;
+        } else if (cur->prev == NULL) {
+            entity->next = self->front;
+            self->front->prev = entity;
+            self->front = entity;
+        } else {
+            entity->prev = cur->prev;
+            entity->next = cur;
+            cur->prev->next = entity;
+            cur->prev = entity;
+        }
     }
-    self->size++;
-}
-void EntityList_pop_back(EntityList* self) {
-    if (self->back == NULL) {
-        raise_warn("EntityList_pop_back: empty list");
-        return;
-    }
-    Entity* old = self->back;
-    self->back = old->prev;
-    if (self->back != NULL)
-        self->back->next = NULL;
-    else
-        self->front = NULL;
-    self->size--;
-}
-void EntityList_pop_front(EntityList* self) {
-    if (self->front == NULL) {
-        raise_warn("EntityList_pop_front: empty list");
-        return;
-    }
-    Entity* old = self->front;
-    self->front = old->next;
-    if (self->front != NULL)
-        self->front->prev = NULL;
-    else
-        self->back = NULL;
-    self->size--;
-}
-void EntityList_from_array(EntityList* self, EntityArray* array) {
-    for (int i = 0; i < EA_len(array); i++)
-        EntityList_push_back(self, EA_get(array, i));
 }
 void EntityList_remove(EntityList* self, Entity* entity) {
     if (entity->prev != NULL)

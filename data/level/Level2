@@ -1,0 +1,139 @@
+#map_height map_width
+24 39
+
+#view_height_upper_bound view_height_lower_bound
+0 24
+
+#view_width_upper_bound view_width_lower_bound
+0 39
+
+#view_window_height view_window_width
+10 10
+
+#gravity_direction
+down
+
+#other_level_information_go_there
+
+#how_many_snakes
+1
+
+#snake1_length
+3
+10 7
+9 7
+9 8
+
+#how_many_entities
+
+
+ground 69
+8 11
+9 11
+9 12
+9 20
+9 22
+9 23
+9 24
+9 25
+9 26
+9 27
+10 8
+10 9
+10 11
+10 12
+10 14
+10 16
+10 22
+10 25
+10 26
+10 27
+11 8
+11 11
+11 14
+11 16
+11 17
+11 20
+11 26
+11 27
+12 8
+12 14
+12 20
+12 21
+12 24
+13 8
+13 11
+13 12
+13 13
+13 14
+13 16
+13 17
+13 18
+13 19
+13 20
+13 21
+13 22
+13 24
+13 28
+13 29
+14 8
+14 9
+14 14
+14 16
+14 22
+14 23
+14 24
+14 25
+14 28
+14 29
+14 30
+14 31
+15 10
+15 14
+15 15
+15 16
+15 25
+15 26
+15 27
+15 28
+15 29
+
+apple 1
+9 19
+
+apple 1
+12 23
+
+apple 1
+13 10
+
+end 1
+13 31
+
+spike 4
+9 16
+12 19
+12 26
+12 29
+
+spike 1
+11 21
+
+button 1
+8 12
+#trigger_effect_type
+1
+snake_len
+-1
+
+button 1
+12 22
+#trigger_effect_type
+2
+destroy
+spike 1
+11 21
+create
+spike 2
+8 22
+8 20

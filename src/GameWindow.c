@@ -38,11 +38,11 @@ void GameWindow_init(GameWindow* self) {
     self->icon = al_load_bitmap(GAME_ICON_PATH);
     if (!self->icon) raise_warn("can't not load icon");
     else al_set_display_icon(self->display, self->icon);
+    // initial sample instances
+    SE_init();
     // initial ObjectClass and InterfaceClass
     ObjectClass_init();
     InterfaceClass_init();
-    // initial sample instances
-    SE_init();
     // Load background Sound
     show_msg("Load background music");
     self->background_sample = al_load_sample(BACKGROUND_SOUND_PATH);

@@ -14,9 +14,9 @@ void Allegro_init() {
     // Initial Allegro addon
     show_msg("Initial Allegro addon");
     al_init_primitives_addon();
-    al_init_font_addon(); // initialize the font addon
-    al_init_ttf_addon(); // initialize the ttf (True Type Font) addon
-    al_init_image_addon(); // initialize the image addon
+    al_init_font_addon();   // initialize the font addon
+    al_init_ttf_addon();    // initialize the ttf (True Type Font) addon
+    al_init_image_addon();  // initialize the image addon
     al_init_acodec_addon(); // initialize acodec addon
 
     // install device

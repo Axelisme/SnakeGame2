@@ -4,6 +4,7 @@
 #include "Engine.h"
 #include "Entity/Spike.h"
 #include "Entity/Snake.h"
+#include "SoundEngine.h"
 
 Entity* new_Button(ObjectVector* objs) {
     Button* self = (Button*)malloc(sizeof(Button));
@@ -54,6 +55,7 @@ static void Button_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, Ent
     Button* self = (Button*)Eself;
     if (self->isPressed) return;
     self->isPressed = true;
+    SE_add_sound(button_down_sound, ALLEGRO_PLAYMODE_ONCE);
     ButtonObject_down((ButtonObject*)ObjV_get(&Eself->objList, 0));
     switch (self->effect) {
         case SNAKE_SHRINK:

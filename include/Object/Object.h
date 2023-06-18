@@ -21,6 +21,7 @@ extern ALLEGRO_BITMAP* snake_tail_img;
 extern ALLEGRO_BITMAP* spike_img;
 extern ALLEGRO_BITMAP* stone_img;
 extern ALLEGRO_BITMAP* box_img;
+extern ALLEGRO_SAMPLE* button_down_sound;
 
 typedef struct Object {
     // Info

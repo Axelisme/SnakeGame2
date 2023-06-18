@@ -11,7 +11,7 @@
 #include <stdbool.h>
 
 // Debug
-#define Debug 1
+#define Debug 0
 
 // Color
 #define COLOR_NUM 9

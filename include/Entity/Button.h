@@ -2,11 +2,13 @@
 #define BUTTON_H
 
 #include "Entity.h"
+#define EFFECT_LINE_MAX 50
+#define BUTTON_MAX_SPIKE_NUM 10
 
 typedef enum BUTTON_EFFECT {
-    SNAKE_SHRINK,
-    GRAVITY_REVERSE,
-    SPIKE_SET,
+    SNAKE_SHRINK    = 0,
+    GRAVITY_CHANGE  = 1,
+    SPIKE_SET       = 2,
 } BUTTON_EFFECT;
 
 typedef struct SnakeShrinkInfo {
@@ -19,7 +21,8 @@ typedef struct GravityReverseInfo {
 
 typedef struct SpikeSetInfo {
     int spike_num;
-    Pos* spike_pos;
+    Pos spike_pos[BUTTON_MAX_SPIKE_NUM];
+    Direction spike_dir[BUTTON_MAX_SPIKE_NUM];
 } SpikeSetInfo;
 
 typedef union EFFECT_INFO {
@@ -40,8 +43,6 @@ typedef struct Button {
 
 Entity* new_Button(ObjectVector* objs);
 void Button_init(Button* self, ObjectVector* objs);
-void Button_destroy(Button* self);
-void delete_Button(Entity* Eself);
 
 static void Button_setter(Entity* Eself, FILE* fp);
 static void Button_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps);

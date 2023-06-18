@@ -31,6 +31,9 @@ void ButtonObject_init(ButtonObject* self, Pos pos) {
     Object_init((Object*)self, pos);
     self->Image = button_img;
 }
+void ButtonObject_down(ButtonObject* self) {
+    self->Image = button_down_img;
+}
 
 EndObject* new_EndObject(Pos pos) {
     EndObject* end = (EndObject*)al_calloc(1,sizeof(EndObject));

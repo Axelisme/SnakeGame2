@@ -390,10 +390,10 @@ static void _get_Creator(EntityType type, ObjectCreator* creator, EntityCreator*
             *creator = (ObjectCreator)new_AppleObject;
             *entity_creator = (EntityCreator)new_Apple;
             break;
-        //case E_BUTTON :
-        //    *creator = (ObjectCreator)new_ButtonObject;
-        //    *entity_creator = (EntityCreator)new_Button;
-        //    break;
+        case E_BUTTON :
+            *creator = (ObjectCreator)new_ButtonObject;
+            *entity_creator = (EntityCreator)new_Button;
+            break;
         case E_SPIKE :
             *creator = (ObjectCreator)new_SpikeObject;
             *entity_creator = (EntityCreator)new_Spike;

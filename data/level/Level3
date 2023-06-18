@@ -21,10 +21,10 @@
 #snake_length
 4
 #snake position direction
-11 8 3
-12 8 3
-12 9 1
-12 10 1
+12 10 3
+12 9 3
+12 8 1
+11 8 1
 
 #how_many_entities
 3
@@ -33,9 +33,12 @@
 9 10 0
 10 10 0
 13 9 0
+0
 
 0 apple 1
 8 10 0
+0
 
 3 end 1
 12 9 0
+0

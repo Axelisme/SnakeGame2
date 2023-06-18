@@ -11,7 +11,7 @@
 10 10
 
 #gravity_direction
-1 down
+1down
 
 #other_level_information_go_there
 
@@ -21,14 +21,14 @@
 #snake_length
 3
 #snake position direction
-10 7 3
+9 8 3
 9 7 0
-9 8 0
+10 7 0
 
 #how_many_entities
 9
 
-6 ground 69
+6ground 69
 8 11 0
 9 11 0
 9 12 0
@@ -98,43 +98,48 @@
 15 27 0
 15 28 0
 15 29 0
+0
 
-0 apple 1
+0apple 1
 9 19 0
+0
 
-0 apple 1
+0apple 1
 12 23 0
+0
 
-0 apple 1
+0apple 1
 13 10 0
+0
 
-3 end 1
+3end 1
 13 31 0
+0
 
-2 spike 4
+2spike 4
 9 16 0
 12 19 0
 12 26 1
 12 29 0
+0
 
-2 spike 1
+2spike 1
 11 21 0
+0
 
-1 button 1
+1button 1
 8 12 0
-#trigger_effect_type
 1
-snake_len
--1
-
-1 button 1
-12 22 0
 #trigger_effect_type
-2
-destroy
-spike 1
+0 SNAKE_SHRINK
+1
+
+1button 1
+12 22 0
+1
+#trigger_effect_type
+2 SPIKE_SET
+3
 11 21 0
-create
-spike 2
 8 22 0
 8 20 0

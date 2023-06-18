@@ -22,5 +22,6 @@ static void Snake_draw(Entity* Eself, ShiftWindow* sw, ALLEGRO_BITMAP* backbuffe
 Pos Snake_next_pos(Snake* self, Direction dir);
 void Snake_move(Snake* self, Direction dir);
 void Snake_grow(Snake* self, EntityMap* map, EntityArray* overlays);
+void Snake_shrink(Snake* self, EntityMap* map, EntityArray* overlays);
 
 #endif // SNAKE_H

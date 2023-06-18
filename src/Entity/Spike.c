@@ -11,6 +11,7 @@ static void Spike_init(Spike* self, ObjectVector* objs) {
     // Inherited from Entity
     Entity* Eself = (Entity*) self;
     Entity_init(Eself, objs);
+    show_msg("Spike_init");
     Eself->type = E_SPIKE;
     Eself->isFixed = true;
     Eself->canOverlap = true;
@@ -18,6 +19,7 @@ static void Spike_init(Spike* self, ObjectVector* objs) {
 }
 
 static void Spike_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps) {
+    if (!Eself->Alive) return;
     Spike* self = (Spike*) Eself;
     EntityArray* activators = (EntityArray*) self->activators;
     for (int i = 0; i < activators->size; i++) {

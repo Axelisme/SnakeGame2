@@ -16,6 +16,7 @@ void AppleObject_init(AppleObject* self, Pos pos);
 typedef Object ButtonObject;
 ButtonObject* new_ButtonObject(Pos pos);
 void ButtonObject_init(ButtonObject* self, Pos pos);
+void ButtonObject_down(ButtonObject* self);
 
 typedef Object EndObject;
 EndObject* new_EndObject(Pos pos);

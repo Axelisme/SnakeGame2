@@ -21,10 +21,12 @@
 #snake_length
 4
 #snake position direction
-10 14 0
-11 14 2
-11 13 1
-10 13 1
+10 13 0
+11 13 2
+11 14 1
+10 14 1
+
+
 
 #how_many_entities
 7
@@ -68,32 +70,37 @@
 16 27 0
 16 28 0
 16 29 0
+0
 
 5 stone 1
 11 22 0
+0
 
 0 apple 1
 11 7 0
+0
 
 3 end 1
-12 9 0
+11 31 0
+0
 
 2 spike 4
 9 19 0
 9 24 1
 13 11 0
 13 17 0
+0
 
 1 button 1
 13 19 0
-#trigger_effect_type
 1
-snake_len
--1
+#trigger_effect_type
+0 SNAKE_SHRINK
+1
 
 1 button 1
 15 29 0
 #trigger_effect_type
 1
-gravity_direction
-1 up
+1 GRAVITY_CHANGE
+0 up

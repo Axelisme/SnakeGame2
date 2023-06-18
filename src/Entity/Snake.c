@@ -84,3 +84,19 @@ void Snake_grow(Snake* self, EntityMap* map, EntityArray* overlays) {
     self->tail = (BodyObject*) ObjV_get(&Eself->objList, -1);
     Entity_mark(Eself, map, overlays);
 }
+void Snake_shrink(Snake* self, EntityMap* map, EntityArray* overlays) {
+    Entity* Eself = (Entity*) self;
+    if (!Eself->Alive) return;
+    show_msg("Snake_shrink");
+    BodyObject* tail = self->tail;
+    if (len(&Eself->objList) <= 1) {
+        show_msg("No body! Snake died.");
+        Eself->Alive = false;
+        return;
+    }
+    Entity_unmark(Eself, map);
+    ObjV_pop_back(&Eself->objList);
+    self->tail = (BodyObject*) ObjV_get(&Eself->objList, -1);
+    self->tail->type = TAIL;
+    Entity_mark(Eself, map, overlays);
+}

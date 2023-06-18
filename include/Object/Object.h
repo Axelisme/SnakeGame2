@@ -10,6 +10,7 @@
 extern ALLEGRO_BITMAP* edge_img;
 extern ALLEGRO_BITMAP* apple_img;
 extern ALLEGRO_BITMAP* button_img;
+extern ALLEGRO_BITMAP* button_down_img;
 extern ALLEGRO_BITMAP* end_img;
 extern ALLEGRO_BITMAP* ground_img;
 extern ALLEGRO_BITMAP* snake_head_img;

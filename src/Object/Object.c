@@ -6,6 +6,7 @@
 static const char edge_img_path[]                = "data/image/edge.png";
 static const char apple_img_path[]               = "data/image/apple.png";
 static const char button_img_path[]              = "data/image/button.png";
+static const char button_down_img_path[]         = "data/image/buttonDown.png";
 static const char end_img_path[]                 = "data/image/end.png";
 static const char ground_img_path[]              = "data/image/ground.png";
 static const char snake_head_img_path[]          = "data/image/snakeHead.png";
@@ -19,6 +20,7 @@ static const char box_img_path[]                 = "data/image/box.png";
 ALLEGRO_BITMAP* edge_img = nullptr;
 ALLEGRO_BITMAP* apple_img = nullptr;
 ALLEGRO_BITMAP* button_img = nullptr;
+ALLEGRO_BITMAP* button_down_img = nullptr;
 ALLEGRO_BITMAP* end_img = nullptr;
 ALLEGRO_BITMAP* ground_img = nullptr;
 ALLEGRO_BITMAP* snake_head_img = nullptr;
@@ -36,6 +38,7 @@ void ObjectClass_init() {
     edge_img = al_load_bitmap(edge_img_path);
     apple_img = al_load_bitmap(apple_img_path);
     button_img = al_load_bitmap(button_img_path);
+    button_down_img = al_load_bitmap(button_down_img_path);
     end_img = al_load_bitmap(end_img_path);
     ground_img = al_load_bitmap(ground_img_path);
     snake_head_img = al_load_bitmap(snake_head_img_path);
@@ -49,6 +52,7 @@ void ObjectClass_init() {
     if (!edge_img)                  raise_warn("cat not load edge_img!");
     if (!apple_img)                 raise_warn("cat not load apple_img!");
     if (!button_img)                raise_warn("cat not load button_img!");
+    if (!button_down_img)           raise_warn("cat not load button_down_img!");
     if (!end_img)                   raise_warn("cat not load end_img!");
     if (!ground_img)                raise_warn("cat not load ground_img!");
     if (!snake_head_img)            raise_warn("cat not load snake_head_img!");
@@ -65,6 +69,7 @@ void ObjectClass_destroy() {
     if (edge_img) al_destroy_bitmap(edge_img);
     if (apple_img) al_destroy_bitmap(apple_img);
     if (button_img) al_destroy_bitmap(button_img);
+    if (button_down_img) al_destroy_bitmap(button_down_img);
     if (end_img) al_destroy_bitmap(end_img);
     if (ground_img) al_destroy_bitmap(ground_img);
     if (snake_head_img) al_destroy_bitmap(snake_head_img);
@@ -78,6 +83,7 @@ void ObjectClass_destroy() {
     edge_img = nullptr;
     apple_img = nullptr;
     button_img = nullptr;
+    button_down_img = nullptr;
     end_img = nullptr;
     ground_img = nullptr;
     snake_head_img = nullptr;

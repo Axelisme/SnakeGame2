@@ -251,3 +251,27 @@ level4 = {
     }
 
 # write_file(4,level4)
+
+# %%
+
+map5_high, map5_width = 20, 25
+map5 = np.zeros([map5_high, map5_width]).astype(int)
+map5[3,4:15] = map5[7,4:15] = map5[15,4:18] = map5[17,8:15] = obj["Ground"]
+map5[4:7,4] = map5[4:7,14] = map5[9:14,15] = map5[12:15,17] = map5[13:15,4] = obj["Ground"]
+map5[10:12,8:11] = map5[[8,8],[6,12]] = obj["Ground"]
+map5[[7,7,10,10,15],[6,12,8,10,12]] = obj["Air"]
+map5[7,8:11] = map5[14,8:12] = obj["Stone"]
+map5[8:10,9] = map5[15,9] = obj["Stone"]
+map5[[4,11],[6,14]] = obj["Apple"]
+map5[8,15] = obj["End point"]
+map5[16,8] = obj["Snake Head"]
+map5[16:18,7] = obj["Snake Body"]
+
+
+map5 = add_edge(map5)
+map5_list = map5.tolist()
+map5_graph = map_to_graph(map5)
+map5_str = map_to_string(map5)
+
+
+# write_file(4,level4)

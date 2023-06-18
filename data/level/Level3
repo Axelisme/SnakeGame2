@@ -1,0 +1,40 @@
+#map_height map_width
+24 39
+
+#view_height_upper_bound view_height_lower_bound
+0 24
+
+#view_width_upper_bound view_width_lower_bound
+0 39
+
+#view_window_height view_window_width
+10 10
+
+#gravity_direction
+down
+
+#other_level_information_go_there
+
+#how_many_snakes
+1
+
+#snake1_length
+4
+11 8
+12 8
+12 9
+12 10
+
+#how_many_entities
+5
+
+ground 3
+9 10
+10 10
+13 9
+
+apple 1
+8 10
+
+end 1
+12 9

@@ -1,0 +1,140 @@
+#map_height map_width
+24 39
+
+#view_height_upper_bound view_height_lower_bound
+0 24
+
+#view_width_upper_bound view_width_lower_bound
+0 39
+
+#view_window_height view_window_width
+10 10
+
+#gravity_direction
+1 down
+
+#other_level_information_go_there
+
+#how_many_snakes
+1
+
+#snake_length
+3
+#snake position direction
+10 7 3
+9 7 0
+9 8 0
+
+#how_many_entities
+9
+
+6 ground 69
+8 11 0
+9 11 0
+9 12 0
+9 20 0
+9 22 0
+9 23 0
+9 24 0
+9 25 0
+9 26 0
+9 27 0
+10 8 0
+10 9 0
+10 11 0
+10 12 0
+10 14 0
+10 16 0
+10 22 0
+10 25 0
+10 26 0
+10 27 0
+11 8 0
+11 11 0
+11 14 0
+11 16 0
+11 17 0
+11 20 0
+11 26 0
+11 27 0
+12 8 0
+12 14 0
+12 20 0
+12 21 0
+12 24 0
+13 8 0
+13 11 0
+13 12 0
+13 13 0
+13 14 0
+13 16 0
+13 17 0
+13 18 0
+13 19 0
+13 20 0
+13 21 0
+13 22 0
+13 24 0
+13 28 0
+13 29 0
+14 8 0
+14 9 0
+14 14 0
+14 16 0
+14 22 0
+14 23 0
+14 24 0
+14 25 0
+14 28 0
+14 29 0
+14 30 0
+14 31 0
+15 10 0
+15 14 0
+15 15 0
+15 16 0
+15 25 0
+15 26 0
+15 27 0
+15 28 0
+15 29 0
+
+0 apple 1
+9 19 0
+
+0 apple 1
+12 23 0
+
+0 apple 1
+13 10 0
+
+3 end 1
+13 31 0
+
+2 spike 4
+9 16 0
+12 19 0
+12 26 1
+12 29 0
+
+2 spike 1
+11 21 0
+
+1 button 1
+8 12 0
+#trigger_effect_type
+1
+snake_len
+-1
+
+1 button 1
+12 22 0
+#trigger_effect_type
+2
+destroy
+spike 1
+11 21 0
+create
+spike 2
+8 22 0
+8 20 0

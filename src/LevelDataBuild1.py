@@ -84,9 +84,10 @@ map1[2,9:14] = obj["Ground"]
 map1[2,11] = obj["Air"]
 map1[3,[9,12]] = obj["Ground"]
 map1[4,12] = obj["Ground"]
-map1[0,17] = obj["Stone"]
+map1[0,17:19] = obj["Stone"]
 map1[3,10] = obj["Apple"]
-map1[3,18] = obj["Apple"]
+map1[3,18] = obj["Ground"]
+map1[2,18] = obj["Apple"]
 map1[7,19] = obj["End point"]
 map1[4,1] = obj["Snake Head"]
 map1[4,0] = obj["Snake Body"]
@@ -113,7 +114,7 @@ level1 = {
     ]
     }
 
-write_file(1,level1)
+# write_file(1,level1)
 
 map2_high, map2_width = 10, 25
 map2 = np.zeros([map2_high, map2_width]).astype(int)
@@ -141,6 +142,7 @@ map2[5,17] = obj["Ground"]
 map2[4:6,13:15] = obj["Ground"]
 map2[[2,5,4,5,5],[9,12,14,19,22]] = obj["Spike"]
 map2[[6,5,2],[3,16,12]] = obj["Apple"]
+map2[8,3] = obj["Ground"]
 map2[[1,5],[5,15]] = obj["Button"]
 map2[6,24] = obj["End point"]
 map2[2:4,0] = obj["Snake Body"]
@@ -172,8 +174,8 @@ level2 = {
     ]
     }
 
-write_file(2,level2)
-
+# write_file(2,level2)
+# %%
 
 map3_high, map3_width = 10, 25
 map3 = np.zeros([map3_high, map3_width]).astype(int)
@@ -207,7 +209,8 @@ level3 = {
         ]
     }
 
-write_file(3,level3)
+# write_file(3,level3)
+# %%
 
 map4_high, map4_width = 10, 25
 map4 = np.zeros([map4_high, map4_width]).astype(int)
@@ -247,4 +250,4 @@ level4 = {
         ]
     }
 
-write_file(4,level4)
+# write_file(4,level4)

@@ -30,6 +30,7 @@ void Level_init(LevelView* self, LEVEL_ID level_id) {
     show_msg("Level_init");
     // Inherited from Interface
     Iself->info.type = INTERFACE_LEVEL;
+    Iself->background_light_max = 180;
     Iself->draw = Level_draw;
     Iself->update = Level_update;
     Iself->event_record = Level_event_recorder;

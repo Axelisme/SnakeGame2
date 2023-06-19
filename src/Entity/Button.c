@@ -22,12 +22,16 @@ void Button_init(Button* self, ObjectVector* objs) {
     self->isPressed = false;
     self->effect = SNAKE_SHRINK;
     self->effect_info.snakeS.shrink_num = 0;
+    self->effect_repeat = 0;
+    self->effect_remain = self->effect_repeat;
 }
 
 static void Button_setter(Entity* Eself, FILE* fp) {
     Button* self = (Button*)Eself;
     char line[EFFECT_LINE_MAX];
     readline(fp, line, EFFECT_LINE_MAX); sscanf(line, "%d", &self->effect);
+    readline(fp, line, EFFECT_LINE_MAX); sscanf(line, "%d", &self->effect_repeat);
+    self->effect_remain = self->effect_repeat;
     switch (self->effect) {
         case SNAKE_SHRINK:
             readline(fp, line, EFFECT_LINE_MAX);
@@ -54,9 +58,11 @@ static void Button_setter(Entity* Eself, FILE* fp) {
 static void Button_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps) {
     Button* self = (Button*)Eself;
     if (self->isPressed) return;
-    self->isPressed = true;
+    if (!self->effect_remain--) {
+        self->isPressed = true;
+        ButtonObject_down((ButtonObject*)ObjV_get(&Eself->objList, 0));
+    }
     SE_add_sound(button_down_sound, ALLEGRO_PLAYMODE_ONCE);
-    ButtonObject_down((ButtonObject*)ObjV_get(&Eself->objList, 0));
     switch (self->effect) {
         case SNAKE_SHRINK:
             for (int i = 0; i < self->effect_info.snakeS.shrink_num; i++)

@@ -36,8 +36,10 @@ typedef struct Button {
     Entity entity;
     // state
     bool isPressed;
+    int effect_remain;
     // properties
     BUTTON_EFFECT effect;
+    int effect_repeat;
     EFFECT_INFO effect_info;
 } Button;
 

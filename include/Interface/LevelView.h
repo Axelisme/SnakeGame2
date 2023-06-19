@@ -10,13 +10,14 @@
 #define DIED_STEP 4
 #define BACKGROUND_MOVE_SPEED make_Pos(1, 0.5)
 
-#define LEVEL_NUM 5
+#define LEVEL_NUM 6
 typedef enum LEVEL_ID {
     LEVEL_1 = 1,
     LEVEL_2,
     LEVEL_3,
     LEVEL_4,
     LEVEL_5,
+    LEVEL_6
 } LEVEL_ID;
 
 typedef struct LevelView {

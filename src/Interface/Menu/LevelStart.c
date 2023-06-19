@@ -8,6 +8,7 @@ const char LEVEL_2_START_IMAGE_PATH[] = "data/image/level/eat_candies.png";
 const char LEVEL_3_START_IMAGE_PATH[] = "data/image/level/I_got_a_perfect_body.png";
 const char LEVEL_4_START_IMAGE_PATH[] = "data/image/level/do_you_know_de_way.png";
 const char LEVEL_5_START_IMAGE_PATH[] = "data/image/level/de_way_to_home.png";
+const char LEVEL_6_START_IMAGE_PATH[] = "data/image/level/too_many_treasure.png";
 
 
 LevelStart* new_LevelStart(LEVEL_ID level_id) {
@@ -66,6 +67,8 @@ static const char* _LevelStart_get_image_path(LEVEL_ID level_id) {
             return LEVEL_4_START_IMAGE_PATH;
         case LEVEL_5:
             return LEVEL_5_START_IMAGE_PATH;
+        case LEVEL_6:
+            return LEVEL_6_START_IMAGE_PATH;
         default:
             raise_err("Unknown level id");
             return nullptr;

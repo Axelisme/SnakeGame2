@@ -97,10 +97,12 @@
 #trigger_effect_type
 0 SNAKE_SHRINK
 1
+1
 
 1 button 1
 15 29 0
 #trigger_effect_type
 1
 1 GRAVITY_CHANGE
+1
 0 up

@@ -64,6 +64,8 @@ static const char* _LevelStart_get_image_path(LEVEL_ID level_id) {
             return LEVEL_3_START_IMAGE_PATH;
         case LEVEL_4:
             return LEVEL_4_START_IMAGE_PATH;
+        case LEVEL_5:
+            return LEVEL_5_START_IMAGE_PATH;
         default:
             raise_err("Unknown level id");
             return nullptr;

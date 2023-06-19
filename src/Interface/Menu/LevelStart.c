@@ -3,10 +3,11 @@
 #include "Interface/LevelView.h"
 #include "GameWindow.h"
 
-const char LEVEL_1_START_IMAGE_PATH[] = "data/image/level1_start.png";
-const char LEVEL_2_START_IMAGE_PATH[] = "data/image/level2_start.png";
-const char LEVEL_3_START_IMAGE_PATH[] = "data/image/level3_start.png";
-const char LEVEL_4_START_IMAGE_PATH[] = "data/image/level4_start.png";
+const char LEVEL_1_START_IMAGE_PATH[] = "data/image/level/Hello_normal_judge.png";
+const char LEVEL_2_START_IMAGE_PATH[] = "data/image/level/eat_candies.png";
+const char LEVEL_3_START_IMAGE_PATH[] = "data/image/level/I_got_a_perfect_body.png";
+const char LEVEL_4_START_IMAGE_PATH[] = "data/image/level/do_you_know_de_way.png";
+const char LEVEL_5_START_IMAGE_PATH[] = "data/image/level/de_way_to_home.png";
 
 
 LevelStart* new_LevelStart(LEVEL_ID level_id) {

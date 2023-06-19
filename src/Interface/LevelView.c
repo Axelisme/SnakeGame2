@@ -101,6 +101,7 @@ static INTERFACE_INFO Level_update(Interface* Iself) {
                 Iself->info.state = INTERFACE_RUNNING;
             break;
         case INTERFACE_RUNNING:
+            SW_setCenter(&self->shift_window, Level_get_view_center(self));
             if (Level_update_counter(self))
                 Iself->event_dealer(Iself);
             break;
@@ -145,7 +146,6 @@ static void Level_event_recorder(Interface* Iself, ALLEGRO_EVENT event) {
 }
 static void Level_event_dealer(Interface* Iself) {
     LevelView* self = (LevelView*)Iself;
-    SW_setCenter(&self->shift_window, Level_get_view_center(self));
     if      (self->PState == WIN)  Level_deal_win(self);
     else if (self->PState == LOSE) Level_deal_lose(self);
     else if (Iself->event.type == NO_EVENT)
@@ -189,7 +189,7 @@ static void Level_deal_win(LevelView* self) {
     if (self->level_id >= LEVEL_NUM)
         Interface_set_kill(Iself, INTERFACE_LEVEL_WIN);
     else
-        Interface_set_kill(Iself, INTERFACE_LEVEL);
+        Interface_set_kill(Iself, INTERFACE_LEVEL_START);
     Iself->info.child.level = self->level_id + 1;
 }
 static void Level_deal_lose(LevelView* self) {

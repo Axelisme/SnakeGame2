@@ -44,8 +44,8 @@ PLAYER_STATE MapEngine_process(MapEngine* self, OPERATION op) {
     self->snake->Alive = Entity_mark(self->snake, &map, &overlaps);
 
     // deal with overlaps
-    _dealWithOverlap(self, &map, &overlaps);
-    if (!self->snake->Alive) goto return_point;
+    EntityArray_clear(&overlaps);
+    _resetAll(self->entities, self->snake);
 
     // check if entities are falling
     keyLock |= _canShift(self->snake, self->gravity, &map, &shiftEs);

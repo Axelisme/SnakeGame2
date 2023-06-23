@@ -58,7 +58,7 @@ static void Button_setter(Entity* Eself, FILE* fp) {
 static void Button_trigger(Entity* Eself, MapEngine* Engine, EntityMap* Map, EntityArray* overlaps) {
     Button* self = (Button*)Eself;
     if (self->isPressed) return;
-    if (!self->effect_remain--) {
+    if (!--self->effect_remain) {
         self->isPressed = true;
         ButtonObject_down((ButtonObject*)ObjV_get(&Eself->objList, 0));
     }

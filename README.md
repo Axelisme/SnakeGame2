@@ -1,7 +1,7 @@
 # Gavity snake
 >I want to play a game
 
-OS: Linux, Mac
+OS: Linux, Mac  
 Requirement: `cmake`
 
 ## How to run

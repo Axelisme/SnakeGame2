@@ -1,4 +1,3 @@
-
 #include "GameWindow.h"
 #include "SoundEngine.h"
 #include "Object/Object.h"
@@ -167,7 +166,7 @@ static Interface* _create_Interface(CHILD_INFO info) {
             return (Interface*)new_Level(info.level);
             break;
         case INTERFACE_LEVEL_WIN:
-            return (Interface*)new_LevelWin(info.level);
+            return (Interface*)new_LevelWin();
             break;
         case INTERFACE_NONE:
             raise_warn("can't create INTERFACE_NONE");
